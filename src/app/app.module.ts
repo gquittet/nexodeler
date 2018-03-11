@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
+import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { MyApp } from './app.component';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    SidenavMainModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
