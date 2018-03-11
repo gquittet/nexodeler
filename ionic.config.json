@@ -1,0 +1,8 @@
+{
+  "name": "nexodeler",
+  "app_id": "8c1df504",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
