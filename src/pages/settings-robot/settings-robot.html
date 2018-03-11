@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            Settings
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-list>
+        <ion-list-header>
+            General
+        </ion-list-header>
+        <battery-list-item></battery-list-item>
+        <temperature-list-item></temperature-list-item>
+        <ion-item>
+            <ion-icon name="ionitron" item-start></ion-icon>
+            <ion-label>NAOqi</ion-label>
+            <ion-note item-end>2.1.4</ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="body" item-start></ion-icon>
+            <ion-label>State</ion-label>
+            <button ion-button item-end outline>Edit</button>
+            <ion-note item-end>Rest</ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="heart" item-start></ion-icon>
+            <ion-label>Mode</ion-label>
+            <button ion-button item-end outline>Edit</button>
+            <ion-note item-end>Disabled</ion-note>
+        </ion-item>
+        <volume-control></volume-control>
+    </ion-list>
+</ion-content>
