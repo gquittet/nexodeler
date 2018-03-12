@@ -46,7 +46,7 @@ export class ListRobotsPage {
       this.filterItems();
     });
   }
-  
+
   ionViewWillEnter() {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
   }
