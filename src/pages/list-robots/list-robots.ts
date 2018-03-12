@@ -27,16 +27,15 @@ export class ListRobotsPage {
   searching: boolean = false;
 
   constructor(public appCtrl: App, public navCtrl: NavController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
-    this.robots = [];
     this.searchControl = new FormControl();
   }
 
-  ngOnInit() {
-    // this.file.removeFile(this.file.dataDirectory, 'robots.json');
+  ionViewDidLoad() {
     this.file.checkFile(this.file.dataDirectory, 'robots.json').then(res => {
       if (res) {
         this.file.readAsText(this.file.dataDirectory, 'robots.json').then(data => {
           console.log('[Info]: Read the file: robots.json');
+          console.log(data);
           this.robots = JSON.parse(data);
           this.robotsService.update(this.robots);
         });
@@ -46,6 +45,10 @@ export class ListRobotsPage {
       this.searching = false;
       this.filterItems();
     });
+  }
+  
+  ionViewWillEnter() {
+    this.robotsService.robots.subscribe(robots => this.robots = robots);
   }
 
   addRobot() {
@@ -61,14 +64,14 @@ export class ListRobotsPage {
     loading.present();
     ping('http://' + robot.ip).then(delta => {
       loading.dismiss();
-      self.alertCtrl.create({
+      this.alertCtrl.create({
         title: 'Ping result',
         subTitle: 'Ping ' + robot.name + ' success.',
         buttons: ['OK']
       }).present();
     }).catch(function (err) {
       loading.dismiss();
-      self.alertCtrl.create({
+      this.alertCtrl.create({
         title: 'Ping result',
         subTitle: 'Ping ' + robot.name + ' failed.',
         buttons: ['OK']
