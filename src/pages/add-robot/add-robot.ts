@@ -7,6 +7,7 @@ import { Robot } from '../../app/objects/Robot';
 
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
+import { QiService } from '../../app/services/naoqi/qi.service';
 
 declare var ping: any;
 
@@ -76,5 +77,6 @@ export class AddRobotPage {
 
   goBack() {
     this.navCtrl.remove(this.viewCtrl.index, 1);
+    QiService.disconnect();
   }
 }
