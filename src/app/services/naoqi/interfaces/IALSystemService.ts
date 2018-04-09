@@ -7,10 +7,16 @@ export interface IALSystemService {
   getName(): Promise<any>;
 
   /**
-   * Set the name of the robot.
-   * @param name The new name of the robot.
+   * Get the NAOqi version used by the robot.
+   * @return {Promise<any>} The NAOqi version used by the robot.
    */
-  setName(name: string): Promise<any>;
+  getSystemVersion(): Promise<any>;
+
+  /**
+   * Return the timezone used by the robot.
+   * @return {Promise<any>} The timezone used by the robot.
+   */
+  getTimezone(): Promise<any>;
 
   /**
    * Reboot the robot.
@@ -19,14 +25,16 @@ export interface IALSystemService {
   reboot(): Promise<any>;
 
   /**
+   * Set the name of the robot.
+   * @param name The new name of the robot.
+   * @return {Promise<any>} A promise with the result of this action.
+   */
+  setName(name: string): Promise<any>;
+
+  /**
    * Shutdown the robot.
    * @return {Promise<any>} The promise with the result of the reboot.
    */
   shutdown(): Promise<any>;
 
-  /**
-   * Get the NAOqi version used by the robot.
-   * @return {Promise<any>} The NAOqi version used by the robot.
-   */
-  systemVersion(): Promise<any>;
 }
