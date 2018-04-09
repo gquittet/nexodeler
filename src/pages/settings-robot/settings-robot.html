@@ -14,23 +14,19 @@
         </ion-list-header>
         <battery-list-item></battery-list-item>
         <temperature-list-item></temperature-list-item>
-        <ion-item>
-            <ion-icon name="ionitron" item-start></ion-icon>
-            <ion-label>NAOqi</ion-label>
-            <ion-note item-end>2.1.4</ion-note>
-        </ion-item>
-        <ion-item>
-            <ion-icon name="body" item-start></ion-icon>
-            <ion-label>State</ion-label>
-            <button ion-button item-end outline>Edit</button>
-            <ion-note item-end>Rest</ion-note>
-        </ion-item>
-        <ion-item>
-            <ion-icon name="heart" item-start></ion-icon>
-            <ion-label>Mode</ion-label>
-            <button ion-button item-end outline>Edit</button>
-            <ion-note item-end>Disabled</ion-note>
-        </ion-item>
+        <naoqi-version-list-item></naoqi-version-list-item>
+        <al-motion-list-item></al-motion-list-item>
+        <al-autonomous-life-list-item></al-autonomous-life-list-item>
         <volume-control></volume-control>
+        <ion-list-header>
+            Language
+        </ion-list-header>
+        <languages-available-list-item></languages-available-list-item>
+        <timezone></timezone>
+        <ion-list-header>
+            Power
+        </ion-list-header>
+        <shutdown-button></shutdown-button>
+        <reboot-button></reboot-button>
     </ion-list>
 </ion-content>
