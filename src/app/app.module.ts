@@ -6,6 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 
+import { RobotsModule } from './services/robots/robots.module';
+import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.module';
+
 @NgModule({
   declarations: [
     MyApp
@@ -13,6 +16,8 @@ import { MyApp } from './app.component';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    RobotsModule,
+    SidenavMainModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

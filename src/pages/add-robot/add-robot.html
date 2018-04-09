@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            {{ name }}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <h2>IP Address</h2>
+    <form [formGroup]="addForm">
+        <ion-item>
+            <ion-input formControlName="number1" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="Number 1" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input formControlName="number2" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="Number 2" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input formControlName="number3" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="Number 3" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input formControlName="number4" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="Number 4" required></ion-input>
+        </ion-item>
+        <ion-label *ngIf="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid"
+            color="danger">Please enter a correct IP address.</ion-label>
+        <ion-buttons end padding>
+            <button default ion-button (click)="save()" [disabled]="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid">Save</button>
+            <button default ion-button color="light" (click)="goBack()">Cancel</button>
+        </ion-buttons>
+    </form>
+</ion-content>

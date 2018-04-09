@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            Robots
+        </ion-title>
+
+        <ion-buttons end>
+            <button ion-button icon-only (click)="addRobot()">
+                <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-searchbar showCancelButton="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearch()"></ion-searchbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="searching" class="spinner-container">
+        <ion-spinner></ion-spinner>
+    </div>
+    <ion-list>
+        <ion-item-sliding #item *ngFor="let robot of robots">
+            <button ion-item (click)="openMonitor(robot)">
+                <ion-avatar item-start>
+                    <img src="assets/imgs/nao.png">
+                </ion-avatar>
+                <ion-label padding-vertical>{{ robot.name }}</ion-label>
+                <ion-note item-end>{{ robot.ip }}</ion-note>
+            </button>
+            <ion-item-options side="left">
+                <button padding ion-button color="secondary" (click)="sendPing(item, robot)">
+                    <ion-icon name="code-working"></ion-icon>
+                    Ping
+                </button>
+            </ion-item-options>
+            <ion-item-options side="right" (ionSwipe)="delete(item, robot)">
+                <button padding ion-button color="dark" (click)="edit(item, robot)">
+                    <ion-icon name="build"></ion-icon>
+                    Edit
+                </button>
+                <button padding ion-button expandable color="danger" (click)="delete(item, robot)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>
