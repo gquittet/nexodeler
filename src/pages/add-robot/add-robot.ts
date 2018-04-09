@@ -53,7 +53,6 @@ export class AddRobotPage {
       this.alSystemService.getName().then(robotName => {
         const robot = new Robot(robotName, ip.toString());
         this.robots.push(robot);
-        console.log(JSON.stringify(this.robots));
         this.robotsService.update(this.robots);
         clearTimeout(timer);
         loading.dismiss();
