@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
 
-import { ALService } from './al.service';
+import { ALModuleService } from './almodule.service';
 import { IALBatteryService } from './interfaces/IALBatteryService';
+import { QiService } from './qi.service';
 
 @Injectable()
-export class ALBatteryService extends ALService implements IALBatteryService {
-
-  constructor() {
-    super();
-  }
+export class ALBatteryService extends ALModuleService implements IALBatteryService {
 
   getLevel(): Promise<any> {
-      return new Promise(resolve => this.qi.call(ALBattery => ALBattery.getBatteryCharge().then(percentage => resolve(percentage))));
+    return new Promise((resolve, reject) => QiService.call(ALBattery => ALBattery.getBatteryCharge().then(result => resolve(result), error => reject(error))));
   }
 
   setPowerMonitoring(enable: boolean): Promise<any> {
-    return new Promise(resolve => this.qi.call(ALBattery => ALBattery.enablePowerMonitoring(enable).then(result => resolve(result))));    
+    return new Promise((resolve, reject) => QiService.call(ALBattery => ALBattery.enablePowerMonitoring().then(result => resolve(result), error => reject(error))));
   }
 }
