@@ -5,22 +5,23 @@ import { File } from '@ionic-native/file';
 
 import 'rxjs/add/operator/map';
 import { Robot } from '../../objects/Robot';
+import { IRobotsService } from './interfaces/IRobotsService';
 
 @Injectable()
-export class RobotsService {
+export class RobotsService implements IRobotsService {
 
+  FILE_NAME: string = "robots.json";
   private robotsSubject: BehaviorSubject<Robot[]> = new BehaviorSubject<Robot[]>([]);
   robots = this.robotsSubject.asObservable();
-  fileName: string = 'robots.json';
 
   constructor(private file: File) { }
 
   update(robots) {
     this.robotsSubject.next(robots);
-    this.file.checkFile(this.file.dataDirectory, this.fileName).then(res => {
-      this.file.writeExistingFile(this.file.dataDirectory, this.fileName, JSON.stringify(robots));
+    this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
+      this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));
     }, err => {
-      this.file.writeFile(this.file.dataDirectory, this.fileName, JSON.stringify(robots));
+      this.file.writeFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));
     });
   }
 

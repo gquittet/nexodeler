@@ -7,6 +7,7 @@ import { Robot } from '../../app/objects/Robot';
 
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
+import { QiService } from '../../app/services/naoqi/qi.service';
 
 declare var ping: any;
 
@@ -21,9 +22,7 @@ export class AddRobotPage {
   addForm: FormGroup;
   robots: Robot[];
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public viewCtrl: ViewController, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alSystemService: ALSystemService) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder, public navCtrl: NavController, public viewCtrl: ViewController, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alSystemService: ALSystemService) {
     this.addForm = this.fb.group({
       'number1': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number2': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
@@ -32,11 +31,12 @@ export class AddRobotPage {
     });
   }
 
-  save() {
-    const ip = new IP([this.addForm.controls['number1'].value, this.addForm.controls['number2'].value,
-    this.addForm.controls['number3'].value, this.addForm.controls['number4'].value]);
+  ionViewWillEnter() {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
-    const self = this;
+  }
+
+  save() {
+    const ip = new IP([this.addForm.controls['number1'].value, this.addForm.controls['number2'].value, this.addForm.controls['number3'].value, this.addForm.controls['number4'].value]);
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -44,22 +44,22 @@ export class AddRobotPage {
     ping('http://' + ip.toString()).then(delta => {
       const timer = setTimeout(() => {
         loading.dismiss();
-        self.alertCtrl.create({
+        this.alertCtrl.create({
           title: 'Error',
           subTitle: 'Unable to get the robot name.',
           buttons: ['OK']
         }).present();
       }, 5000);
-      self.alSystemService.setIP(ip);
-      self.alSystemService.getName().then(robotName => {
+      this.alSystemService.setIP(ip);
+      this.alSystemService.getName().then(robotName => {
         const robot = new Robot(robotName, ip.toString());
-        self.robots.push(robot);
-        self.robotsService.update(self.robots);
+        this.robots.push(robot);
+        this.robotsService.update(this.robots);
         clearTimeout(timer);
         loading.dismiss();
-        self.goBack();
+        this.goBack();
       }, error => {
-        self.alertCtrl.create({
+        this.alertCtrl.create({
           title: 'Error',
           subTitle: 'Unable to get the robot name.',
           buttons: ['OK']
@@ -67,7 +67,7 @@ export class AddRobotPage {
       });
     }).catch(err => {
       loading.dismiss();
-      self.alertCtrl.create({
+      this.alertCtrl.create({
         title: 'Error',
         subTitle: 'Verify your network connection !',
         buttons: ['OK']
@@ -77,5 +77,6 @@ export class AddRobotPage {
 
   goBack() {
     this.navCtrl.remove(this.viewCtrl.index, 1);
+    QiService.disconnect();
   }
 }

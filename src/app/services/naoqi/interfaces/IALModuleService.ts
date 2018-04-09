@@ -1,6 +1,6 @@
 import { IP } from "../../../objects/IP";
 
-export interface IALService {
+export interface IALModuleService {
 
   /**
    * Set the IP address of the robot and connect to it.

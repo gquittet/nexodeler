@@ -4,15 +4,13 @@ import { IonicPageModule } from 'ionic-angular';
 import { ListRobotsPage } from './list-robots';
 
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
-import { RobotsModule } from '../../app/services/robots/robots.module';
 
 @NgModule({
   declarations: [
     ListRobotsPage
   ],
   imports: [
-    IonicPageModule.forChild(ListRobotsPage),
-    RobotsModule
+    IonicPageModule.forChild(ListRobotsPage)
   ],
   exports: [
     ListRobotsPage

@@ -1,32 +1,33 @@
 import { Injectable } from '@angular/core';
 
-import { ALService } from './al.service';
+import { ALModuleService } from './almodule.service';
 import { IALSystemService } from './interfaces/IALSystemService';
+import { QiService } from './qi.service';
 
 @Injectable()
-export class ALSystemService extends ALService implements IALSystemService {
-
-  constructor() {
-    super();
-  }
+export class ALSystemService extends ALModuleService implements IALSystemService {
 
   getName(): Promise<any> {
-    return new Promise(resolve => this.qi.call(ALSystem => ALSystem.robotName().then(name => resolve(name))));
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.robotName().then(result => resolve(result), error => reject(error))));
   }
 
-  setName(name: string): Promise<any> {
-    return new Promise(resolve => this.qi.call(ALSystem => ALSystem.setRobotName(name).then(result => resolve(result))));
+  getSystemVersion() {
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.systemVersion().then(result => resolve(result), error => reject(error))));
+  }
+
+  getTimezone(): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.timezone().then(result => resolve(result), error => reject(error))));
   }
 
   reboot() {
-    return new Promise(resolve => this.qi.call(ALSystem => ALSystem.reboot().then(result => resolve(result))));
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.reboot().then(result => resolve(result), error => reject(error))));
+  }
+
+  setName(name: string): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.setRobotName(name).then(result => resolve(result), error => reject(error))));
   }
 
   shutdown() {
-    return new Promise(resolve => this.qi.call(ALSystem => ALSystem.shutdown().then(result => resolve(result))));
-  }
-
-  systemVersion() {
-    return new Promise(resolve => this.qi.call(ALSystem => ALSystem.systemVersion().then(version => resolve(version))));
+    return new Promise((resolve, reject) => QiService.call(ALSystem => ALSystem.shutdown().then(result => resolve(result), error => reject(error))));
   }
 }
