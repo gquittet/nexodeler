@@ -30,12 +30,10 @@ export class ListRobotsPage {
     this.searchControl = new FormControl();
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     this.file.checkFile(this.file.dataDirectory, 'robots.json').then(res => {
       if (res) {
         this.file.readAsText(this.file.dataDirectory, 'robots.json').then(data => {
-          console.log('[Info]: Read the file: robots.json');
-          console.log(data);
           this.robots = JSON.parse(data);
           this.robotsService.update(this.robots);
         });
@@ -47,17 +45,16 @@ export class ListRobotsPage {
     });
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
   }
 
-  addRobot() {
+  addRobot(): void {
     this.navCtrl.push('AddRobotPage');
   }
 
-  sendPing(item: ItemSliding, robot: Robot) {
+  sendPing(item: ItemSliding, robot: Robot): void {
     item.close();
-    const self = this;
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -79,9 +76,8 @@ export class ListRobotsPage {
     });
   }
 
-  delete(item: ItemSliding, robot: Robot) {
+  delete(item: ItemSliding, robot: Robot): void {
     item.close();
-    const self = this;
     this.alertCtrl.create({
       title: 'Confirm delete',
       message: 'Do you want to delete this robot?',
@@ -94,25 +90,24 @@ export class ListRobotsPage {
           text: 'Delete',
           handler: () => {
             let index = 0;
-            self.robotsService.robots.subscribe(robots => self.robots = robots);
-            self.robots.forEach(element => {
+            this.robotsService.robots.subscribe(robots => this.robots = robots);
+            this.robots.forEach(element => {
               if (element === robot) {
-                self.robots.splice(index, 1);
+                this.robots.splice(index, 1);
               }
               index++;
             });
-            self.robotsService.update(self.robots);
+            this.robotsService.update(this.robots);
           }
         }
       ]
     }).present();
   }
 
-  edit(item: ItemSliding, robot: Robot) {
+  edit(item: ItemSliding, robot: Robot): void {
     item.close();
     const ipPart = robot.ip.split('.');
-    const self = this;
-    self.alertCtrl.create({
+    this.alertCtrl.create({
       title: 'Edit - ' + robot.name,
       inputs: [
         {
@@ -155,14 +150,14 @@ export class ListRobotsPage {
           handler: data => {
             const ip = new IP([data.ipPart0, data.ipPart1, data.ipPart2, data.ipPart3]);
             if (!data.name || data.name.trim() === '') {
-              self.alertCtrl.create({
+              this.alertCtrl.create({
                 title: 'Error',
                 subTitle: 'Enter a correct name.',
                 buttons: ['OK']
               }).present();
               return false;
             } else if (!ip.isValid()) {
-              self.alertCtrl.create({
+              this.alertCtrl.create({
                 title: 'Error',
                 subTitle: 'Enter correct numbers.',
                 buttons: ['OK']
@@ -170,25 +165,25 @@ export class ListRobotsPage {
               return false;
             } else {
               if (robot.name != data.name.trim() || ipPart[0] != data.ipPart0 || ipPart[1] != data.ipPart1 || ipPart[2] != data.ipPart2 || ipPart[3] != data.ipPart3) {
-                self.robotsService.robots.subscribe(robots => self.robots = robots);
-                self.robots.forEach(element => {
+                this.robotsService.robots.subscribe(robots => this.robots = robots);
+                this.robots.forEach(element => {
                   if (element === robot) {
                     element.ip = ip.toString();
                     if (robot.name != data.name.trim()) {
                       ping('http://' + ip.toString()).then(delta => {
                         element.name = data.name.trim();
-                        self.updateName(element.name, ip);
+                        this.updateName(element.name, ip);
                       }).catch(function (err) {
-                        self.alertCtrl.create({
+                        this.alertCtrl.create({
                           title: 'Error',
-                          subTitle: 'Verify your network connection !',
+                          subTitle: 'Verify your network connection!',
                           buttons: ['OK']
                         }).present();
                       });
                     }
                   }
                 });
-                self.robotsService.update(self.robots);
+                this.robotsService.update(this.robots);
               }
             }
           }
@@ -197,19 +192,18 @@ export class ListRobotsPage {
     }).present();
   }
 
-  onSearch() {
+  onSearch(): void {
     this.searching = true;
   }
 
-  filterItems() {
+  filterItems(): void {
     this.robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
   }
 
-  updateName(name: string, ip: IP) {
-    const self = this;
+  updateName(name: string, ip: IP): void {
     this.alSystemService.setIP(ip);
     this.alSystemService.setName(name).then(() => {
-      self.alertCtrl.create({
+      this.alertCtrl.create({
         title: 'Update confirmation',
         message: 'The name will be apply after a reboot. Do you want to reboot ' + name + ' now?',
         buttons: [
@@ -222,10 +216,10 @@ export class ListRobotsPage {
           {
             text: 'Reboot now',
             handler: () => {
-              self.alSystemService.reboot().then(() => {
-                self.alertCtrl.create({
+              this.alSystemService.reboot().then(() => {
+                this.alertCtrl.create({
                   title: 'Info',
-                  subTitle: name + ' is rebooting ...',
+                  subTitle: name + ' is rebooting...',
                   buttons: ['OK']
                 }).present();
               });
@@ -233,11 +227,27 @@ export class ListRobotsPage {
           }
         ]
       }).present();
-      self.robotsService.update(self.robots);
+      this.robotsService.update(this.robots);
     });
   }
 
-  openMonitor(robot: Robot) {
-    this.navCtrl.push('SettingsRobotPage');
+  openMonitor(robot: Robot): void {
+    const loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    loading.present();
+    const self = this;
+    ping('http://' + robot.ip).then(delta => {
+      loading.dismiss();
+      this.navCtrl.push('SettingsRobotPage', { ip: robot.ip });
+    }).catch(function (err) {
+      loading.dismiss();
+      self.alertCtrl.create({
+        title: 'Network error',
+        subTitle: 'Unable to find ' + robot.name + '!',
+        buttons: ['OK']
+      }).present();
+    });
+
   }
 }
