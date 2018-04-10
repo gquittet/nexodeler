@@ -17,8 +17,8 @@ import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.modul
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
     BrowserAnimationsModule,
+    IonicModule.forRoot(MyApp),
     RobotsModule,
     SidenavMainModule
   ],

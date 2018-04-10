@@ -1,15 +1,14 @@
 <ion-header>
     <ion-navbar [hideBackButton]="isSelection" color="primary">
-        <ion-title>
-            Robots
+        <ion-title>{{ name }}
         </ion-title>
 
-        <ion-buttons start *ngIf="isSelection" @easeInOut>
+        <ion-buttons start *ngIf="isSelection" @easeInOutLeftToRight>
             <button ion-button (tap)="cancelSelection()">
                 Cancel
             </button>
         </ion-buttons>
-        <ion-buttons end *ngIf="!isSelection" @easeInOut>
+        <ion-buttons end *ngIf="!isSelection" @easeInOutRightToLeft>
             <button ion-button icon-only (tap)="showSearchBar = !showSearchBar; content.resize()">
                 <ion-icon name="search"></ion-icon>
             </button>
@@ -17,7 +16,7 @@
                 <ion-icon name="add"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-buttons end *ngIf="isSelection" @easeInOut>
+        <ion-buttons end *ngIf="isSelection" @easeInOutRightToLeft>
             <button ion-button icon-only (tap)="removeRobots(); content.resize();">
                 <ion-icon name="trash"></ion-icon>
             </button>
@@ -34,22 +33,22 @@
         <ion-spinner></ion-spinner>
     </div>
     <ion-list>
-        <ion-item-sliding #item *ngFor="let robot of robots">
-            <button ion-item @easeInOut (press)="isSelection = true; actionOnClick(robot);" (tap)="actionOnClick(robot)">
-                <ion-avatar *ngIf="!isSelection" @easeInOut item-start>
+        <ion-item-sliding #item *ngFor="let robot of robots" @easeInOutRightToLeft>
+            <button ion-item (press)="isSelection = true" (tap)="isSelection ? null : openMonitor(robot)">
+                <ion-avatar *ngIf="!isSelection" item-start>
                     <img src="assets/imgs/nao.png">
                 </ion-avatar>
-                <ion-checkbox *ngIf="isSelection" @easeInOut checked="isInTable(robot)"></ion-checkbox>
+                <ion-checkbox (ionChange)="selectRobot(robot)" *ngIf="isSelection"></ion-checkbox>
                 <ion-label padding-vertical>{{ robot.name }}</ion-label>
                 <ion-note item-end>{{ robot.ip }}</ion-note>
             </button>
-            <ion-item-options side="left">
+            <ion-item-options *ngIf="!isSelection" side="left">
                 <button padding ion-button color="secondary" (tap)="sendPing(item, robot)">
                     <ion-icon name="code-working"></ion-icon>
                     Ping
                 </button>
             </ion-item-options>
-            <ion-item-options side="right" (ionSwipe)="delete(item, robot)">
+            <ion-item-options *ngIf="!isSelection" side="right" (ionSwipe)="delete(item, robot)">
                 <button padding ion-button color="dark" (tap)="edit(item, robot)">
                     <ion-icon name="build"></ion-icon>
                     Edit
