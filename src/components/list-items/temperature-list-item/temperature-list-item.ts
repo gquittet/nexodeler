@@ -10,7 +10,7 @@ export class TemperatureListItemComponent {
 
   private temperatureInterval: number;
 
-  temperature: string;
+  private temperature: string;
 
   constructor(private alBodyTemperature: ALBodyTemperatureService) { }
 
