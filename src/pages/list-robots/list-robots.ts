@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController } from 'ionic-angular';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
@@ -19,13 +19,40 @@ declare var ping: any;
   selector: 'page-list-robots',
   templateUrl: 'list-robots.html',
   animations: [
-    trigger('easeInOut', [
+    trigger('easeInOutLeftToRight', [
       transition(':enter', [
-        style({ opacity: 1 }),
-        animate('3s ease-out')
+        style({ transform: 'translate3d(100%, 0, 0)', opacity: 0 }),
+        animate('300ms ease-in', keyframes([
+          style({ transform: 'translate3d(-100%, 0, 0)', opacity: 0, offset: 0 }),
+          style({ transform: 'translate3d(15px, 0, 0)', opacity: 0.3, offset: 0.3 }),
+          style({ transform: 'translate3d(0, 0, 0)', opacity: 1, offset: 1 })
+        ])),
       ]),
       transition(':leave', [
-        animate('3s ease-in', style({ opacity: 0 }))
+        style({ transform: 'translate3d(0, 0, 0)', opacity: 1 }),
+        animate('300ms ease-out', keyframes([
+          style({ transform: 'translate3d(0, 0, 0)', opacity: 1, offset: 0 }),
+          style({ transform: 'translate3d(15px, 0, 0)', opacity: 0.7, offset: 0.7 }),
+          style({ transform: 'translate3d(-100%, 0, 0)', opacity: 0, offset: 1 })
+        ])),
+      ])
+    ]),
+    trigger('easeInOutRightToLeft', [
+      transition(':enter', [
+        style({ transform: 'translate3d(100%, 0, 0)', opacity: 0 }),
+        animate('300ms ease-in', keyframes([
+          style({ transform: 'translate3d(100%, 0, 0)', opacity: 0, offset: 0 }),
+          style({ transform: 'translate3d(-15px, 0, 0)', opacity: 0.3, offset: 0.3 }),
+          style({ transform: 'translate3d(0, 0, 0)', opacity: 1, offset: 1 })
+        ])),
+      ]),
+      transition(':leave', [
+        style({ transform: 'translate3d(0, 0, 0)', opacity: 1 }),
+        animate('300ms ease-out', keyframes([
+          style({ transform: 'translate3d(0, 0, 0)', opacity: 1, offset: 0 }),
+          style({ transform: 'translate3d(-15px, 0, 0)', opacity: 0.7, offset: 0.7 }),
+          style({ transform: 'translate3d(100%, 0, 0)', opacity: 0, offset: 1 })
+        ])),
       ])
     ])
   ]
@@ -59,7 +86,7 @@ export class ListRobotsPage {
     });
   }
 
-  ionViewWillEnter(): void {
+  ionViewDidEnter(): void {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
     this.selectedRobots = [];
   }
@@ -246,7 +273,7 @@ export class ListRobotsPage {
     });
   }
 
-  private openMonitor(robot: Robot): void {
+  openMonitor(robot: Robot): void {
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -265,25 +292,11 @@ export class ListRobotsPage {
     });
   }
 
-  isInTable(robot: Robot): boolean {
-    return (this.selectedRobots.find(elem => elem === robot) === undefined);
-  }
-
-  actionOnClick(robot: Robot): void {
-    if (this.isSelection) {
-      if (this.selectedRobots.find(elem => elem === robot))
-        this.selectedRobots = this.selectedRobots.filter(element => element !== robot);
-      else
-        this.selectRobot(robot);
-    }
+  selectRobot(robot: Robot): void {
+    if (this.selectedRobots.find(elem => elem === robot))
+      this.selectedRobots = this.selectedRobots.filter(element => element !== robot);
     else
-      this.openMonitor(robot);
-    console.log(this.selectedRobots.length);
-  }
-
-  private selectRobot(robot: Robot): void {
-    this.isSelection = true;
-    this.selectedRobots.push(robot);
+      this.selectedRobots.push(robot);
   }
 
   cancelSelection(): void {
@@ -293,12 +306,30 @@ export class ListRobotsPage {
 
   removeRobots(): void {
     if (this.selectedRobots.length > 0) {
-      this.robotsService.update(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
-      this.robotsService.robots.subscribe(robots => this.robots = robots);
-      this.toastCtrl.create({
-        message: 'Robot was success fully deleted.',
-        duration: 3000,
-        position: 'bottom'
+      this.alertCtrl.create({
+        title: 'Delete confirmation',
+        message: 'Are you shure to delete them?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.robotsService.update(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
+              this.robotsService.robots.subscribe(robots => this.robots = robots);
+              this.toastCtrl.create({
+                message: 'Robot was success fully deleted.',
+                duration: 3000,
+                position: 'bottom'
+              }).present();
+              this.cancelSelection();
+            }
+          }
+        ]
       }).present();
     } else {
       this.toastCtrl.create({
@@ -306,7 +337,7 @@ export class ListRobotsPage {
         duration: 3000,
         position: 'bottom'
       }).present();
+      this.cancelSelection();
     }
-    this.cancelSelection();
   }
 }
