@@ -25,11 +25,11 @@ export class LanguagesAvailableListItemComponent {
   }
 
   private getLanguages(): void {
-    this.alTextToSpeech.getAvailableLanguages().then(languages => this.languages = languages).catch(error => "[ERROR][NAOQI][Call][ALTextToSpeechService] getAvailableLanguages: " + error);
+    this.alTextToSpeech.getAvailableLanguages().then(languages => this.languages = languages).catch(error => console.error(error));
     this.alTextToSpeech.getLanguage().then(language => {
       this.currentLanguage = language;
       this.alert.setResult(language);
-    }).catch(error => "[ERROR][NAOQI][Call][ALTextToSpeech] getLanguage: " + error);
+    }).catch(error => console.error(error));
   }
 
   show(): void {

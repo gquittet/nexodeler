@@ -20,7 +20,7 @@ export class TimezoneComponent {
   }
 
   getTimezone(): void {
-    this.alSystem.getTimezone().then(timezone => this.timezone = timezone).catch(error => console.error("[ERROR][NAOQI][Call][ALSystemService] getTimezone: " + error));
+    this.alSystem.getTimezone().then(timezone => this.timezone = timezone).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {

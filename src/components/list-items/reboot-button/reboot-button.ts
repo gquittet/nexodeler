@@ -23,7 +23,7 @@ export class RebootButtonComponent {
         {
           text: 'Yes',
           handler: () => {
-            this.alSystem.reboot();
+            this.alSystem.reboot().catch(error => console.error(error));
             this.alertCtrl.create({
               title: 'Info',
               subTitle: name + ' is rebooting...',

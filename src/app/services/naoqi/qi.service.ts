@@ -63,12 +63,12 @@ export class QiService {
         this.loadModule(modulesToBeLoaded[i]).then(module => {
           modulesLoaded[i] = module;
           pendingModules--;
+          console.log("[INFO][NAOQI][Call] " + modulesToBeLoaded[i]);
           if (pendingModules === 0) {
-            console.log("[INFO][NAOQI][Call] " + modulesLoaded.toString());
             resolve(callback.apply(null, modulesLoaded));
           }
         }, () => {
-          const reason = "Failed getting a NaoQi Module: " + modulesToBeLoaded[i];
+          const reason = "[ERROR][NAOQI][Call][" + modulesToBeLoaded[i] + "] Failed to get the NAOqi module";
           reject(reason);
         });
       }
@@ -85,7 +85,7 @@ export class QiService {
       this.session = null;
       console.log("[INFO][NAOQI][Session] Disconnected");
     } else {
-      throw "Cannot disconnect because there's no session active.";
+      console.error("[ERROR][NAOQI][Session] Cannot disconnect because there's no session active.");
     }
   }
 

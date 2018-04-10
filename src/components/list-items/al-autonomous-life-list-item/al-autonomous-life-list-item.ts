@@ -22,11 +22,11 @@ export class ALAutonomousLifeListItemComponent {
   ngOnInit(): void {
     this.alert = new BtrAlert(this.alertCtrl);
     this.getState();
-    this.stateInterval = setInterval(() => this.getState(), 1000);
+    this.stateInterval = setInterval(() => this.getState(), 1500);
   }
 
   private getState(): void {
-    this.alAutonomousLife.getState().then(state => this.alert.setResult(state)).catch(error => console.error("[ERROR][NAOQI][Call][ALAutonomousLifeService] getState: " + error));
+    this.alAutonomousLife.getState().then(state => this.alert.setResult(state)).catch(error => console.error(error));
   }
 
   show(): void {
@@ -42,7 +42,7 @@ export class ALAutonomousLifeListItemComponent {
         for (let state of this.states) {
           if (state === data) {
             this.alAutonomousLife.setState(data);
-          this.alert.setResult(data);
+            this.alert.setResult(data);
           }
         }
       }

@@ -24,7 +24,7 @@ export class ALMotionListItemComponent {
   }
 
   private getState(): void {
-    this.alMotionService.robotIsWakeUp().then(wakeUp => wakeUp ? this.alert.setResult(this.state[1]) : this.alert.setResult(this.state[0])).catch(error => console.error("[ERROR][NAOQI][Call][ALMotionService] robotIsWakeUp: " + error));
+    this.alMotionService.robotIsWakeUp().then(wakeUp => wakeUp ? this.alert.setResult(this.state[1]) : this.alert.setResult(this.state[0])).catch(error => console.error(error));
   }
 
   show(): void {
