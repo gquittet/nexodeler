@@ -6,7 +6,7 @@
   </ion-header>
   <ion-content>
       <ion-list>
-          <button ion-item *ngFor="let page of pages" (click)="openPage(page)">
+          <button ion-item *ngFor="let page of pages" (tap)="openPage(page)">
               <ion-icon name="{{page.icon}}" item-left></ion-icon> {{page.title}}
           </button>
       </ion-list>
