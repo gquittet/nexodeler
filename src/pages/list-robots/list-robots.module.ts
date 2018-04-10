@@ -10,7 +10,7 @@ import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
     ListRobotsPage
   ],
   imports: [
-    IonicPageModule.forChild(ListRobotsPage)
+    IonicPageModule.forChild(ListRobotsPage),
   ],
   exports: [
     ListRobotsPage

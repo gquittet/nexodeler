@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage } from 'ionic-angular';
+import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController } from 'ionic-angular';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
@@ -16,17 +17,30 @@ declare var ping: any;
 @IonicPage()
 @Component({
   selector: 'page-list-robots',
-  templateUrl: 'list-robots.html'
+  templateUrl: 'list-robots.html',
+  animations: [
+    trigger('easeInOut', [
+      transition(':enter', [
+        style({ opacity: 1 }),
+        animate('3s ease-out')
+      ]),
+      transition(':leave', [
+        animate('3s ease-in', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class ListRobotsPage {
 
-  name = 'Robots';
-  robots: Robot[];
-  searchControl: FormControl;
-  searchTerm: string = '';
-  searching: boolean = false;
+  private name = 'Robots';
+  private robots: Robot[];
+  private selectedRobots: Robot[];
+  private isSelection: boolean = false;
+  private searchControl: FormControl;
+  private searchTerm: string = '';
+  private searching: boolean;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
     this.searchControl = new FormControl();
   }
 
@@ -47,6 +61,7 @@ export class ListRobotsPage {
 
   ionViewWillEnter(): void {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
+    this.selectedRobots = [];
   }
 
   addRobot(): void {
@@ -231,7 +246,7 @@ export class ListRobotsPage {
     });
   }
 
-  openMonitor(robot: Robot): void {
+  private openMonitor(robot: Robot): void {
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
@@ -248,6 +263,50 @@ export class ListRobotsPage {
         buttons: ['OK']
       }).present();
     });
+  }
 
+  isInTable(robot: Robot): boolean {
+    return (this.selectedRobots.find(elem => elem === robot) === undefined);
+  }
+
+  actionOnClick(robot: Robot): void {
+    if (this.isSelection) {
+      if (this.selectedRobots.find(elem => elem === robot))
+        this.selectedRobots = this.selectedRobots.filter(element => element !== robot);
+      else
+        this.selectRobot(robot);
+    }
+    else
+      this.openMonitor(robot);
+    console.log(this.selectedRobots.length);
+  }
+
+  private selectRobot(robot: Robot): void {
+    this.isSelection = true;
+    this.selectedRobots.push(robot);
+  }
+
+  cancelSelection(): void {
+    this.selectedRobots = [];
+    setTimeout(() => this.isSelection = false, 50);
+  }
+
+  removeRobots(): void {
+    if (this.selectedRobots.length > 0) {
+      this.robotsService.update(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
+      this.robotsService.robots.subscribe(robots => this.robots = robots);
+      this.toastCtrl.create({
+        message: 'Robot was success fully deleted.',
+        duration: 3000,
+        position: 'bottom'
+      }).present();
+    } else {
+      this.toastCtrl.create({
+        message: 'No robot was deleted.',
+        duration: 3000,
+        position: 'bottom'
+      }).present();
+    }
+    this.cancelSelection();
   }
 }
