@@ -8,22 +8,15 @@ import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 })
 export class NaoqiVersionListItemComponent {
 
-  private versionInterval: number;
-
   private version: Object;
 
   constructor(private alSystemService: ALSystemService) { }
 
   ngOnInit(): void {
     this.getVersion();
-    this.versionInterval = setInterval(() => this.getVersion(), 10000);
   }
 
   private getVersion(): void {
-    this.alSystemService.getSystemVersion().then(version => this.version = version).catch(error => console.error("[ERROR][NAOQI][Call][ALSystemService] getSystemVersion: " + error));
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.versionInterval);
+    this.alSystemService.getSystemVersion().then(version => this.version = version).catch(error => console.error(error));
   }
 }

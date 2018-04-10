@@ -36,7 +36,7 @@ export class TemperatureListItemComponent {
       } else {
         this.temperature = "Perfect";
       }
-    }).catch(error => console.error("[ERROR][NAOQI][Call][ALBodyTemperatureService] getTemperatureDiagnosis: " + error));
+    }).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {

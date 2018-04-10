@@ -24,7 +24,7 @@ export class ShutdownButtonComponent {
         {
           text: 'Yes',
           handler: () => {
-            this.alSystem.shutdown();
+            this.alSystem.shutdown().catch(error => console.error(error));
             this.alertCtrl.create({
               title: 'Info',
               subTitle: name + ' is shutting down...',

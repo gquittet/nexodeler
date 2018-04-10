@@ -18,12 +18,11 @@ export class BatteryListItemComponent {
 
   ngOnInit(): void {
     this.getBatteryLevel();
-    this.batteryInterval = setInterval(() => this.getBatteryLevel(), 1000);
+    this.batteryInterval = setInterval(() => this.getBatteryLevel(), 1500);
   }
 
-  // TODO Corriger le bug d'erreur dans la promesse.
   private getBatteryLevel(): void {
-    this.alBatteryService.getLevel().then(level => this.batteryLevel = level).catch(error => console.error("[ERROR][NAOQI][Call][ALBatteryService] getLevel: " + error));
+    this.alBatteryService.getLevel().then(level => this.batteryLevel = level).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {
