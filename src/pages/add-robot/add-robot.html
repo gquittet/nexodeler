@@ -24,8 +24,8 @@
         <ion-label *ngIf="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid"
             color="danger">Please enter a correct IP address.</ion-label>
         <ion-buttons end padding>
-            <button default ion-button (click)="save()" [disabled]="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid">Save</button>
-            <button default ion-button color="light" (click)="goBack()">Cancel</button>
+            <button default ion-button (tap)="save()" [disabled]="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid">Save</button>
+            <button default ion-button color="light" (tap)="goBack()">Cancel</button>
         </ion-buttons>
     </form>
 </ion-content>

@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MyApp } from './app.component';
 
 import { RobotsModule } from './services/robots/robots.module';
@@ -16,6 +18,7 @@ import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.modul
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    BrowserAnimationsModule,
     RobotsModule,
     SidenavMainModule
   ],
