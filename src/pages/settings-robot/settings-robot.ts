@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, IonicPage, ViewController } from 'ionic-angular';
+import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { IP } from '../../app/objects/IP';
 import { ALModuleService } from '../../app/services/naoqi/almodule.service';
 import { QiService } from '../../app/services/naoqi/qi.service';

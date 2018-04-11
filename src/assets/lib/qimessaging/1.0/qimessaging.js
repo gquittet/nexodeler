@@ -85,7 +85,7 @@ function QiSession(host, resource)
   _socket.on('disconnect', function(data) {
     for (var idm in _dfd)
     {
-      _dfd[idm].reject("Call " + idm + " canceled: disconnected");
+      // _dfd[idm].reject("Call " + idm + " canceled: disconnected");
       delete _dfd[idm];
     }
   });

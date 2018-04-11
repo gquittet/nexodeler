@@ -80,10 +80,8 @@ export class QiService {
    */
   static disconnect(): void {
     if (this.session) {
-      this.session.socket().removeAllListeners();
+      // this.session.socket().removeAllListeners();
       this.session.socket().disconnect();
-      this.session = null;
-      console.log("[INFO][NAOQI][Session] Disconnected");
     } else {
       console.error("[ERROR][NAOQI][Session] Cannot disconnect because there's no session active.");
     }
@@ -97,9 +95,11 @@ export class QiService {
     if (!this.session) {
       this.session = new QiSession(ip.toString() + ':80');
       this.modulesLoaded = {};
-      this.session.socket().on('connect', () => { });
-      this.session.socket().on('disconnect', () => { });
-      console.log("[INFO][NAOQI][Session] Connected");
+      this.session.socket().on('connect', () => console.log("[INFO][NAOQI][Session] Connected"));
+      this.session.socket().on('disconnect', () => {
+        console.log("[INFO][NAOQI][Session] Disconnected");
+        this.session = null;
+      });
     } else {
       this.disconnect();
       this.connect(ip);
