@@ -1,6 +1,6 @@
 <ion-list-header>
   <ion-label> Volume: {{ volume }}%</ion-label>
-  <ion-toggle checked="true" (ionChange)="setMute($event)"></ion-toggle>
+  <ion-toggle [(ngModel)]="enable" (ngModelChange)="setMute()"></ion-toggle>
 </ion-list-header>
 <ion-item>
   <ion-range min="0" max="100" pin="true" [(ngModel)]="volume" (ngModelChange)="update()">
