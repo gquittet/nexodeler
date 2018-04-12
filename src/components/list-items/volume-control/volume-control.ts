@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ALAudioDeviceService } from '../../../app/services/naoqi/alaudiodevice.service';
-import { Toggle } from 'ionic-angular';
 
 @Component({
   selector: 'volume-control',
@@ -9,6 +8,7 @@ import { Toggle } from 'ionic-angular';
 export class VolumeControlComponent {
 
   private volumeInterval: number;
+  private enableInterval: number;
 
   private volume: number;
   private enable: boolean;
@@ -19,6 +19,7 @@ export class VolumeControlComponent {
     this.getVolume();
     this.getMuteStatus();
     this.volumeInterval = setInterval(() => this.getVolume(), 1000);
+    this.enableInterval = setInterval(() => this.getMuteStatus(), 2000);
   }
 
   private getVolume(): void {
@@ -33,12 +34,12 @@ export class VolumeControlComponent {
     this.alAudioDeviceService.setOutputVolume(this.volume).catch(error => console.error(error));
   }
 
-  setMute(event: Toggle): void {
-    this.enable = event.checked;
-    this.alAudioDeviceService.muteAudioOut(!event.checked).catch(error => console.error(error));
+  setMute(): void {
+    this.alAudioDeviceService.muteAudioOut(!this.enable).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {
     clearInterval(this.volumeInterval);
+    clearInterval(this.enableInterval);
   }
 }
