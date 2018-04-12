@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ALBatteryService } from '../../../app/services/naoqi/albattery.service';
-import { IP } from '../../../app/objects/IP';
 import { NavController, ViewController } from 'ionic-angular';
 
 
@@ -14,7 +13,7 @@ export class BatteryListItemComponent {
 
   private batteryLevel: number;
 
-  constructor(private navCtrl: NavController, private viewCtrl: ViewController, private alBatteryService: ALBatteryService) { }
+  constructor(private alBatteryService: ALBatteryService) { }
 
   ngOnInit(): void {
     this.getBatteryLevel();

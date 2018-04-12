@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AlertController, ToastController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 import { BtrAlert } from '../../objects/alert/BtrAlert';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
 
@@ -14,10 +14,9 @@ export class ALAutonomousLifeListItemComponent {
   private alert: BtrAlert;
   private stateInterval: number;
 
-  private currentState: string;
   private states: string[] = ['solitary', 'interactive', 'disabled', 'safegard'];
 
-  constructor(private alertCtrl: AlertController, private toastCtrl: ToastController, private alAutonomousLife: ALAutonomousLifeService) { }
+  constructor(private alertCtrl: AlertController, private alAutonomousLife: ALAutonomousLifeService) { }
 
   ngOnInit(): void {
     this.alert = new BtrAlert(this.alertCtrl);
