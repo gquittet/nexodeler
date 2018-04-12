@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController } from 'ionic-angular';
 import { trigger, style, animate, transition, keyframes } from '@angular/animations';
@@ -59,13 +59,13 @@ declare var ping: any;
 })
 export class ListRobotsPage {
 
-  private name = 'Robots';
+  name = 'Robots';
   private robots: Robot[];
   private selectedRobots: Robot[];
   private isSelection: boolean = false;
   private searchControl: FormControl;
   private searchTerm: string = '';
-  private searching: boolean;
+  searching: boolean;
 
   constructor(public appCtrl: App, public navCtrl: NavController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
     this.searchControl = new FormControl();

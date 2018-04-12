@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ViewController, NavController } from 'ionic-angular';
+import { QiService } from '../../../app/services/naoqi/qi.service';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { AlertController } from 'ionic-angular';
 })
 export class RebootButtonComponent {
 
-  constructor(private alertCtrl: AlertController, private alSystem: ALSystemService) { }
+  constructor(private navCtrl: NavController, private viewCtrl: ViewController, private alertCtrl: AlertController, private alSystem: ALSystemService) { }
 
   reboot(): void {
     this.alertCtrl.create({
@@ -27,7 +28,15 @@ export class RebootButtonComponent {
             this.alertCtrl.create({
               title: 'Info',
               subTitle: name + ' is rebooting...',
-              buttons: ['OK']
+              buttons: [
+                {
+                  text: 'OK',
+                  handler: () => {
+                    QiService.disconnect();
+                    this.navCtrl.remove(this.viewCtrl.index, 1);
+                  }
+                }
+              ]
             }).present();
           }
         }

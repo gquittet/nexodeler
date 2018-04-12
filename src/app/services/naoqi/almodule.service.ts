@@ -8,13 +8,7 @@ import { IALModuleService } from './interfaces/IALModuleService';
  */
 export class ALModuleService implements IALModuleService {
 
-  /**
-   * The IP address of the robot.
-   */
-  private ip: IP;
-
   setIP(ip: IP): void {
-    this.ip = ip;
     QiService.connect(ip);
   }
 }
