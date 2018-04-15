@@ -1,7 +1,7 @@
 /**
  * Creates and loads an image element by url.
  * @param  {String} url
- * @return {Promise} promise that resolves to an image element or
+ * @returns {Promise} promise that resolves to an image element or
  *                   fails to an Error.
  */
 var request_image = function (url) {
@@ -16,7 +16,7 @@ var request_image = function (url) {
 /**
  * Pings a url.
  * @param  {String} url
- * @return {Promise} promise that resolves to a ping (ms, float).
+ * @returns {Promise} promise that resolves to a ping (ms, float).
  */
 var ping = function (url) {
     return new Promise(function (resolve, reject) {
