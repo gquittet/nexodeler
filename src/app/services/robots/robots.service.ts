@@ -7,6 +7,11 @@ import 'rxjs/add/operator/map';
 import { Robot } from '../../objects/Robot';
 import { IRobotsService } from './interfaces/IRobotsService';
 
+/**
+ * The service to manage asynchronously the robots.
+ * @author Guillaume Quittet
+ * @implements
+ */
 @Injectable()
 export class RobotsService implements IRobotsService {
 
@@ -16,7 +21,7 @@ export class RobotsService implements IRobotsService {
 
   constructor(private file: File) { }
 
-  update(robots: Robot[]) {
+  update(robots: Robot[]): void {
     this.robotsSubject.next(robots);
     this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
       this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));

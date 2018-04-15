@@ -23,6 +23,7 @@ export interface IRobotsService {
   /**
    * Filter the list of the robots with a value.
    * @param value The value that used to filter the list of the robots.
+   * @returns {Observable<Robot[]>} An observer with the list of the robots.
    */
   filter(value: string): Observable<Robot[]>;
 }
