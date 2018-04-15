@@ -1,0 +1,126 @@
+{
+  "BATTERY": "Batterie",
+  "DISABLED": "Désactivé",
+  "ERROR": {
+    "ERROR": "Erreur",
+    "ENTER_CORRECT_IP_ADDRESS": "Entrez une adresse IP correcte.",
+    "ENTER_CORRECT_NAME": "Entrez un nom correct.",
+    "ENTER_CORRECT_NUMBER": "Entrez un nombre correct.",
+    "NETWORK_ERROR": "Erreur réseau",
+    "UNABLE_TO_FIND_VALUE": "Impossible de trouver {{value}} !",
+    "VERIFY_NETWORK_CONNECTION": "Vérifiez votre connexion au WiFi !"
+  },
+  "GENERAL": "Général",
+  "IP_ADDRESS": "Adresse IP",
+  "LANGUAGE": "Langue",
+  "LANGUAGES": "Langues",
+  "MODE": "Mode",
+  "MENU": "Menu",
+  "NAME": "Nom",
+  "NAOQI": {
+    "AUTONOMOUS_LIFE": {
+      "AUTONOMOUS_LIFE": "Mode autonome",
+      "SOLITARY": "Solitary",
+      "INTERACTIVE": "Interactive",
+      "SAFEGARD": "Sécurité",
+      "DISABLED": "Désactivé"
+    },
+    "MOTION": {
+      "REST": "Repos",
+      "WAKE_UP": "Marche"
+    },
+    "TEMPERATURE": {
+      "PERFECT": "Parfaite",
+      "NEGLIGIBLE": "Chaud",
+      "SERIOUS": "Brulante",
+      "CRITICAL": "Critique"
+    }
+  },
+  "NO": "Non",
+  "NUMBER": "Nombre",
+  "OK": "D'accord",
+  "PERFECT": "Parfait",
+  "PLEASE_WAIT": "Veuillez patienter...",
+  "POWER": "Énergie",
+  "ROBOT": "Robot",
+  "ROBOTS": "Robots",
+  "SETTINGS": {
+    "LOCALE": "Paramètre régional",
+    "LOCALES": "Paramètres régionaux",
+    "MOTORS_MODE": "Mode des moteurs",
+    "SETTING": "Paramètre",
+    "SETTINGS": "Paramètres"
+  },
+  "SHUTDOWN": "Arrêt",
+  "STATE": "État",
+  "TEMPERATURE": "Température",
+  "TIMEZONE": "Fuseau horaire",
+  "UI": {
+    "ALERT": {
+      "CONTENT": {
+        "QUESTION": {
+          "ROBOT": {
+            "DELETE": "Voulez-vous vraiment supprimer ce robot ?",
+            "REBOOT": "Voulez-vous redémarrer ce robot ?",
+            "SHUTDOWN": "Voulez-vous éteindre ce robot ?"
+          },
+          "ROBOTS": {
+            "DELETE": "Voulez-vous vraiment supprimer ces robots ?",
+            "REBOOT": "Voulez-vous redémarrer ces robots ?",
+            "SHUTDOWN": "Voulez-vous éteindre ces robots ?"
+          }
+        },
+        "LABEL": {
+          "ROBOT": {
+            "IS_REBOOTING_DOTS": "{{value}} redémarre...",
+            "IS_SHUTTINGDOWN_DOTS": "{{value}} s'éteind...",
+            "NAME_APPLIED_AFTER_REBOOT": "Le nom sera changé après un redémarrage."
+          }
+        }
+      },
+      "TITLE": {
+        "INFORMATION": {
+          "INFORMATION": "Information"
+        },
+        "CONFIRM": {
+          "DELETE": "Confirmation de suppression",
+          "REBOOT": "Confirmation de redémarrage",
+          "SHUTDOWN": "Confirmation d'extinction",
+          "UPDATE": "Confirmation de mise à jour"
+        }
+      }
+    },
+    "NAVBAR": {
+      "BUTTONS": {
+        "BACK": "Retour"
+      }
+    },
+    "SIDENAV": {
+      "HOME": "Accueil",
+      "ROBOTS": "Robots",
+      "MODULES": "Modules",
+      "SETTINGS": "Paramètres"
+    },
+    "TITLE": {
+      "ADD_ROBOT": "Ajouter un robot"
+    },
+    "TOAST": {
+      "ROBOTS": {
+        "NO_DELETE": "Aucun robot n'a été supprimé.",
+        "SELECTED_DELETE": "Les robots séléctionnés ont été correctement supprimés."
+      }
+    }
+  },
+  "VERBS": {
+    "CANCEL": "Annuler",
+    "DELETE": "Supprimer",
+    "EDIT": "Modifier",
+    "REBOOT": "Redémarrer",
+    "REBOOT_NOW": "Redémarrer maintenant",
+    "SAVE": "Enregistrer",
+    "SEARCH": "Rechercher",
+    "SHUTDOWN": "Arrêter"
+  },
+  "VOLUME": "Volume",
+  "YES": "Oui"
+}

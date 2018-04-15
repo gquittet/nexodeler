@@ -1,0 +1,126 @@
+{
+  "BATTERY": "Battery",
+  "DISABLED": "Disabled",
+  "ERROR": {
+    "ERROR": "Error",
+    "ENTER_CORRECT_IP_ADDRESS": "Enter a correct IP address.",
+    "ENTER_CORRECT_NAME": "Enter a correct name.",
+    "ENTER_CORRECT_NUMBER": "Enter correct numbers.",
+    "NETWORK_ERROR": "Network error",
+    "UNABLE_TO_FIND_VALUE": "Unable to find {{value}}!",
+    "VERIFY_NETWORK_CONNECTION": "Verify your network connection!"
+  },
+  "GENERAL": "General",
+  "IP_ADDRESS": "IP Address",
+  "LANGUAGE": "Language",
+  "LANGUAGES": "Languages",
+  "MODE": "Mode",
+  "MENU": "Menu",
+  "NAME": "Name",
+  "NAOQI": {
+    "AUTONOMOUS_LIFE": {
+      "AUTONOMOUS_LIFE": "Autonomous Life",
+      "SOLITARY": "Solitary",
+      "INTERACTIVE": "Interactive",
+      "SAFEGARD": "Safeguard",
+      "DISABLED": "Disabled"
+    },
+    "MOTION": {
+      "REST": "Rest",
+      "WAKE_UP": "On"
+    },
+    "TEMPERATURE": {
+      "PERFECT": "Perfect",
+      "NEGLIGIBLE": "Hot",
+      "SERIOUS": "Burning",
+      "CRITICAL": "Critical"
+    }
+  },
+  "NO": "No",
+  "NUMBER": "Number",
+  "OK": "OK",
+  "PERFECT": "Perfect",
+  "PLEASE_WAIT": "Please wait...",
+  "POWER": "Power",
+  "ROBOT": "Robot",
+  "ROBOTS": "Robots",
+  "SETTINGS": {
+    "LOCALE": "Locale",
+    "LOCALES": "Locales",
+    "MOTORS_MODE": "Motors mode",
+    "SETTING": "Setting",
+    "SETTINGS": "Settings"
+  },
+  "SHUTDOWN": "Shutdown",
+  "STATE": "State",
+  "TEMPERATURE": "Temperature",
+  "TIMEZONE": "Timezone",
+  "UI": {
+    "ALERT": {
+      "CONTENT": {
+        "QUESTION": {
+          "ROBOT": {
+            "DELETE": "Do you want to delete this robot?",
+            "REBOOT": "Do you want to reboot this robot?",
+            "SHUTDOWN": "Do you want to shutdown this robot?"
+          },
+          "ROBOTS": {
+            "DELETE": "Do you want to delete these robots?",
+            "REBOOT": "Do you want to reboot these robots?",
+            "SHUTDOWN": "Do you want to shutdown these robots?"
+          }
+        },
+        "LABEL": {
+          "ROBOT": {
+            "IS_REBOOTING_DOTS": "{{value}} is rebooting...",
+            "IS_SHUTTINGDOWN_DOTS": "{{value}} is shutting down...",
+            "NAME_APPLIED_AFTER_REBOOT": "The name will be applied after a reboot."
+          }
+        }
+      },
+      "TITLE": {
+        "INFORMATION": {
+          "INFORMATION": "Information"
+        },
+        "CONFIRM": {
+          "DELETE": "Confirm delete",
+          "REBOOT": "Confirm reboot",
+          "SHUTDOWN": "Confirm shutdown",
+          "UPDATE": "Confirm update"
+        }
+      }
+    },
+    "NAVBAR": {
+      "BUTTONS": {
+        "BACK": "Back"
+      }
+    },
+    "SIDENAV": {
+      "HOME": "Home",
+      "ROBOTS": "Robots",
+      "MODULES": "Modules",
+      "SETTINGS": "Settings"
+    },
+    "TITLE": {
+      "ADD_ROBOT": "Add robot"
+    },
+    "TOAST": {
+      "ROBOTS": {
+        "NO_DELETE": "No robot was deleted.",
+        "SELECTED_DELETE": "Selected robots was successfully deleted."
+      }
+    }
+  },
+  "VERBS": {
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "REBOOT": "Reboot",
+    "REBOOT_NOW": "Reboot now",
+    "SAVE": "Save",
+    "SEARCH": "Search",
+    "SHUTDOWN": "Shutdown"
+  },
+  "VOLUME": "Volume",
+  "YES": "Yes"
+}
