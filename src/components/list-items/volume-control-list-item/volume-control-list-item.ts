@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { ALAudioDeviceService } from '../../../app/services/naoqi/alaudiodevice.service';
 
 @Component({
-  selector: 'volume-control',
-  templateUrl: 'volume-control.html'
+  selector: 'volume-control-list-item',
+  templateUrl: 'volume-control-list-item.html'
 })
-export class VolumeControlComponent {
+export class VolumeControlListItemComponent {
 
-  private volumeInterval: number;
-  private enableInterval: number;
+  private volumeInterval;
+  private enableInterval;
 
   private volume: number;
   private enable: boolean;
