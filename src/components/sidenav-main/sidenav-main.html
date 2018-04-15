@@ -1,13 +1,22 @@
 <ion-menu [content]="sidenavMain">
   <ion-header>
       <ion-toolbar>
-          <ion-title>Menu</ion-title>
+          <ion-title>{{ 'MENU' | translate }}</ion-title>
       </ion-toolbar>
   </ion-header>
   <ion-content>
       <ion-list>
-          <button ion-item *ngFor="let page of pages" (tap)="openPage(page)">
-              <ion-icon name="{{page.icon}}" item-left></ion-icon> {{page.title}}
+          <button ion-item (tap)="openPage('HomePage')">
+              <ion-icon name="home" item-left></ion-icon> {{ 'UI.SIDENAV.HOME' | translate }}
+          </button>
+          <button ion-item (tap)="openPage('ListRobotsPage')">
+              <ion-icon name="outlet" item-left></ion-icon> {{ 'UI.SIDENAV.ROBOTS' | translate }}
+          </button>
+          <button ion-item (tap)="openPage('ListRobotsPage')">
+              <ion-icon name="archive" item-left></ion-icon> {{ 'UI.SIDENAV.MODULES' | translate }}
+          </button>
+          <button ion-item (tap)="openPage('ListRobotsPage')">
+              <ion-icon name="settings" item-left></ion-icon> {{ 'SETTINGS.SETTINGS' | translate }}
           </button>
       </ion-list>
   </ion-content>

@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
 import { SidenavMainComponent } from './sidenav-main';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-	declarations: [
+    declarations: [
         SidenavMainComponent
     ],
-	imports: [
-        IonicModule
+    imports: [
+        IonicModule,
+        TranslateModule
     ],
-	exports: [
+    exports: [
         SidenavMainComponent
     ]
 })
-export class SidenavMainModule {}
+export class SidenavMainModule { }

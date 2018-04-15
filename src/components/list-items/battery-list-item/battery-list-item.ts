@@ -9,7 +9,7 @@ import { NavController, ViewController } from 'ionic-angular';
 })
 export class BatteryListItemComponent {
 
-  private batteryInterval: number;
+  private batteryInterval;
 
   private batteryLevel: number;
 

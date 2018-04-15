@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 import { BtrAlert } from '../../objects/alert/BtrAlert';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -11,11 +12,19 @@ import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeec
 export class LanguagesAvailableListItemComponent {
 
   private alert: BtrAlert;
-  private languagesInterval: number;
+  private languagesInterval;
+
+  private alertTitle: string;
+  private okText: string;
+  private cancelText: string;
 
   private languages: string[];
 
-  constructor(private alertCtrl: AlertController, private alTextToSpeech: ALTextToSpeechService) { }
+  constructor(private alertCtrl: AlertController, translate: TranslateService, private alTextToSpeech: ALTextToSpeechService) {
+    translate.get('OK').subscribe((res: string) => this.okText = res);
+    translate.get('VERBS.CANCEL').subscribe((res: string) => this.cancelText = res);
+    translate.get('LANGUAGES').subscribe((res: string) => this.alertTitle = res);
+  }
 
   ngOnInit(): void {
     this.alert = new BtrAlert(this.alertCtrl);
@@ -31,11 +40,11 @@ export class LanguagesAvailableListItemComponent {
   }
 
   show(): void {
-    const alert = this.alert.create('Languages');
+    const alert = this.alert.create(this.alertTitle);
     this.languages.forEach(language => this.alert.createInput(language));
-    alert.addButton('Cancel');
+    alert.addButton(this.cancelText);
     alert.addButton({
-      text: 'Ok',
+      text: this.okText,
       handler: data => {
         this.alert.close();
         this.alTextToSpeech.setLanguage(data);

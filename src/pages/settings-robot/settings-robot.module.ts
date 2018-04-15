@@ -8,13 +8,13 @@ import { ALMotionListItemModule } from '../../components/list-items/al-motion-li
 import { BatteryListItemModule } from '../../components/list-items/battery-list-item/battery-list-item.module';
 import { LanguagesAvailableListItemModule } from '../../components/list-items/languages-available-list-item/languages-available-list-item.module';
 import { NaoqiVersionListItemModule } from '../../components/list-items/naoqi-version-list-item/naoqi-version-list-item.module';
-import { RebootButtonModule } from '../../components/list-items/reboot-button/reboot-button.module';
-import { ShutdownButtonModule } from '../../components/list-items/shutdown-button/shutdown-button.module';
+import { RebootButtonListItemModule } from '../../components/list-items/reboot-button-list-item/reboot-button-list-item.module';
+import { ShutdownButtonListItemModule } from '../../components/list-items/shutdown-button-list-item/shutdown-button-list-item.module';
 import { TemperatureListItemModule } from '../../components/list-items/temperature-list-item/temperature-list-item.module';
-import { VolumeControlModule } from '../../components/list-items/volume-control/volume-control.module';
+import { VolumeControlListItemModule } from '../../components/list-items/volume-control-list-item/volume-control-list-item.module';
 
-import { ALModuleService } from '../../app/services/naoqi/almodule.service';
-import { TimezoneModule } from '../../components/list-items/timezone/timezone.module';
+import { TimezoneListItemModule } from '../../components/list-items/timezone-list-item/timezone-list-item.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -27,17 +27,15 @@ import { TimezoneModule } from '../../components/list-items/timezone/timezone.mo
     BatteryListItemModule,
     LanguagesAvailableListItemModule,
     NaoqiVersionListItemModule,
-    RebootButtonModule,
-    ShutdownButtonModule,
+    RebootButtonListItemModule,
+    ShutdownButtonListItemModule,
     TemperatureListItemModule,
-    TimezoneModule,
-    VolumeControlModule
+    TranslateModule,
+    TimezoneListItemModule,
+    VolumeControlListItemModule
   ],
   exports: [
     SettingsRobotPage
-  ],
-  providers: [
-    ALModuleService
   ]
 })
 export class SettingsRobotModule {}

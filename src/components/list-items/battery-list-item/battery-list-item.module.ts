@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
 import { BatteryListItemComponent } from './battery-list-item';
 import { ALBatteryService } from '../../../app/services/naoqi/albattery.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
         BatteryListItemComponent
     ],
     imports: [
-        IonicModule
+        IonicModule,
+        TranslateModule
     ],
     exports: [
         BatteryListItemComponent

@@ -18,7 +18,6 @@ declare var ping: any;
 })
 export class AddRobotPage {
 
-  name = 'Add Robot';
   addForm: FormGroup;
   robots: Robot[];
 
@@ -31,11 +30,11 @@ export class AddRobotPage {
     });
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.robotsService.robots.subscribe(robots => this.robots = robots);
   }
 
-  save() {
+  save(): void {
     const ip = new IP([this.addForm.controls['number1'].value, this.addForm.controls['number2'].value, this.addForm.controls['number3'].value, this.addForm.controls['number4'].value]);
     const loading = this.loadingCtrl.create({
       content: 'Please wait...'
@@ -50,7 +49,7 @@ export class AddRobotPage {
           buttons: ['OK']
         }).present();
       }, 5000);
-      this.alSystemService.setIP(ip);
+      QiService.connect(ip);
       this.alSystemService.getName().then(robotName => {
         const robot = new Robot(robotName, ip.toString());
         this.robots.push(robot);
@@ -75,7 +74,7 @@ export class AddRobotPage {
     });
   }
 
-  goBack() {
+  goBack(): void {
     this.navCtrl.remove(this.viewCtrl.index, 1);
     QiService.disconnect();
   }
