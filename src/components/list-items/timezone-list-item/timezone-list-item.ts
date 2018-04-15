@@ -3,12 +3,12 @@ import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 
 
 @Component({
-  selector: 'timezone',
-  templateUrl: 'timezone.html'
+  selector: 'timezone-list-item',
+  templateUrl: 'timezone-list-item.html'
 })
-export class TimezoneComponent {
+export class TimezoneListItemComponent {
 
-  private timezoneInterval: number;
+  private timezoneInterval;
 
   private timezone: string;
 

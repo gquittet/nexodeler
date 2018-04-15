@@ -25,7 +25,7 @@ export class QiService {
    * Return a table with the parameters of a function.
    * Source: https://stackoverflow.com/a/9924463
    * @param func A function
-   * @return {string[]} A table with the parameters of a function.
+   * @returns {string[]} A table with the parameters of a function.
    */
   private static getParamsName(func: Function): string[] {
     const STRIP_COMMENTS = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=[^,\)]*(('(?:\\'|[^'\r\n])*')|("(?:\\"|[^"\r\n])*"))|(\s*=[^,\)]*))/mg;
@@ -40,7 +40,7 @@ export class QiService {
   /**
    * Load a module with its name.
    * @param moduleName The name of a module.
-   * @return {Promise<any>} A promise that is ended when the module is loaded.
+   * @returns {Promise<any>} A promise that is ended when the module is loaded.
    */
   private static loadModule(moduleName: string): Promise<any> {
     if (!(moduleName in this.modulesLoaded)) {
@@ -52,7 +52,7 @@ export class QiService {
   /**
    * Call a NAOqi module and use it.
    * @param callback A function to use a NAOqi module.
-   * @return {Promise<any>} The Promise
+   * @returns {Promise<any>} The Promise
    */
   static call(callback: Function): Promise<any> {
     const modulesToBeLoaded = this.getParamsName(callback);

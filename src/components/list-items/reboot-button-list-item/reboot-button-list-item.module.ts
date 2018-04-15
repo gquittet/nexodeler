@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
-import { RebootButtonComponent } from './reboot-button';
+import { RebootButtonListItemComponent } from './reboot-button-list-item';
 
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
     declarations: [
-        RebootButtonComponent
+        RebootButtonListItemComponent
     ],
     imports: [
-        IonicModule
+        IonicModule,
+        TranslateModule
     ],
     exports: [
-        RebootButtonComponent
+        RebootButtonListItemComponent
     ],
     providers: [
         ALSystemService
     ]
 })
-export class RebootButtonModule { }
+export class RebootButtonListItemModule { }

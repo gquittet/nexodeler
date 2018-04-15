@@ -1,14 +1,10 @@
-import { IP } from '../../objects/IP';
-import { QiService } from './qi.service';
 import { IALModuleService } from './interfaces/IALModuleService';
 
 /**
- * Create a connection with the robot and use modules from QiSession.
+ * The service implementation of the ALModule NAOqi class.
  * @author Guillaume Quittet
+ * @implements
  */
 export class ALModuleService implements IALModuleService {
 
-  setIP(ip: IP): void {
-    QiService.connect(ip);
-  }
 }

@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar color="primary">
         <ion-title>
-            Settings
+            {{ 'SETTINGS.SETTINGS' | translate }}
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -10,23 +10,23 @@
 <ion-content>
     <ion-list>
         <ion-list-header>
-            General
+            {{ 'GENERAL' | translate: param }}
         </ion-list-header>
         <battery-list-item></battery-list-item>
         <temperature-list-item></temperature-list-item>
         <naoqi-version-list-item></naoqi-version-list-item>
         <al-motion-list-item></al-motion-list-item>
-        <volume-control></volume-control>
+        <volume-control-list-item></volume-control-list-item>
         <al-autonomous-life-list-item></al-autonomous-life-list-item>
         <ion-list-header>
-            Language
+            {{ 'SETTINGS.LOCALES' | translate }}
         </ion-list-header>
         <languages-available-list-item></languages-available-list-item>
-        <timezone></timezone>
+        <timezone-list-item></timezone-list-item>
         <ion-list-header>
-            Power
+            {{ 'SHUTDOWN' | translate }}
         </ion-list-header>
-        <shutdown-button></shutdown-button>
-        <reboot-button></reboot-button>
+        <shutdown-button-list-item></shutdown-button-list-item>
+        <reboot-button-list-item></reboot-button-list-item>
     </ion-list>
 </ion-content>

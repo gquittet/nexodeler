@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
-import { TimezoneComponent } from './timezone';
+import { TimezoneListItemComponent } from './timezone-list-item';
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
 	declarations: [
-        TimezoneComponent
+        TimezoneListItemComponent
     ],
 	imports: [
-        IonicModule
+        IonicModule,
+        TranslateModule
     ],
 	exports: [
-        TimezoneComponent
+        TimezoneListItemComponent
     ],
     providers: [
         ALSystemService
     ]
 })
-export class TimezoneModule {}
+export class TimezoneListItemModule {}

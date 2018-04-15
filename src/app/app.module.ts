@@ -4,12 +4,21 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MyApp } from './app.component';
 
 import { RobotsModule } from './services/robots/robots.module';
 import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.module';
+import { Globalization } from '@ionic-native/globalization';
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -19,6 +28,14 @@ import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.modul
     BrowserModule,
     BrowserAnimationsModule,
     IonicModule.forRoot(MyApp),
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    }),
     RobotsModule,
     SidenavMainModule
   ],
@@ -29,7 +46,8 @@ import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.modul
   providers: [
     SplashScreen,
     StatusBar,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    Globalization,
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
-import { VolumeControlComponent } from './volume-control';
+import { VolumeControlListItemComponent } from './volume-control-list-item';
 import { ALAudioDeviceService } from '../../../app/services/naoqi/alaudiodevice.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
-        VolumeControlComponent
+        VolumeControlListItemComponent
     ],
     imports: [
-        IonicModule
+        IonicModule,
+        TranslateModule
     ],
     exports: [
-        VolumeControlComponent
+        VolumeControlListItemComponent
     ],
     providers: [
         ALAudioDeviceService
     ]
 })
-export class VolumeControlModule { }
+export class VolumeControlListItemModule { }
