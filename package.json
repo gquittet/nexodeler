@@ -9,7 +9,10 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "doc:build": "compodoc -p tsconfig.json --theme postmark --hideGenerator",
+    "doc:serve": "compodoc -s",
+    "doc:buildandserve": "compodoc -p tsconfig.json --theme postmark --hideGenerator -s"
   },
   "dependencies": {
     "@angular/animations": "^5.2.9",
@@ -21,29 +24,34 @@
     "@angular/http": "5.2.9",
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
-    "@ionic-native/core": "4.6.0",
+    "@ionic-native/core": "4.7.0",
     "@ionic-native/file": "^4.6.0",
-    "@ionic-native/splash-screen": "4.6.0",
-    "@ionic-native/status-bar": "4.6.0",
+    "@ionic-native/globalization": "^4.7.0",
+    "@ionic-native/splash-screen": "4.7.0",
+    "@ionic-native/status-bar": "4.7.0",
     "@ionic/pro": "1.0.20",
     "@ionic/storage": "2.1.3",
+    "@ngx-translate/core": "9.1.1",
+    "@ngx-translate/http-loader": "^3.0.1",
     "chart.js": "^2.7.2",
     "cordova-android": "7.1.0",
     "cordova-browser": "5.0.3",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-file": "^6.0.1",
+    "cordova-plugin-globalization": "^1.0.9",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.19",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-whitelist": "^1.3.3",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
-    "rxjs": "5.5.8",
+    "rxjs": "5.5.10",
     "sw-toolbox": "3.6.0",
     "web-animations-js": "^2.3.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.2",
     "@ionic/app-scripts": "3.1.8",
     "typescript": "^2.8.1"
   },
@@ -55,7 +63,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-globalization": {}
     },
     "platforms": [
       "android",
