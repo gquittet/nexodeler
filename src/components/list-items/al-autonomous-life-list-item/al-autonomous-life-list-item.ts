@@ -22,7 +22,7 @@ export class ALAutonomousLifeListItemComponent {
   constructor(private alertCtrl: AlertController, translate: TranslateService, private alAutonomousLife: ALAutonomousLifeService) {
     this.states = [];
     translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('VERBS.CANCEL').subscribe((res: string) => this.okText = res);
+    translate.get('VERBS.CANCEL').subscribe((res: string) => this.cancelText = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.AUTONOMOUS_LIFE').subscribe((res: string) => this.alertTitle = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').subscribe((res: string) => this.states[1] = res);
