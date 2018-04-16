@@ -15,14 +15,16 @@
   "IP_ADDRESS": "Adresse IP",
   "LANGUAGE": "Langue",
   "LANGUAGES": "Langues",
-  "MODE": "Mode",
   "MENU": "Menu",
+  "MODE": "Mode",
+  "MOTOR": "Moteur",
+  "MOTORS": "Moteurs",
   "NAME": "Nom",
   "NAOQI": {
     "AUTONOMOUS_LIFE": {
       "AUTONOMOUS_LIFE": "Mode autonome",
-      "SOLITARY": "Solitary",
-      "INTERACTIVE": "Interactive",
+      "SOLITARY": "Solitaire",
+      "INTERACTIVE": "Interactif",
       "SAFEGARD": "Sécurité",
       "DISABLED": "Désactivé"
     },
