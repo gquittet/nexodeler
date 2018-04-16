@@ -20,7 +20,7 @@ export class ALAutonomousLifeListItemComponent {
   private states: string[];
 
   constructor(private alertCtrl: AlertController, translate: TranslateService, private alAutonomousLife: ALAutonomousLifeService) {
-    this.states = new Array(4);
+    this.states = [];
     translate.get('OK').subscribe((res: string) => this.okText = res);
     translate.get('VERBS.CANCEL').subscribe((res: string) => this.okText = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.AUTONOMOUS_LIFE').subscribe((res: string) => this.alertTitle = res);
@@ -32,7 +32,6 @@ export class ALAutonomousLifeListItemComponent {
 
   ngOnInit(): void {
     this.alert = new BtrAlert(this.alertCtrl);
-    this.states = new Array(4);
     this.getState();
     this.stateInterval = setInterval(() => this.getState(), 1500);
   }

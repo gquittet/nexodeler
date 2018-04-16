@@ -15,6 +15,7 @@ export class TemperatureListItemComponent {
   private temperatures: string[];
 
   constructor(translate: TranslateService, private alBodyTemperature: ALBodyTemperatureService) {
+    this.temperatures = [];
     translate.get('NAOQI.TEMPERATURE.PERFECT').subscribe(res => this.temperatures[0] = res);
     translate.get('NAOQI.TEMPERATURE.NEGLIGIBLE').subscribe(res => this.temperatures[1] = res);
     translate.get('NAOQI.TEMPERATURE.SERIOUS').subscribe(res => this.temperatures[2] = res);
@@ -24,7 +25,6 @@ export class TemperatureListItemComponent {
   ngOnInit(): void {
     this.getTemperature();
     this.temperatureInterval = setInterval(() => this.getTemperature(), 2000);
-    this.temperatures = new Array(4);
   }
 
   private getTemperature(): void {
