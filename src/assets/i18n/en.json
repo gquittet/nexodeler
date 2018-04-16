@@ -8,6 +8,7 @@
     "ENTER_CORRECT_NUMBER": "Enter correct numbers.",
     "NETWORK_ERROR": "Network error",
     "UNABLE_TO_FIND_VALUE": "Unable to find {{value}}!",
+    "UNABLE_TO_GET_ROBOT_NAME": "Unable to get the robot name!",
     "VERIFY_NETWORK_CONNECTION": "Verify your network connection!"
   },
   "GENERAL": "General",
