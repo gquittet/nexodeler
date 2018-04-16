@@ -15,8 +15,10 @@
   "IP_ADDRESS": "IP Address",
   "LANGUAGE": "Language",
   "LANGUAGES": "Languages",
-  "MODE": "Mode",
   "MENU": "Menu",
+  "MODE": "Mode",
+  "MOTOR": "Motor",
+  "MOTORS": "Motors",
   "NAME": "Name",
   "NAOQI": {
     "AUTONOMOUS_LIFE": {
