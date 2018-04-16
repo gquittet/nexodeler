@@ -8,6 +8,7 @@
     "ENTER_CORRECT_NUMBER": "Entrez un nombre correct.",
     "NETWORK_ERROR": "Erreur réseau",
     "UNABLE_TO_FIND_VALUE": "Impossible de trouver {{value}} !",
+    "UNABLE_TO_GET_ROBOT_NAME": "Impossible de récupérer le nom du robot !",
     "VERIFY_NETWORK_CONNECTION": "Vérifiez votre connexion au WiFi !"
   },
   "GENERAL": "Général",
