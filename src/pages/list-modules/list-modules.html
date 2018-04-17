@@ -1,0 +1,48 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{ 'UI.SIDENAV.MODULES' | translate }}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (tap)="content.resize();">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+      <button ion-button icon-only (tap)="showSearchBar = !showSearchBar; content.resize()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar *ngIf="!showSearchBar">
+    <ion-segment [(ngModel)]="section" (ngModelChange)="segmentChanged()">
+      <ion-segment-button value="favorites">
+        {{ 'FAVORITES' | translate }}
+      </ion-segment-button>
+      <ion-segment-button value="recents">
+        {{ 'RECENTS' | translate }}
+      </ion-segment-button>
+      <ion-segment-button value="all">
+        {{ 'ALL' | translate }}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="showSearchBar" color="accent">
+    <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ cancelText }}" showCancelButton="true"
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionCancel)="searchTerm = ''; showSearchBar = false; content.resize()"></ion-searchbar>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content #content>
+
+  <ion-list>
+    <button ion-item *ngFor="let module of modules">
+      <ion-label padding-vertical>{{ 'MODULES.NAMES.' + module.name | translate }}</ion-label>
+      <ion-icon item-end color="secondary" *ngIf="module.fav" name="star"></ion-icon>
+      <ion-icon item-end color="secondary" *ngIf="!module.fav" name="star-outline"></ion-icon>
+    </button>
+  </ion-list>
+
+</ion-content>
