@@ -12,7 +12,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MyApp } from './app.component';
 
-import { RobotsModule } from './services/robots/robots.module';
 import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.module';
 import { Globalization } from '@ionic-native/globalization';
 
@@ -36,7 +35,6 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    RobotsModule,
     SidenavMainModule
   ],
   bootstrap: [IonicApp],

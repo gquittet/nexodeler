@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import 'rxjs/add/operator/debounceTime';
 import { QiService } from '../../app/services/naoqi/qi.service';
+import { Subscription } from 'rxjs/Subscription';
 
 declare var ping: any;
 
@@ -62,6 +63,8 @@ export class ListRobotsPage {
   private searchControl: FormControl;
   private searchTerm: string = '';
   searching: boolean;
+
+  private subscription: Subscription;
 
   private cancelText: string;
   private confirmDeleteText: string;
@@ -136,12 +139,12 @@ export class ListRobotsPage {
   }
 
   ionViewDidEnter(): void {
-    this.robotsService.robots.subscribe(robots => this.robots = robots);
+    this.subscription =  this.robotsService.robots.subscribe(robots => this.robots = robots);
     this.selectedRobots = [];
   }
 
   addRobot(): void {
-    this.navCtrl.push('AddRobotPage');
+    this.navCtrl.push('AddRobotPage', { robots: this.robots });
   }
 
   delete(item: ItemSliding, robot: Robot): void {
@@ -379,5 +382,9 @@ export class ListRobotsPage {
       }).present();
       this.cancelSelection();
     }
+  }
+
+  ionViewWillLeave(): void {
+    this.subscription.unsubscribe();
   }
 }
