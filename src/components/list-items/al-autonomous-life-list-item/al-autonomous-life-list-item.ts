@@ -73,7 +73,9 @@ export class ALAutonomousLifeListItemComponent {
   show(): void {
     const alert = this.alert.create(this.alertTitle);
     for (let state of this.states) {
-      this.alert.createInput(state);
+      // We can't set the 'interactive' and 'safegard' state. (bug: 0.0.3-3)
+      if (this.convertState(state) !== 'interactive' && this.convertState(state) !== 'safegard')
+        this.alert.createInput(state);
     }
     alert.addButton(this.cancelText);
     alert.addButton({
@@ -81,7 +83,8 @@ export class ALAutonomousLifeListItemComponent {
       handler: data => {
         this.alert.close();
         for (let state of this.states) {
-          if (state === data) {
+          // We can't set the 'interactive' and 'safegard' state. (bug: 0.0.3-3)
+          if (state === data && state !== 'interactive' && state !== 'safegard') {
             this.alAutonomousLife.setState(this.convertState(data));
             this.alert.setResult(data);
           }
