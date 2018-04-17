@@ -59,8 +59,8 @@ export class ListRobotsPage {
   private robots: Robot[];
   private selectedRobots: Robot[];
   private isSelection: boolean = false;
-  private searchControl: FormControl;
-  private searchTerm: string = '';
+  searchControl: FormControl;
+  searchTerm: string = '';
   searching: boolean;
 
   private cancelText: string;
