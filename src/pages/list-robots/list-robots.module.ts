@@ -4,6 +4,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { ListRobotsPage } from './list-robots';
 
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
+import { RobotsModule } from '../../app/services/robots/robots.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -12,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   imports: [
     IonicPageModule.forChild(ListRobotsPage),
+    RobotsModule,
     TranslateModule
   ],
   exports: [
@@ -21,4 +23,4 @@ import { TranslateModule } from '@ngx-translate/core';
     ALSystemService
   ]
 })
-export class ListRobotsModule {}
+export class ListRobotsModule { }
