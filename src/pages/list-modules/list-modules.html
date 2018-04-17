@@ -38,10 +38,12 @@
 <ion-content #content>
 
   <ion-list>
-    <button ion-item *ngFor="let module of modules">
-      <ion-label padding-vertical>{{ 'MODULES.NAMES.' + module.name | translate }}</ion-label>
-      <ion-icon item-end color="secondary" *ngIf="module.fav" name="star"></ion-icon>
-      <ion-icon item-end color="secondary" *ngIf="!module.fav" name="star-outline"></ion-icon>
+    <button ion-item *ngFor="let module of modules" (tap)="openPage(module)">
+      <ion-label>{{ 'MODULES.NAMES.' + module.name | translate }}</ion-label>
+      <button icon-only item-end (tap)="toggleFavorite(module)">
+        <ion-icon *ngIf="module.fav" color="secondary" name="star"></ion-icon>
+        <ion-icon *ngIf="!module.fav" color="secondary" name="star-outline"></ion-icon>
+      </button>
     </button>
   </ion-list>
 
