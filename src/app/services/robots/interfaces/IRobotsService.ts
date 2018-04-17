@@ -11,6 +11,7 @@ export interface IRobotsService {
 
   /**
    * The file name where the data will be saved.
+   * @readonly
    */
   readonly FILE_NAME: string;
 
