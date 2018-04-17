@@ -9,4 +9,4 @@ import { ModulesService } from './modules.service';
     ModulesService
   ]
 })
-export class RobotsModule {}
+export class ModulesModule {}

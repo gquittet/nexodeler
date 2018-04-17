@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ListModulesPage } from './list-modules';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModulesService } from '../../app/services/modules/modules.service';
+import { ModulesModule } from '../../app/services/modules/modules.module';
 
 @NgModule({
   declarations: [
@@ -10,13 +10,11 @@ import { ModulesService } from '../../app/services/modules/modules.service';
   ],
   imports: [
     IonicPageModule.forChild(ListModulesPage),
+    ModulesModule,
     TranslateModule
   ],
   exports: [
     ListModulesPage
-  ],
-  providers: [
-    ModulesService
   ]
 })
 export class ListModulesPageModule {}
