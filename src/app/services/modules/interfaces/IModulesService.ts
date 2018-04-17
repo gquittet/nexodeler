@@ -28,9 +28,9 @@ export interface IModulesService {
   update(modules: Module[]): void;
 
   /**
-   * Filter the list of the robots with a value.
-   * @param value The value that used to filter the list of the robots.
-   * @returns {Observable<Module[]>} An observer with the list of the robots.
+   * Filter the list of the modules with a value.
+   * @param value The value that used to filter the list of the modules.
+   * @returns {Observable<Module[]>} An observer with the list of the modules.
    */
   filter(value: string): Observable<Module[]>;
 }
