@@ -16,12 +16,6 @@ export interface IModulesService {
   readonly FILE_NAME: string;
 
   /**
-   * Favorite or unfavorite one modules.
-   * @param module The module.
-   */
-  favorite(module: Module): void;
-
-  /**
    * Update the list of the modules.
    * @param modules The new list of the modules.
    */

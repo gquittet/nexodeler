@@ -18,24 +18,13 @@ export class ModulesService implements IModulesService {
 
   readonly FILE_NAME: string = "modules.json";
   private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
-    <Module>{'id': 0, 'name': 'PAIR', 'category': 'LEARNING', 'fav': false, 'page': 'HomePage', 'version': '0.0.1', 'created': new Date('2018-04-17T11:59:00'), 'update': new Date('2018-04-17T11:59:00'), 'access': new Date('2018-04-17T11:59:00')},
-    <Module>{'id': 1, 'name': 'SPEAK', 'category': 'SPEAK', 'fav': false, 'page': 'HomePage', 'version': '0.0.1', 'created': new Date('2018-04-17T11:59:00'), 'update': new Date('2018-04-17T11:59:00'), 'access': new Date('2018-04-17T11:59:00')},
-    <Module>{'id': 2, 'name': 'MOVE', 'category': 'MOVE', 'fav': false, 'page': 'HomePage', 'version': '0.0.1', 'created': new Date('2018-04-17T11:59:00'), 'update': new Date('2018-04-17T11:59:00'), 'access': new Date('2018-04-17T11:59:00')}
+    <Module>{ id: 0, name: 'PAIR', category: 'LEARNING', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T22:40:00') },
+    <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T11:59:00') },
+    <Module>{ id: 2, name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T22:38:00') }
   ]);
   modules = this.modulesSubject.asObservable();
 
   constructor(private file: File, private translate: TranslateService) { }
-
-  favorite(module: Module): void {
-    let modulesList: Module[] = [];
-    this.modules.subscribe(
-      (modules: Module[]) => modulesList = modules.map((element: Module) => {
-        JSON.stringify(element) === JSON.stringify(module) ? element.fav = !element.fav : element;
-        return element;
-      }),
-      error => console.error('[ERROR][OBSERVABLE][ModulesService] favorite(module: Module): void ' + error),
-      () => this.update(modulesList));
-  }
 
   update(modules: Module[]): void {
     this.modulesSubject.next(modules);
