@@ -4,9 +4,6 @@
     <ion-title>{{ 'UI.SIDENAV.MODULES' | translate }}</ion-title>
 
     <ion-buttons end>
-      <button ion-button icon-only (tap)="content.resize();">
-        <ion-icon name="funnel"></ion-icon>
-      </button>
       <button ion-button icon-only (tap)="showSearchBar = !showSearchBar; content.resize()">
         <ion-icon name="search"></ion-icon>
       </button>
@@ -28,7 +25,7 @@
   </ion-toolbar>
 
   <ion-toolbar *ngIf="showSearchBar" color="accent">
-    <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ cancelText }}" showCancelButton="true"
+    <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
       animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionCancel)="searchTerm = ''; showSearchBar = false; content.resize()"></ion-searchbar>
   </ion-toolbar>
 
@@ -37,14 +34,60 @@
 
 <ion-content #content>
 
-  <ion-list>
+  <ion-list *ngIf="section !== 'all'">
     <button ion-item *ngFor="let module of modules" (tap)="openPage(module)">
-      <ion-label>{{ 'MODULES.NAMES.' + module.name | translate }}</ion-label>
-      <button icon-only item-end (tap)="toggleFavorite(module)">
-        <ion-icon *ngIf="module.fav" color="secondary" name="star"></ion-icon>
-        <ion-icon *ngIf="!module.fav" color="secondary" name="star-outline"></ion-icon>
+      <h2>{{ 'MODULES.NAMES.' + module.name | translate }}</h2>
+      <p *ngIf="section === 'recents'">
+        <b>{{ formatDate(module.access) }}</b>
+      </p>
+      <p>
+        <b>{{ 'CREATOR' | translate }}</b>
+        <i>{{ module.creator }}</i>
+      </p>
+      <p>
+        <b>{{ 'MAINTAINER' | translate }}</b>
+        <i>{{ module.maintainer }}</i>
+      </p>
+      <p>
+        <b>{{ 'VERSION' | translate }}</b>
+        <i>{{ module.version }}</i>
+      </p>
+      <button ion-button clear style="zoom: 1.4;" item-end (tap)="toggleFavorite(module, $event)" *ngIf="module.fav">
+        <ion-icon color="secondary" style="zoom: 1.4;" name="star"></ion-icon>
+      </button>
+      <button ion-button clear style="zoom: 1.4;" item-end (tap)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+        <ion-icon color="secondary" style="zoom: 1.4;" name="star-outline"></ion-icon>
       </button>
     </button>
   </ion-list>
+
+  <ng-container *ngFor="let categorie of categories">
+    <ion-item-group *ngIf="section === 'all'">
+      <ion-item-divider>{{ 'MODULES.CATEGORIES.' + categorie | translate }}</ion-item-divider>
+      <ng-container *ngFor="let module of modules">
+        <button ion-item *ngIf="module.category === categorie" (tap)="openPage(module)">
+          <h2>{{ 'MODULES.NAMES.' + module.name | translate }}</h2>
+          <p>
+            <b>{{ 'CREATOR' | translate }}</b>
+            <i>{{ module.creator }}</i>
+          </p>
+          <p>
+            <b>{{ 'MAINTAINER' | translate }}</b>
+            <i>{{ module.maintainer }}</i>
+          </p>
+          <p>
+            <b>{{ 'VERSION' | translate }}</b>
+            <i>{{ module.version }}</i>
+          </p>
+          <button ion-button clear style="zoom: 1.4;" item-end (tap)="toggleFavorite(module, $event)" *ngIf="module.fav">
+            <ion-icon color="secondary" style="zoom: 1.4;" name="star"></ion-icon>
+          </button>
+          <button ion-button clear style="zoom: 1.4;" item-end (tap)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+            <ion-icon color="secondary" style="zoom: 1.4;" name="star-outline"></ion-icon>
+          </button>
+        </button>
+      </ng-container>
+    </ion-item-group>
+  </ng-container>
 
 </ion-content>

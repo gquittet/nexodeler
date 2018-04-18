@@ -26,6 +26,7 @@ export class ListModulesPage {
 
   private modulesOriginal: Module[];
   modules: Module[];
+  categories: string[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, private modulesService: ModulesService, private translate: TranslateService) {
     this.searchControl = new FormControl();
@@ -45,31 +46,55 @@ export class ListModulesPage {
 
   ionViewDidEnter(): void {
     this.subscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
+    this.categories = [];
+    let index = 0;
+    for (let module of this.modulesOriginal) {
+      if (index === 0)
+        this.categories.push(module.category);
+      else {
+        this.categories.indexOf(module.category) <= -1 ? this.categories.push(module.category) : null;
+      }
+      index++;
+    }
+    let categorieA: string = "";
+    let categorieB: string = "";
+    this.categories = this.categories.sort((a, b) => {
+      this.translate.get('MODULES.CATEGORIES.' + a).subscribe((res: string) => categorieA = res);
+      this.translate.get('MODULES.CATEGORIES.' + b).subscribe((res: string) => categorieB = res);
+      return categorieA.localeCompare(categorieB);
+    });
     this.refreshModules();
   }
 
   private refreshModules(): void {
     if (this.section === 'favorites') {
       this.modules = this.modulesOriginal.filter((module: Module) => module.fav);
+      this.modules = this.alphabeticModuleSort(this.modules);
     } else if (this.section === 'recents') {
-      this.modules = this.modulesOriginal.sort((a, b) => new Date(b.access).getTime() - new Date(a.access).getTime());
+      this.modules = this.modulesOriginal.filter((module: Module) => module.access);
+      this.modules = this.modules.sort((a, b) => new Date(b.access).getTime() - new Date(a.access).getTime());
     } else if (this.section === 'all') {
-      let nameA: string;
-      let nameB: string;
-      this.modules = this.modulesOriginal.sort((a, b) => {
-        this.translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res);
-        this.translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res);
-        return nameA.localeCompare(nameB);
-      });
+      this.modules = this.alphabeticModuleSort(this.modulesOriginal);
     }
   }
 
-  toggleFavorite(module: Module): void {
+  private alphabeticModuleSort(module: Module[]): Module[] {
+    let nameA: string = "";
+    let nameB: string = "";
+    return module.sort((a, b) => {
+      this.translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res);
+      this.translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res);
+      return nameA.localeCompare(nameB);
+    });
+  }
+
+  toggleFavorite(module: Module, event: { srcEvent: Event } ): void {
     this.modulesOriginal = this.modulesOriginal.map((element: Module) => {
       element === module ? element.fav = !element.fav : null;
       return element;
     });
-    this.modulesService.update(this.modulesOriginal);
+    event.srcEvent.stopPropagation();
+    this.modulesService.next(this.modulesOriginal);
   }
 
   openPage(module: Module): void {
@@ -77,12 +102,16 @@ export class ListModulesPage {
       element === module ? element.access = new Date() : null;
       return element;
     });
-    this.modulesService.update(this.modulesOriginal);
+    this.modulesService.next(this.modulesOriginal);
   }
 
   segmentChanged(): void {
-    console.log(this.section);
     this.refreshModules();
+  }
+
+  formatDate(date: Date): string {
+    const newDate = new Date(date);
+    return newDate.toLocaleString();
   }
 
   ionViewWillLeave(): void {
