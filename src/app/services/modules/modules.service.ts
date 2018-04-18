@@ -18,15 +18,40 @@ export class ModulesService implements IModulesService {
 
   readonly FILE_NAME: string = "modules.json";
   private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
-    <Module>{ id: 0, name: 'PAIR', category: 'LEARNING', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T22:40:00') },
-    <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T11:59:00') },
-    <Module>{ id: 2, name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: new Date('2018-04-17T22:38:00') }
+    <Module>{ name: 'PAIR', category: 'LEARNING', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
+    <Module>{ name: 'SPEAK', category: 'SPEAK', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.4', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
+    <Module>{ name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
+    <Module>{ name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.3', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null }
   ]);
-  modules = this.modulesSubject.asObservable();
+  modules: Observable<Module[]> = this.modulesSubject.asObservable();
 
   constructor(private file: File, private translate: TranslateService) { }
 
   update(modules: Module[]): void {
+    this.modulesSubject.value.forEach((module: Module, index: number) => {
+      let newModule: Module = modules[index];
+      if (!newModule)
+        modules.push(module);
+      else {
+        if (newModule.name !== module.name || newModule.category !== module.category || newModule.page !== module.page || newModule.maintainer !== module.maintainer || newModule.version !== module.version || newModule.update !== module.update) {
+          newModule.name = module.name;
+          newModule.category = module.category;
+          newModule.page = module.page;
+          newModule.maintainer = module.maintainer;
+          newModule.version = module.version;
+          newModule.update = module.update;
+        }
+      }
+    });
+    this.modulesSubject.next(modules);
+    this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
+      this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+    }, err => {
+      this.file.writeFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+    });
+  }
+
+  next(modules: Module[]): void {
     this.modulesSubject.next(modules);
     this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
       this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
