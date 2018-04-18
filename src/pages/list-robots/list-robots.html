@@ -18,7 +18,7 @@
                 <ion-icon name="trash"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ cancelText }}" *ngIf="showSearchBar" showCancelButton="true"
+        <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" *ngIf="showSearchBar" showCancelButton="true"
             animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearch()" (ionCancel)="searchTerm = ''; showSearchBar = false; content.resize()"></ion-searchbar>
     </ion-navbar>
 </ion-header>
