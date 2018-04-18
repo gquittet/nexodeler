@@ -1,9 +1,10 @@
 export interface Module {
-  id: number;
   name: string;
   category: string;
   fav: boolean;
   page: string;
+  readonly creator: string;
+  maintainer: string;
   version: string;
   created: Date;
   update: Date;
