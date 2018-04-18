@@ -1,6 +1,7 @@
 {
   "ALL": "All",
   "BATTERY": "Battery",
+  "CREATOR": "Creator",
   "DISABLED": "Disabled",
   "ERROR": {
     "ERROR": "Error",
@@ -18,6 +19,7 @@
   "IP_ADDRESS": "IP Address",
   "LANGUAGE": "Language",
   "LANGUAGES": "Languages",
+  "MAINTAINER": "MAINTAINER",
   "MENU": "Menu",
   "MODE": "Mode",
   "MODULES": {
@@ -143,6 +145,7 @@
     "SEARCH": "Search",
     "SHUTDOWN": "Shutdown"
   },
+  "VERSION": "Version",
   "VOLUME": "Volume",
   "YES": "Yes"
 }
