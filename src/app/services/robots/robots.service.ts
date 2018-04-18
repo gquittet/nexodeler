@@ -17,7 +17,7 @@ export class RobotsService implements IRobotsService {
 
   readonly FILE_NAME: string = "robots.json";
   private robotsSubject: BehaviorSubject<Robot[]> = new BehaviorSubject<Robot[]>([]);
-  robots = this.robotsSubject.asObservable();
+  robots: Observable<Robot[]> = this.robotsSubject.asObservable();
 
   constructor(private file: File) { }
 
