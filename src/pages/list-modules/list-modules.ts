@@ -3,23 +3,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { ModulesService } from '../../app/services/modules/modules.service';
 import { Module } from '../../app/objects/Module';
+import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 
 import { File } from '@ionic-native/file'
 import { Subscription } from 'rxjs/Subscription';
 import { TranslateService } from '@ngx-translate/core';
 
+import 'rxjs/add/operator/debounceTime';
 
 @IonicPage()
 @Component({
   selector: 'page-list-modules',
-  templateUrl: 'list-modules.html',
+  templateUrl: 'list-modules.html'
 })
 export class ListModulesPage {
 
+  private oldSection: string;
   section: string = "favorites";
 
   searchControl: FormControl;
   searchTerm: string = '';
+  searchBar: boolean = false;
   searching: boolean;
 
   private subscription: Subscription;
@@ -42,20 +46,27 @@ export class ListModulesPage {
         });
       }
     }, err => { });
+    this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+      this.searching = false;
+      this.filterItems();
+    });
   }
 
   ionViewDidEnter(): void {
     this.subscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
+    this.updateCategories(this.modulesOriginal);
+    this.refreshModules();
+  }
+
+  private updateCategories(modules: Module[]): void {
     this.categories = [];
-    let index = 0;
-    for (let module of this.modulesOriginal) {
+    modules.forEach((module: Module, index: number) => {
       if (index === 0)
         this.categories.push(module.category);
       else {
         this.categories.indexOf(module.category) <= -1 ? this.categories.push(module.category) : null;
       }
-      index++;
-    }
+    });
     let categorieA: string = "";
     let categorieB: string = "";
     this.categories = this.categories.sort((a, b) => {
@@ -63,7 +74,6 @@ export class ListModulesPage {
       this.translate.get('MODULES.CATEGORIES.' + b).subscribe((res: string) => categorieB = res);
       return categorieA.localeCompare(categorieB);
     });
-    this.refreshModules();
   }
 
   private refreshModules(): void {
@@ -71,9 +81,11 @@ export class ListModulesPage {
       this.modules = this.modulesOriginal.filter((module: Module) => module.fav);
       this.modules = this.alphabeticModuleSort(this.modules);
     } else if (this.section === 'recents') {
-      this.modules = this.modulesOriginal.filter((module: Module) => module.access);
-      this.modules = this.modules.sort((a, b) => new Date(b.access).getTime() - new Date(a.access).getTime());
+      this.modules = this.modulesOriginal.filter((module: Module) => module.last_access);
+      this.modules = this.modules.sort((a, b) => new Date(b.last_access).getTime() - new Date(a.last_access).getTime());
     } else if (this.section === 'all') {
+      if (this.searchTerm.length <= 0)
+        this.updateCategories(this.modulesOriginal);
       this.modules = this.alphabeticModuleSort(this.modulesOriginal);
     }
   }
@@ -88,7 +100,7 @@ export class ListModulesPage {
     });
   }
 
-  toggleFavorite(module: Module, event: { srcEvent: Event } ): void {
+  toggleFavorite(module: Module, event: { srcEvent: Event }): void {
     this.modulesOriginal = this.modulesOriginal.map((element: Module) => {
       element === module ? element.fav = !element.fav : null;
       return element;
@@ -98,10 +110,7 @@ export class ListModulesPage {
   }
 
   openPage(module: Module): void {
-    this.modulesOriginal = this.modulesOriginal.map((element: Module) => {
-      element === module ? element.access = new Date() : null;
-      return element;
-    });
+    this.modulesOriginal.forEach((element: Module) => element.id === module.id ? element.last_access = new Date() : null);
     this.modulesService.next(this.modulesOriginal);
   }
 
@@ -112,6 +121,27 @@ export class ListModulesPage {
   formatDate(date: Date): string {
     const newDate = new Date(date);
     return newDate.toLocaleString();
+  }
+
+  showSearchBar(): void {
+    this.oldSection = this.section;
+    this.section = 'all';
+    this.searchBar = true;
+  }
+
+  cancelSearch(): void {
+    this.section = this.oldSection;
+    this.searchTerm = '';
+    this.searchBar = false;
+    this.refreshModules();
+  }
+
+  private filterItems(): void {
+    if (this.searchBar) {
+      const subscription = this.modulesService.filter(this.searchTerm).subscribe((modules: Module[]) => this.modules = modules);
+      this.updateCategories(this.modules);
+      subscription.unsubscribe();
+    }
   }
 
   ionViewWillLeave(): void {
