@@ -137,6 +137,7 @@
   },
   "VERBS": {
     "CANCEL": "Cancel",
+    "CLOSE": "Close",
     "DELETE": "Delete",
     "EDIT": "Edit",
     "REBOOT": "Reboot",

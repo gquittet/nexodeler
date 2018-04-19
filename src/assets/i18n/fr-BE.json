@@ -137,6 +137,7 @@
   },
   "VERBS": {
     "CANCEL": "Annuler",
+    "CLOSE": "Fermer",
     "DELETE": "Supprimer",
     "EDIT": "Modifier",
     "REBOOT": "Redémarrer",
