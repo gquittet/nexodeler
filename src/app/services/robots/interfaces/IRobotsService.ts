@@ -11,6 +11,7 @@ export interface IRobotsService {
 
   /**
    * The file name where the data will be saved.
+   * @readonly
    */
   readonly FILE_NAME: string;
 
@@ -18,7 +19,7 @@ export interface IRobotsService {
    * Update the list of the robots.
    * @param robots The new list of the robots.
    */
-  update(robots: Robot[]): void;
+  next(robots: Robot[]): void;
 
   /**
    * Filter the list of the robots with a value.

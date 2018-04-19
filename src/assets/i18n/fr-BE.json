@@ -1,5 +1,7 @@
 {
+  "ALL": "Tout",
   "BATTERY": "Batterie",
+  "CREATOR": "Créateur",
   "DISABLED": "Désactivé",
   "ERROR": {
     "ERROR": "Erreur",
@@ -11,12 +13,29 @@
     "UNABLE_TO_GET_ROBOT_NAME": "Impossible de récupérer le nom du robot !",
     "VERIFY_NETWORK_CONNECTION": "Vérifiez votre connexion au WiFi !"
   },
+  "FAVORITE": "Favori",
+  "FAVORITES": "Favoris",
   "GENERAL": "Général",
   "IP_ADDRESS": "Adresse IP",
   "LANGUAGE": "Langue",
   "LANGUAGES": "Langues",
+  "MAINTAINER": "Mainteneur",
   "MENU": "Menu",
   "MODE": "Mode",
+  "MODULES": {
+    "MODULES": "Modules",
+    "CATEGORIES": {
+      "ACTIVITY": "Activité",
+      "LEARNING": "Apprentissage",
+      "MOVE": "Mouvement",
+      "SPEAK": "Expressif"
+    },
+    "NAMES": {
+      "PAIR": "Paire",
+      "MOVE": "Déplacement",
+      "SPEAK": "Parler"
+    }
+  },
   "MOTOR": "Moteur",
   "MOTORS": "Moteurs",
   "NAME": "Nom",
@@ -45,6 +64,8 @@
   "PERFECT": "Parfait",
   "PLEASE_WAIT": "Veuillez patienter...",
   "POWER": "Énergie",
+  "RECENT": "Récent",
+  "RECENTS": "Récents",
   "ROBOT": "Robot",
   "ROBOTS": "Robots",
   "SETTINGS": {
@@ -124,6 +145,7 @@
     "SEARCH": "Rechercher",
     "SHUTDOWN": "Arrêter"
   },
+  "VERSION": "Version",
   "VOLUME": "Volume",
   "YES": "Oui"
 }

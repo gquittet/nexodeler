@@ -6,14 +6,16 @@ import { trigger, style, animate, transition, keyframes } from '@angular/animati
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 
+import { QiService } from '../../app/services/naoqi/qi.service';
+
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { File } from '@ionic-native/file';
 import { RobotsService } from '../../app/services/robots/robots.service';
 import { TranslateService } from '@ngx-translate/core';
 
-import 'rxjs/add/operator/debounceTime';
-import { QiService } from '../../app/services/naoqi/qi.service';
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
+
 
 declare var ping: any;
 
@@ -60,8 +62,9 @@ export class ListRobotsPage {
   private robots: Robot[];
   private selectedRobots: Robot[];
   private isSelection: boolean = false;
-  private searchControl: FormControl;
-  private searchTerm: string = '';
+  searchControl: FormControl;
+  searchTerm: string = '';
+  showSearchBar: boolean = false;
   searching: boolean;
 
   private subscription: Subscription;
@@ -128,7 +131,7 @@ export class ListRobotsPage {
       if (res) {
         this.file.readAsText(this.file.dataDirectory, this.robotsService.FILE_NAME).then(data => {
           this.robots = JSON.parse(data);
-          this.robotsService.update(this.robots);
+          this.robotsService.next(this.robots);
         });
       }
     }, err => { });
@@ -168,7 +171,7 @@ export class ListRobotsPage {
               }
               index++;
             });
-            this.robotsService.update(this.robots);
+            this.robotsService.next(this.robots);
           }
         }
       ]
@@ -254,17 +257,13 @@ export class ListRobotsPage {
                     }
                   }
                 });
-                this.robotsService.update(this.robots);
+                this.robotsService.next(this.robots);
               }
             }
           }
         }
       ]
     }).present();
-  }
-
-  onSearch(): void {
-    this.searching = true;
   }
 
   filterItems(): void {
@@ -304,7 +303,7 @@ export class ListRobotsPage {
           }
         ]
       }).present();
-      this.robotsService.update(this.robots);
+      this.robotsService.next(this.robots);
     });
   }
 
@@ -362,7 +361,7 @@ export class ListRobotsPage {
           {
             text: this.yesText,
             handler: () => {
-              this.robotsService.update(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
+              this.robotsService.next(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
               this.robotsService.robots.subscribe(robots => this.robots = robots);
               this.toastCtrl.create({
                 message: this.toastRobotSelectedDeleteText,
@@ -386,5 +385,11 @@ export class ListRobotsPage {
 
   ionViewWillLeave(): void {
     this.subscription.unsubscribe();
+  }
+
+  cancelSearch(): void {
+    this.searchTerm = '';
+    this.showSearchBar = false;
+    this.searching = false;
   }
 }

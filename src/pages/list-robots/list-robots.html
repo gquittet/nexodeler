@@ -18,15 +18,18 @@
                 <ion-icon name="trash"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ cancelText }}" *ngIf="showSearchBar" showCancelButton="true"
-            animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearch()" (ionCancel)="searchTerm = ''; showSearchBar = false; content.resize()"></ion-searchbar>
+        <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" *ngIf="showSearchBar"
+            showCancelButton="true" animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="searching = true"
+            (ionCancel)="content.resize(); cancelSearch();"></ion-searchbar>
     </ion-navbar>
 </ion-header>
 
 <ion-content #content>
+
     <div *ngIf="searching" class="spinner-container">
         <ion-spinner></ion-spinner>
     </div>
+
     <ion-list>
         <ion-item-sliding #item *ngFor="let robot of robots" @easeInOutRightToLeft>
             <button ion-item (press)="isSelection = true" (tap)="isSelection ? null : openMonitor(robot)">
