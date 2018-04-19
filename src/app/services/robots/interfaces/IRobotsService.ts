@@ -19,7 +19,7 @@ export interface IRobotsService {
    * Update the list of the robots.
    * @param robots The new list of the robots.
    */
-  update(robots: Robot[]): void;
+  next(robots: Robot[]): void;
 
   /**
    * Filter the list of the robots with a value.

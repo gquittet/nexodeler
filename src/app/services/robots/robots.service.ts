@@ -21,7 +21,7 @@ export class RobotsService implements IRobotsService {
 
   constructor(private file: File) { }
 
-  update(robots: Robot[]): void {
+  next(robots: Robot[]): void {
     this.robotsSubject.next(robots);
     this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
       this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));

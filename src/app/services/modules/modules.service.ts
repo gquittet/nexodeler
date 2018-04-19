@@ -18,10 +18,10 @@ export class ModulesService implements IModulesService {
 
   readonly FILE_NAME: string = "modules.json";
   private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
-    <Module>{ name: 'PAIR', category: 'LEARNING', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
-    <Module>{ name: 'SPEAK', category: 'SPEAK', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.4', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
-    <Module>{ name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null },
-    <Module>{ name: 'MOVE', category: 'MOVE', fav: false, page: 'HomePage', creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.3', created: new Date('2018-04-17T11:59:00'), update: new Date('2018-04-17T11:59:00'), access: null }
+    <Module>{ id: 0, name: 'PAIR', category: 'LEARNING', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
+    <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.4', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
+    <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
+    <Module>{ id: 3, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.3', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null }
   ]);
   modules: Observable<Module[]> = this.modulesSubject.asObservable();
 
@@ -33,13 +33,13 @@ export class ModulesService implements IModulesService {
       if (!newModule)
         modules.push(module);
       else {
-        if (newModule.name !== module.name || newModule.category !== module.category || newModule.page !== module.page || newModule.maintainer !== module.maintainer || newModule.version !== module.version || newModule.update !== module.update) {
+        if (newModule.name !== module.name || newModule.category !== module.category || newModule.page !== module.page || newModule.maintainer !== module.maintainer || newModule.version !== module.version || newModule.updated !== module.updated) {
           newModule.name = module.name;
           newModule.category = module.category;
           newModule.page = module.page;
           newModule.maintainer = module.maintainer;
           newModule.version = module.version;
-          newModule.update = module.update;
+          newModule.updated = module.updated;
         }
       }
     });
@@ -61,7 +61,7 @@ export class ModulesService implements IModulesService {
   }
 
   private equals(text0: string, text1: string): boolean {
-    return text0.toLowerCase().indexOf(text1.toLowerCase()) > 1;
+    return text0.toLowerCase().indexOf(text1.toLowerCase()) > -1;
   }
 
   filter(value: string): Observable<Module[]> {
@@ -70,7 +70,7 @@ export class ModulesService implements IModulesService {
     return this.modules.map((modules: Module[]) => modules.filter((module: Module) => {
       this.translate.get('MODULES.NAMES.' + module.name).subscribe((res: string) => name = res);
       this.translate.get('MODULES.CATEGORIES.' + module.category).subscribe((res: string) => category = res);
-      return this.equals(name, value) || this.equals(name, value);
+      return this.equals(name, value) || this.equals(category, value) || this.equals(module.creator, value) || this.equals(module.maintainer, value) || this.equals(module.version, value);
     }));
   }
 }
