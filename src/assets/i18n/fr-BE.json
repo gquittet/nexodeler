@@ -5,10 +5,12 @@
   "DISABLED": "Désactivé",
   "ERROR": {
     "ERROR": "Erreur",
+    "ERROR_BEHAVIOR_START": "L'activité Chorégraphe a eu une erreur inattendue.",
     "ENTER_CORRECT_IP_ADDRESS": "Entrez une adresse IP correcte.",
     "ENTER_CORRECT_NAME": "Entrez un nom correct.",
     "ENTER_CORRECT_NUMBER": "Entrez un nombre correct.",
     "NETWORK_ERROR": "Erreur réseau",
+    "NO_ROBOT_FOUND": "Aucun robot trouvé.",
     "UNABLE_TO_FIND_VALUE": "Impossible de trouver {{value}} !",
     "UNABLE_TO_GET_ROBOT_NAME": "Impossible de récupérer le nom du robot !",
     "VERIFY_NETWORK_CONNECTION": "Vérifiez votre connexion au WiFi !"
@@ -96,6 +98,7 @@
         },
         "LABEL": {
           "ROBOT": {
+            "CHOREGRAPHY_FINISHED": "L'activité Chorégraphe est terminée.",
             "IS_REBOOTING_DOTS": "{{value}} redémarre...",
             "IS_SHUTTINGDOWN_DOTS": "{{value}} s'éteind...",
             "NAME_APPLIED_AFTER_REBOOT": "Le nom sera changé après un redémarrage."
@@ -120,6 +123,7 @@
       }
     },
     "SIDENAV": {
+      "CHOREGRAPHIES": "Chorégraphies",
       "HOME": "Accueil",
       "ROBOTS": "Robots",
       "MODULES": "Modules",
@@ -138,6 +142,7 @@
   "VERBS": {
     "CANCEL": "Annuler",
     "CLOSE": "Fermer",
+    "CONNECT": "Connecter",
     "DELETE": "Supprimer",
     "EDIT": "Modifier",
     "REBOOT": "Redémarrer",
