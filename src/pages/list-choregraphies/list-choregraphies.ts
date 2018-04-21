@@ -119,6 +119,7 @@ export class ListChoregraphiesPage {
               subTitle: this.errorNoRobotFoundText,
               buttons: [this.okText]
             }).present();
+            this.navCtrl.remove(this.viewCtrl.index, 1);
           } else
             this.robotsAlertCombobox.present();
         }
