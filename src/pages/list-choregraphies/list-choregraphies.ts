@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ViewController, LoadingController, Loading } from 'ionic-angular';
 import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { AlertCombobox } from '../../components/objects/alert/AlertCombobox';
+import { AlertRadioButton } from '../../components/objects/alert/AlertRadioButton';
 import { TranslateService } from '@ngx-translate/core';
 import { RobotsService } from '../../app/services/robots/robots.service';
 import { File } from '@ionic-native/file';
@@ -11,7 +10,6 @@ import { Robot } from '../../app/objects/Robot';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { IP } from '../../app/objects/IP';
 
-import * as Rx from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Rx';
 import 'rxjs/add/operator/debounceTime';
 
@@ -24,7 +22,7 @@ declare var pingRobot: any;
 })
 export class ListChoregraphiesPage {
 
-  private robotsAlertCombobox: AlertCombobox;
+  private robotsAlertCombobox: AlertRadioButton;
 
   searchControl: FormControl;
   searchTerm: string = '';
@@ -84,7 +82,7 @@ export class ListChoregraphiesPage {
 
   ionViewDidEnter(): void {
     this.dataSubscription = this.robotsService.robots.subscribe((robots: Robot[]) => this.robots = robots);
-    this.robotsAlertCombobox = new AlertCombobox(this.alertCtrl);
+    this.robotsAlertCombobox = new AlertRadioButton(this.alertCtrl);
     this.showRobotsAlertCombobox();
   }
 

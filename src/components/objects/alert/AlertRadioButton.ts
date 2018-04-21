@@ -1,7 +1,7 @@
-import { IAlertCombobox } from "./IAlertCombobox";
+import { IAlertRadioButton } from "./IAlertRadioButton";
 import { Alert, AlertController } from "ionic-angular";
 
-export class AlertCombobox implements IAlertCombobox {
+export class AlertRadioButton implements IAlertRadioButton {
 
   protected isRadioOpen: boolean = false;
   private alert: Alert;
