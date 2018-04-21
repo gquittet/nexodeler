@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AlertController } from 'ionic-angular';
-import { BtrAlert } from '../../objects/alert/BtrAlert';
+import { AlertCombobox } from '../../objects/alert/AlertCombobox';
 import { ALMotionService } from '../../../app/services/naoqi/almotion.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -16,7 +16,7 @@ export class ALMotionListItemComponent {
   private okText: string;
   private cancelText: string;
 
-  private alert: BtrAlert;
+  private alert: AlertCombobox;
   private stateInterval;
 
   constructor(private alertCtrl: AlertController, translate: TranslateService, private alMotionService: ALMotionService) {
@@ -29,7 +29,7 @@ export class ALMotionListItemComponent {
   }
 
   ngOnInit(): void {
-    this.alert = new BtrAlert(this.alertCtrl);
+    this.alert = new AlertCombobox(this.alertCtrl);
     this.getState();
     this.stateInterval = setInterval(() => this.getState(), 2000);
   }

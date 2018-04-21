@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AlertController } from 'ionic-angular';
-import { BtrAlert } from '../../objects/alert/BtrAlert';
+import { AlertCombobox } from '../../objects/alert/AlertCombobox';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ALAutonomousLifeListItemComponent {
 
-  private alert: BtrAlert;
+  private alert: AlertCombobox;
   private stateInterval;
 
   private alertTitle: string;
@@ -31,7 +31,7 @@ export class ALAutonomousLifeListItemComponent {
   }
 
   ngOnInit(): void {
-    this.alert = new BtrAlert(this.alertCtrl);
+    this.alert = new AlertCombobox(this.alertCtrl);
     this.getState();
     this.stateInterval = setInterval(() => this.getState(), 1500);
   }

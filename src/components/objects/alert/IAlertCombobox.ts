@@ -1,4 +1,4 @@
-export interface IBtrAlert {
+export interface IAlertCombobox {
 
   /**
    * Close the alert

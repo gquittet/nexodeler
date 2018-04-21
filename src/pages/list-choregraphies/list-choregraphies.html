@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{ 'UI.SIDENAV.CHOREGRAPHIES' | translate }}</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar color="accent">
+    <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="searching = true" (ionCancel)="searchTerm = ''; content.resize();"></ion-searchbar>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content #content>
+
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list>
+    <button ion-item *ngFor="let choregraphy of searchResults" (tap)="startBehavior(choregraphy)">
+      <ion-label>{{ choregraphy }}</ion-label>
+    </button>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab icon-only (tap)="stopAll()">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>
