@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController } from 'ionic-angular';
+import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController, ModalController } from 'ionic-angular';
 import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 
 import { IP } from '../../app/objects/IP';
@@ -67,7 +67,7 @@ export class ListRobotsPage {
   showSearchBar: boolean = false;
   searching: boolean;
 
-  private subscription: Subscription;
+  private dataSubscription: Subscription;
 
   private cancelText: string;
   private confirmDeleteText: string;
@@ -96,7 +96,7 @@ export class ListRobotsPage {
   private saveText: string;
   private yesText: string;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private translate: TranslateService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private translate: TranslateService) {
     this.searchControl = new FormControl();
     translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this.errorEnterCorrectIpAddressText = res);
     translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this.errorEnterCorrectNameText = res);
@@ -142,7 +142,7 @@ export class ListRobotsPage {
   }
 
   ionViewDidEnter(): void {
-    this.subscription =  this.robotsService.robots.subscribe(robots => this.robots = robots);
+    this.dataSubscription = this.robotsService.robots.subscribe(robots => this.robots = robots);
     this.selectedRobots = [];
   }
 
@@ -267,7 +267,8 @@ export class ListRobotsPage {
   }
 
   filterItems(): void {
-    this.robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
+    const searchSubscription = this.robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
+    searchSubscription.unsubscribe();
   }
 
   updateName(name: string, ip: IP): void {
@@ -315,8 +316,8 @@ export class ListRobotsPage {
     const self = this;
     ping('http://' + robot.ip).then(delta => {
       loading.dismiss();
-      this.navCtrl.push('SettingsRobotPage', { ip: robot.ip });
-    }).catch(function (err) {
+      this.modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
+    }).catch(error => {
       loading.dismiss();
       let errorUnableToFindText: string;
       self.translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
@@ -384,7 +385,7 @@ export class ListRobotsPage {
   }
 
   ionViewWillLeave(): void {
-    this.subscription.unsubscribe();
+    this.dataSubscription.unsubscribe();
   }
 
   cancelSearch(): void {
