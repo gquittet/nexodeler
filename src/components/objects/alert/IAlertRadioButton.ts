@@ -1,4 +1,4 @@
-export interface IAlertCombobox {
+export interface IAlertRadioButton {
 
   /**
    * Close the alert

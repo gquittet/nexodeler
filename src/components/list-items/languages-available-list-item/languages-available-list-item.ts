@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from 'ionic-angular';
-import { AlertCombobox } from '../../objects/alert/AlertCombobox';
+import { AlertRadioButton } from '../../objects/alert/AlertRadioButton';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LanguagesAvailableListItemComponent {
 
-  private alert: AlertCombobox;
+  private alert: AlertRadioButton;
   private languagesInterval;
 
   private alertTitle: string;
@@ -27,7 +27,7 @@ export class LanguagesAvailableListItemComponent {
   }
 
   ngOnInit(): void {
-    this.alert = new AlertCombobox(this.alertCtrl);
+    this.alert = new AlertRadioButton(this.alertCtrl);
     this.getLanguages();
     this.languagesInterval = setInterval(() => this.getLanguages(), 3000);
   }
