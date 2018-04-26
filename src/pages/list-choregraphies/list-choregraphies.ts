@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ViewController, LoadingController, Loading } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, LoadingController, Loading, Content, VirtualScroll } from 'ionic-angular';
 import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
 import { FormControl } from '@angular/forms';
 import { AlertRadioButton } from '../../components/objects/alert/AlertRadioButton';
@@ -9,9 +9,11 @@ import { File } from '@ionic-native/file';
 import { Robot } from '../../app/objects/Robot';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { IP } from '../../app/objects/IP';
+import { Network } from '@ionic-native/network';
 
 import { Subscription } from 'rxjs/Rx';
 import 'rxjs/add/operator/debounceTime';
+import { Behavior } from '../../app/objects/Behavior';
 
 declare var pingRobot: any;
 
@@ -23,17 +25,22 @@ declare var pingRobot: any;
 export class ListChoregraphiesPage {
 
   private robotsAlertCombobox: AlertRadioButton;
+  private loading: Loading;
 
   searchControl: FormControl;
   searchTerm: string = '';
   searching: boolean;
+  @ViewChild('content') content: Content;
+  @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
 
   private robots: Robot[];
   private dataSubscription: Subscription;
 
   private cancelText: string;
   private connectText: string;
-  private choregraphyFinishedText: string;
+  private choregraphyStartingText: string;
+  private errorAddAtLeastOneRobotText: string;
+  private errorNetworkDisconnectedText: string;
   private errorBehaviorStartText: string;
   private errorNoRobotFoundText: string;
   private errorText: string;
@@ -42,23 +49,40 @@ export class ListChoregraphiesPage {
   private pleaseWaitText: string;
   private robotsText: string;
 
-  private loading: Loading;
+  private isConnectedToWireless: Subscription;
 
-  choregraphies: string[];
-  searchResults: string[];
+  choregraphies: Behavior[];
+  searchResults: Behavior[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController, translate: TranslateService, private file: File, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alBehaviorManager: ALBehaviorManager) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController, private translate: TranslateService, network: Network, private file: File, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alBehaviorManager: ALBehaviorManager) {
     this.searchControl = new FormControl();
+    this.choregraphies = [];
+    this.searchResults = [];
     translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
+    translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this.errorNetworkDisconnectedText = res);
+    translate.get('ERROR.ADD_AT_LEAST_A_ROBOT').subscribe((res: string) => this.errorAddAtLeastOneRobotText = res);
     translate.get('ERROR.ERROR_BEHAVIOR_START').subscribe((res: string) => this.errorBehaviorStartText = res);
     translate.get('ERROR.NO_ROBOT_FOUND').subscribe((res: string) => this.errorNoRobotFoundText = res);
     translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this.informationText = res);
-    translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_FINISHED').subscribe((res: string) => this.choregraphyFinishedText = res);
+    translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this.choregraphyStartingText = res);
     translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
     translate.get("VERBS.CANCEL").subscribe((res: string) => this.cancelText = res);
     translate.get("VERBS.CONNECT").subscribe((res: string) => this.connectText = res);
     translate.get("OK").subscribe((res: string) => this.okText = res);
     translate.get("ROBOTS").subscribe((res: string) => this.robotsText = res);
+    this.isConnectedToWireless = network.onDisconnect().subscribe(() => {
+      console.log('[INFO][NETWORK] Network access disconnected.');
+      this.alertCtrl.create({
+        title: this.errorText,
+        subTitle: this.errorNetworkDisconnectedText,
+        buttons: [{
+          text: this.okText,
+          handler: () => {
+            this.navCtrl.remove(this.viewCtrl.index, 1)
+          }
+        }]
+      }).present();
+    });
   }
 
   ionViewDidLoad(): void {
@@ -89,10 +113,25 @@ export class ListChoregraphiesPage {
   private showRobotsAlertCombobox(): void {
     const robotsAlertCombobox = this.robotsAlertCombobox.create(this.robotsText);
     const promises = [];
-    this.robots.forEach((robot: Robot) => {
-      promises.push(pingRobot(robot));
-    });
-    let index = 1;
+    if (this.robots.length > 0) {
+      this.robots.forEach((robot: Robot) => {
+        promises.push(pingRobot(robot));
+      });
+    } else {
+      this.loading.dismiss();
+      this.alertCtrl.create({
+        title: this.errorText,
+        subTitle: this.errorAddAtLeastOneRobotText,
+        buttons: [{
+          text: this.okText,
+          handler: () => {
+            this.navCtrl.remove(this.viewCtrl.index, 1)
+          }
+        }]
+      }).present();
+    }
+    this.dataSubscription.unsubscribe();
+    let index = 0;
     let pass = 0;
     promises.forEach((promise) => {
       promise.then(robot => {
@@ -115,11 +154,17 @@ export class ListChoregraphiesPage {
             this.alertCtrl.create({
               title: this.errorText,
               subTitle: this.errorNoRobotFoundText,
-              buttons: [this.okText]
+              enableBackdropDismiss: false,
+              buttons: [{
+                text: this.okText,
+                handler: () => {
+                  this.navCtrl.remove(this.viewCtrl.index, 1)
+                }
+              }]
             }).present();
-            this.navCtrl.remove(this.viewCtrl.index, 1);
-          } else
+          } else {
             this.robotsAlertCombobox.present();
+          }
         }
       });
     });
@@ -134,15 +179,32 @@ export class ListChoregraphiesPage {
       text: this.connectText,
       handler: data => {
         this.robotsAlertCombobox.close();
-        QiService.connect(new IP(data.split('.')));
-        this.dataSubscription.unsubscribe();
         this.loading = this.loadingCtrl.create({
           content: this.pleaseWaitText
         });
         this.loading.present();
+        QiService.connect(new IP(data.split('.')));
+        let index: number = 0;
         this.alBehaviorManager.getInstalledBehaviors().then(installedBehaviors => {
-          this.choregraphies = installedBehaviors;
+          installedBehaviors.forEach(element => {
+            const pathSplit: string = element.split('/');
+            if (pathSplit.length > 3) {
+              const posture = pathSplit[1].replace(/-|_/gi, ' ');
+              const postureUppercase = posture.charAt(0).toUpperCase() + posture.slice(1);
+              const category = pathSplit[2].replace(/-|_/gi, ' ');
+              const categoryUppercase = category.charAt(0).toUpperCase() + category.slice(1);
+              const name: string = pathSplit[pathSplit.length - 1].replace(/-|_/gi, ' ');
+              const nameUppercase: string = name.charAt(0).toUpperCase() + name.slice(1);
+              if (postureUppercase !== 'SitOnPod') {
+                this.choregraphies.push(<Behavior>{ id: index, name: nameUppercase, posture: postureUppercase, category: categoryUppercase, creator: 'Aldebaran', path: element });
+                index++;
+              }
+            }
+          });
           this.searchResults = this.choregraphies;
+          this.loading.dismiss();
+        }, error => {
+          console.error(error);
           this.loading.dismiss();
         });
         this.robotsAlertCombobox.setResult(data);
@@ -150,32 +212,65 @@ export class ListChoregraphiesPage {
     });
   }
 
-  startBehavior(name: string) {
+  startBehavior(behavior: Behavior) {
     this.loading = this.loadingCtrl.create({
       content: this.pleaseWaitText
     });
     this.loading.present();
-    this.alBehaviorManager.startBehavior(name).then(result => {
+    this.alBehaviorManager.startBehavior(behavior.path).then(result => {
       this.loading.dismiss();
-      this.alertCtrl.create({
+      const alert = this.alertCtrl.create({
         title: this.informationText,
-        subTitle: this.choregraphyFinishedText,
+        subTitle: this.choregraphyStartingText,
         buttons: [this.okText]
-      }).present();
-      console.log("[INFO][NAOQI][ALBehaviorManager] startBehavior(): finished.");
+      })
+      alert.present();
+      console.log("[INFO][NAOQI][ALBehaviorManager] startBehavior(): activity started.");
+      setTimeout(() => alert.dismiss(), 2000);
     }).catch(err => {
       this.loading.dismiss();
       this.alertCtrl.create({
         title: this.errorText,
         subTitle: this.errorBehaviorStartText,
-        buttons: [this.okText]
+        buttons: [{
+          text: this.okText,
+          handler: () => {
+            this.navCtrl.remove(this.viewCtrl.index, 1)
+          }
+        }]
       }).present();
       console.error("error")
     });
   }
 
+  identify(index, behavior: Behavior): number {
+    return behavior.id;
+  }
+
+  getPosture(record, recordIndex, records): string {
+    if (recordIndex === 0) {
+      return record.posture.toUpperCase();
+    } else if (records[recordIndex - 1].posture !== record.posture) {
+      return record.posture.toUpperCase();
+    }
+    return null;
+  }
+
+  inputSearch(): void {
+    this.searching = true;
+  }
+
+  private isStringEquals(text0: string, text1: string): boolean {
+    return text0.toLowerCase().indexOf(text1.toLowerCase()) > -1;
+  }
+
   private filterItems(): void {
-    this.searchResults = this.choregraphies.filter((choregraphy: string) => choregraphy.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1);
+    let posture: string;
+    this.searchResults = this.choregraphies.filter((choregraphy: Behavior) => {
+      this.translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
+      return this.isStringEquals(choregraphy.name, this.searchTerm) || this.isStringEquals(posture, this.searchTerm) || this.isStringEquals(choregraphy.category, this.searchTerm);
+    });
+    setTimeout(() => this.virtualScroll.resize(), 500);
   }
 
   stopAll(): void {
@@ -183,6 +278,7 @@ export class ListChoregraphiesPage {
   }
 
   ionViewWillLeave(): void {
+    this.isConnectedToWireless.unsubscribe();
     QiService.disconnect();
   }
 }

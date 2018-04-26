@@ -6,22 +6,31 @@
 
   <ion-toolbar color="accent">
     <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
-      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="searching = true" (ionCancel)="searchTerm = ''; content.resize();"></ion-searchbar>
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()" (ionCancel)="searchTerm = ''; content.resize();"></ion-searchbar>
   </ion-toolbar>
 
 </ion-header>
 
-
 <ion-content #content>
 
-  <div *ngIf="searching" class="spinner-container">
+  <div *ngIf="searching" class="refresh-spinner">
     <ion-spinner></ion-spinner>
   </div>
 
-  <ion-list>
-    <button ion-item *ngFor="let choregraphy of searchResults" (tap)="startBehavior(choregraphy)">
-      <ion-label>{{ choregraphy }}</ion-label>
-    </button>
+  <ion-list [virtualScroll]="searchResults" [virtualTrackBy]="identify" [headerFn]="getPosture" approxItemHeight="110px" approxHeaderHeight="80px">
+    <ion-item-group>
+      <ion-item-divider color="light" *virtualHeader="let header" sticky>
+        {{ 'NAOQI.ROBOT_POSTURES.' + header | translate }}
+      </ion-item-divider>
+      <button ion-item *virtualItem="let choregraphy" (tap)="startBehavior(choregraphy)">
+        <h2>{{ choregraphy.name }}</h2>
+        <ion-note item-end>{{ choregraphy.category }}</ion-note>
+        <p>
+          <b>{{ 'CREATOR' | translate }}</b>
+          <i>{{ choregraphy.creator }}</i>
+        </p>
+      </button>
+    </ion-item-group>
   </ion-list>
 
   <ion-fab right bottom>
