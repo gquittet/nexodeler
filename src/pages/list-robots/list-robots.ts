@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController, ModalController } from 'ionic-angular';
+import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController, ModalController, Content } from 'ionic-angular';
 import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 
 import { IP } from '../../app/objects/IP';
@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
+import { Network } from '@ionic-native/network';
 
 
 declare var ping: any;
@@ -66,6 +67,7 @@ export class ListRobotsPage {
   searchTerm: string = '';
   showSearchBar: boolean = false;
   searching: boolean;
+  @ViewChild(Content) content: Content;
 
   private dataSubscription: Subscription;
 
@@ -78,6 +80,7 @@ export class ListRobotsPage {
   private errorEnterCorrectNameText: string;
   private errorEnterCorrectNumberText: string;
   private errorErrorText: string;
+  private errorNoNetwork: string;
   private errorNetworkErrorText: string;
   private errorUnableToFindValueText: string;
   private errorVerifyNetworkConnectionText: string;
@@ -96,14 +99,14 @@ export class ListRobotsPage {
   private saveText: string;
   private yesText: string;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private translate: TranslateService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private network: Network, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private translate: TranslateService) {
     this.searchControl = new FormControl();
     translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this.errorEnterCorrectIpAddressText = res);
     translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this.errorEnterCorrectNameText = res);
     translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this.errorEnterCorrectNumberText = res);
     translate.get('ERROR.ERROR').subscribe((res: string) => this.errorErrorText = res);
     translate.get('ERROR.NETWORK_ERROR').subscribe((res: string) => this.errorNetworkErrorText = res);
-    translate.get('ERROR.UNABLE_TO_FIND_VALUE').subscribe((res: string) => this.errorUnableToFindValueText = res);
+    translate.get('ERROR.UNABLE_TO_COMMUNICATE_WITH_VALUE').subscribe((res: string) => this.errorUnableToFindValueText = res);
     translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this.errorVerifyNetworkConnectionText = res);
     translate.get('NAME').subscribe((res: string) => this.nameText = res);
     translate.get('NO').subscribe((res: string) => this.noText = res);
@@ -118,6 +121,7 @@ export class ListRobotsPage {
     translate.get('UI.TOAST.ROBOTS.SELECTED_DELETE').subscribe((res: string) => this.toastRobotSelectedDeleteText = res);
     translate.get('UI.TOAST.ROBOTS.NO_DELETE').subscribe((res: string) => this.toastRobotNoDeleteText = res);
     translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.NAME_APPLIED_AFTER_REBOOT').subscribe((res: string) => this.labelNameAppliedAfterRebootText = res);
+    translate.get('UI.ALERT.CONTENT.LABEL.NETWORK.CONNECT_TO_NETWORK').subscribe((res: string) => this.errorNoNetwork = res);
     translate.get('VERBS.CANCEL').subscribe((res: string) => this.cancelText = res);
     translate.get('VERBS.DELETE').subscribe((res: string) => this.deleteText = res);
     translate.get('VERBS.EDIT').subscribe((res: string) => this.editText = res);
@@ -147,7 +151,15 @@ export class ListRobotsPage {
   }
 
   addRobot(): void {
-    this.navCtrl.push('AddRobotPage', { robots: this.robots });
+    if (this.network.type !== 'none') {
+      this.navCtrl.push('AddRobotPage', { robots: this.robots });
+    } else {
+      this.alertCtrl.create({
+        title: this.errorErrorText,
+        subTitle: this.errorNoNetwork,
+        buttons: [this.okText]
+      }).present();
+    }
   }
 
   delete(item: ItemSliding, robot: Robot): void {
@@ -314,24 +326,34 @@ export class ListRobotsPage {
     });
     loading.present();
     const self = this;
-    ping('http://' + robot.ip).then(delta => {
+    if (this.network.type === 'none') {
+      this.alertCtrl.create({
+        title: this.errorErrorText,
+        subTitle: this.errorNoNetwork,
+        buttons: [this.okText]
+      }).present();
       loading.dismiss();
-      this.modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
-    }).catch(error => {
-      loading.dismiss();
-      let errorUnableToFindText: string;
-      self.translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
-        (res: string) => errorUnableToFindText = res,
-        () => { },
-        () => {
-          self.alertCtrl.create({
-            title: self.errorNetworkErrorText,
-            subTitle: errorUnableToFindText,
-            buttons: [self.okText]
-          }).present();
-        }
-      );
-    });
+    } else {
+      ping('http://' + robot.ip).then(delta => {
+        loading.dismiss();
+        this.modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
+      }).catch(error => {
+        loading.dismiss();
+        let errorUnableToFindText: string;
+        self.translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
+          (res: string) => errorUnableToFindText = res,
+          () => { },
+          () => {
+            self.alertCtrl.create({
+              title: self.errorNetworkErrorText,
+              subTitle: errorUnableToFindText,
+              buttons: [self.okText]
+            }).present();
+          }
+        );
+      });
+    }
+
   }
 
   selectRobot(robot: Robot): void {
@@ -345,6 +367,11 @@ export class ListRobotsPage {
     this.selectedRobots = [];
     // Fix bug that tap on the back button on iOS when cancel selection.
     setTimeout(() => this.isSelection = false, 50);
+  }
+
+  inputSearch(): void {
+    this.content.scrollToTop();
+    this.searching = true;
   }
 
   removeRobots(): void {

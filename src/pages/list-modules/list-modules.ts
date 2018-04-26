@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { ModulesService } from '../../app/services/modules/modules.service';
 import { Module } from '../../app/objects/Module';
@@ -25,8 +25,9 @@ export class ListModulesPage {
   searchTerm: string = '';
   searchBar: boolean = false;
   searching: boolean;
+  @ViewChild(Content) content: Content;
 
-  private subscription: Subscription;
+  private dataSubscription: Subscription;
 
   private modulesOriginal: Module[];
   modules: Module[];
@@ -53,7 +54,7 @@ export class ListModulesPage {
   }
 
   ionViewDidEnter(): void {
-    this.subscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
+    this.dataSubscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
     this.updateCategories(this.modulesOriginal);
     this.refreshModules();
   }
@@ -79,21 +80,22 @@ export class ListModulesPage {
   private refreshModules(): void {
     if (this.section === 'favorites') {
       this.modules = this.modulesOriginal.filter((module: Module) => module.fav);
-      this.modules = this.alphabeticModuleSort(this.modules);
+      this.alphabeticModuleSort(this.modules);
     } else if (this.section === 'recents') {
       this.modules = this.modulesOriginal.filter((module: Module) => module.last_access);
       this.modules = this.modules.sort((a, b) => new Date(b.last_access).getTime() - new Date(a.last_access).getTime());
     } else if (this.section === 'all') {
       if (this.searchTerm.length <= 0)
         this.updateCategories(this.modulesOriginal);
-      this.modules = this.alphabeticModuleSort(this.modulesOriginal);
+      this.modules = this.modulesOriginal;
+      this.alphabeticModuleSort(this.modules);
     }
   }
 
-  private alphabeticModuleSort(module: Module[]): Module[] {
+  private alphabeticModuleSort(module: Module[]): void {
     let nameA: string = "";
     let nameB: string = "";
-    return module.sort((a, b) => {
+    module.sort((a, b) => {
       this.translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res);
       this.translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res);
       return nameA.localeCompare(nameB);
@@ -123,6 +125,11 @@ export class ListModulesPage {
     return newDate.toLocaleString();
   }
 
+  inputSearch(): void {
+    this.content.scrollToTop();
+    this.searching = true;
+  }
+
   showSearchBar(): void {
     this.oldSection = this.section;
     this.section = 'all';
@@ -145,6 +152,6 @@ export class ListModulesPage {
   }
 
   ionViewWillLeave(): void {
-    this.subscription.unsubscribe();
+    this.dataSubscription.unsubscribe();
   }
 }

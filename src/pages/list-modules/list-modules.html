@@ -26,7 +26,8 @@
 
   <ion-toolbar *ngIf="searchBar" color="accent">
     <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
-      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="searching = true" (ionCancel)="cancelSearch(); content.resize();"></ion-searchbar>
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()"
+      (ionCancel)="cancelSearch(); content.resize();"></ion-searchbar>
   </ion-toolbar>
 
 </ion-header>
@@ -34,7 +35,7 @@
 
 <ion-content #content>
 
-  <div *ngIf="searching" class="spinner-container">
+  <div *ngIf="searching" class="refresh-spinner">
     <ion-spinner></ion-spinner>
   </div>
 

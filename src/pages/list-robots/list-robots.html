@@ -1,60 +1,62 @@
 <ion-header>
-    <ion-navbar [hideBackButton]="isSelection" color="primary">
-        <ion-title *ngIf="!showSearchBar">{{ 'ROBOTS' | translate }}
-        </ion-title>
+  <ion-navbar [hideBackButton]="isSelection" color="primary">
+    <ion-title>{{ 'ROBOTS' | translate }}
+    </ion-title>
 
-        <ion-buttons start *ngIf="isSelection" @easeInOutLeft>
-            <button ion-button (tap)="cancelSelection()">
-                {{ cancelText }}
-            </button>
-        </ion-buttons>
-        <ion-buttons end *ngIf="!isSelection" @easeInOutRightToLeft>
-            <button ion-button icon-only (tap)="showSearchBar = !showSearchBar; content.resize()">
-                <ion-icon name="search"></ion-icon>
-            </button>
-        </ion-buttons>
-        <ion-buttons end *ngIf="isSelection" @easeInOutRightToLeft>
-            <button ion-button icon-only (tap)="removeRobots(); content.resize();">
-                <ion-icon name="trash"></ion-icon>
-            </button>
-        </ion-buttons>
-        <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" *ngIf="showSearchBar"
-            showCancelButton="true" animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="searching = true"
-            (ionCancel)="content.resize(); cancelSearch();"></ion-searchbar>
-    </ion-navbar>
+    <ion-buttons start *ngIf="isSelection" @easeInOutLeft>
+      <button ion-button (tap)="cancelSelection()">
+        {{ cancelText }}
+      </button>
+    </ion-buttons>
+    <ion-buttons end *ngIf="!isSelection" @easeInOutRightToLeft>
+      <button ion-button icon-only (tap)="showSearchBar = !showSearchBar; content.resize()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end *ngIf="isSelection" @easeInOutRightToLeft>
+      <button ion-button icon-only (tap)="removeRobots(); content.resize();">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar *ngIf="showSearchBar">
+    <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()"
+      (ionCancel)="content.resize(); cancelSearch();"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content #content>
 
-    <div *ngIf="searching" class="spinner-container">
-        <ion-spinner></ion-spinner>
-    </div>
+  <div *ngIf="searching" class="refresh-spinner">
+    <ion-spinner></ion-spinner>
+  </div>
 
-    <ion-list>
-        <ion-item-sliding #item *ngFor="let robot of robots" @easeInOutRightToLeft>
-            <button ion-item (press)="isSelection = true" (tap)="isSelection ? null : openMonitor(robot)">
-                <ion-avatar *ngIf="!isSelection" item-start>
-                    <img src="assets/imgs/nao.png">
-                </ion-avatar>
-                <ion-checkbox (ionChange)="selectRobot(robot)" *ngIf="isSelection"></ion-checkbox>
-                <ion-label padding-vertical>{{ robot.name }}</ion-label>
-                <ion-note item-end>{{ robot.ip }}</ion-note>
-            </button>
-            <ion-item-options *ngIf="!isSelection" side="right" (ionSwipe)="delete(item, robot)">
-                <button padding ion-button color="dark" (tap)="edit(item, robot)">
-                    <ion-icon name="build"></ion-icon>
-                    {{ 'VERBS.EDIT' | translate }}
-                </button>
-                <button padding ion-button expandable color="danger" (tap)="delete(item, robot)">
-                    <ion-icon name="trash"></ion-icon>
-                    {{ 'VERBS.DELETE' | translate }}
-                </button>
-            </ion-item-options>
-        </ion-item-sliding>
-    </ion-list>
-    <ion-fab right bottom *ngIf="!isSelection && !showSearchBar" @easeInOutRightToLeft>
-        <button ion-fab icon-only (tap)="addRobot()">
-            <ion-icon name="add"></ion-icon>
+  <ion-list>
+    <ion-item-sliding #item *ngFor="let robot of robots" @easeInOutRightToLeft>
+      <button ion-item (press)="isSelection = true" (tap)="isSelection ? null : openMonitor(robot)">
+        <ion-avatar *ngIf="!isSelection" item-start>
+          <img src="assets/imgs/nao.png">
+        </ion-avatar>
+        <ion-checkbox (ionChange)="selectRobot(robot)" *ngIf="isSelection"></ion-checkbox>
+        <ion-label padding-vertical>{{ robot.name }}</ion-label>
+        <ion-note item-end>{{ robot.ip }}</ion-note>
+      </button>
+      <ion-item-options *ngIf="!isSelection" side="right" (ionSwipe)="delete(item, robot)">
+        <button padding ion-button color="dark" (tap)="edit(item, robot)">
+          <ion-icon name="build"></ion-icon>
+          {{ 'VERBS.EDIT' | translate }}
         </button>
-    </ion-fab>
+        <button padding ion-button expandable color="danger" (tap)="delete(item, robot)">
+          <ion-icon name="trash"></ion-icon>
+          {{ 'VERBS.DELETE' | translate }}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-fab right bottom *ngIf="!isSelection && !showSearchBar" @easeInOutRightToLeft>
+    <button ion-fab icon-only (tap)="addRobot()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
