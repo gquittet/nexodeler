@@ -10,7 +10,9 @@ export class AlertRadioButton implements IAlertRadioButton {
   constructor(private alertCtrl: AlertController) { }
 
   create(title: string): Alert {
-    this.alert = this.alertCtrl.create();
+    this.alert = this.alertCtrl.create({
+      enableBackdropDismiss: false
+    });
     this.alert.setTitle(title);
     return this.alert;
   }

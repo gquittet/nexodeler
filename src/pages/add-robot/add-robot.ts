@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NavController, ViewController, AlertController, LoadingController, IonicPage, NavParams } from 'ionic-angular';
+import { NavController, ViewController, IonicPage, NavParams, LoadingController, AlertController } from 'ionic-angular';
 
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
@@ -28,7 +28,7 @@ export class AddRobotPage {
   private pleaseWaitText: string;
   private okText: string;
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alSystemService: ALSystemService, translate: TranslateService) {
+  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private robotsService: RobotsService, private alSystemService: ALSystemService, translate: TranslateService) {
     this.addForm = this.fb.group({
       'number1': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number2': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
@@ -69,7 +69,9 @@ export class AddRobotPage {
         clearTimeout(timer);
         loading.dismiss();
         this.goBack();
-      }, error => {
+      }).catch(error => {
+        clearTimeout(timer);
+        loading.dismiss();
         this.alertCtrl.create({
           title: this.errorText,
           subTitle: this.errorUnableToGetRobotName,

@@ -14,6 +14,8 @@ import { MyApp } from './app.component';
 
 import { SidenavMainModule } from '../components/sidenav-main/sidenav-main.module';
 import { Globalization } from '@ionic-native/globalization';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Brightness } from '@ionic-native/brightness';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -45,6 +47,8 @@ export function createTranslateLoader(http: HttpClient) {
     SplashScreen,
     StatusBar,
     Globalization,
+    AndroidPermissions,
+    Brightness,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
