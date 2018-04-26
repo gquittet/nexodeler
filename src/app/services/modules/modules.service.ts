@@ -28,6 +28,8 @@ export class ModulesService implements IModulesService {
   constructor(private file: File, private translate: TranslateService) { }
 
   update(modules: Module[]): void {
+    // Fixing the bad sorting. Sort with the id.
+    modules.sort((a, b) => a.id - b.id);
     this.modulesSubject.value.forEach((module: Module, index: number) => {
       let newModule: Module = modules[index];
       if (!newModule)
@@ -52,6 +54,8 @@ export class ModulesService implements IModulesService {
   }
 
   next(modules: Module[]): void {
+    // Fixing the bad sorting. Sort with the id.
+    modules.sort((a, b) => a.id - b.id);
     this.modulesSubject.next(modules);
     this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
       this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));

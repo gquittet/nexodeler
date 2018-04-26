@@ -15,6 +15,7 @@ import { VolumeControlListItemModule } from '../../components/list-items/volume-
 
 import { TimezoneListItemModule } from '../../components/list-items/timezone-list-item/timezone-list-item.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,9 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   exports: [
     SettingsRobotPage
+  ],
+  providers: [
+    Network
   ]
 })
 export class SettingsRobotModule {}

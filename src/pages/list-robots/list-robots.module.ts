@@ -6,6 +6,7 @@ import { ListRobotsPage } from './list-robots';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { RobotsModule } from '../../app/services/robots/robots.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ListRobotsPage
   ],
   providers: [
-    ALSystemService
+    ALSystemService,
+    Network
   ]
 })
 export class ListRobotsModule { }

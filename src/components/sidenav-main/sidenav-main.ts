@@ -14,10 +14,9 @@ export class SidenavMainComponent {
   constructor(private menuCtrl: MenuController) { }
 
   openPage(page: string): void {
+    this.nav.setRoot('HomePage');
     if (page !== 'HomePage')
       this.nav.push(page);
-    else
-      this.nav.setRoot(page);
     this.menuCtrl.close();
   }
 
