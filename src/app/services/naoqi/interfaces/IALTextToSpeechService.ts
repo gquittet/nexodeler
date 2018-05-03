@@ -24,6 +24,13 @@ export interface IALTextToSpeechService {
   getVolume(): Promise<any>;
 
   /**
+   * Says a string of characters.
+   * @param text The text to say.
+   * @returns {Promise<any>} A promise with the result of this action.
+   */
+  say(text: string): Promise<any>;
+
+  /**
    * Set the current language used by the robot.
    * @param language The language name (example: 'English')
    * @returns {Promise<any>} A promise with the result of this action.

@@ -26,8 +26,18 @@ export class ALTextToSpeechService extends ALModuleService implements IALTextToS
     return new Promise((resolve, reject) => QiService.call(ALTextToSpeech => ALTextToSpeech.getLanguage().then(result => resolve(result), error => reject(error))));
   }
 
+  /**
+   * @override
+   */
   getVolume(): Promise<any> {
     return new Promise((resolve, reject) => QiService.call(ALTextToSpeech => ALTextToSpeech.getVolume().then(result => resolve(result * 100), error => reject(error))));
+  }
+
+  /**
+   * @override
+   */
+  say(text: string): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALTextToSpeech => ALTextToSpeech.say(text).then(result => resolve(result), error => reject(error))));
   }
 
   /**
