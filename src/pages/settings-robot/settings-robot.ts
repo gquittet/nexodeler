@@ -39,10 +39,6 @@ export class SettingsRobotPage {
     QiService.connect(ip);
   }
 
-  dismiss(): void {
-    this.viewCtrl.dismiss();
-  }
-
   ionViewWillLeave(): void {
     this.isConnectedToNetwork.unsubscribe();
     QiService.disconnect();

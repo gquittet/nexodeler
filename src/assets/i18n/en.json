@@ -39,7 +39,15 @@
     "NAMES": {
       "PAIR": "Pair",
       "MOVE": "Move",
-      "SPEAK": "Speak"
+      "SPEAK": "Speak",
+      "THEMATICALASSOCIATION": "Thematical Association"
+    },
+    "TRANSLATE": {
+      "THEMATICALASSOCIATION": {
+        "THEMES": {
+          "BATHROOM": "Bathroom"
+        }
+      }
     }
   },
   "MOTOR": "Motor",
@@ -75,6 +83,15 @@
   "PERFECT": "Perfect",
   "PLEASE_WAIT": "Please wait...",
   "POWER": "Power",
+  "REACTIONS": {
+    "NEGATIVES": {
+      "NO_IT_IS_NOT_CORRECT": "No, it isn't correct."
+    },
+    "POSITIVES": {
+      "GOOD_GAME": "Good game!",
+      "YOUPI_YOU_WIN": "Youpie! you win!"
+    }
+  },
   "RECENT": "Recent",
   "RECENTS": "Recents",
   "ROBOT": "Robot",
@@ -88,12 +105,16 @@
   },
   "SHUTDOWN": "Shutdown",
   "STATE": "State",
+  "SUPER": "Super",
   "TEMPERATURE": "Temperature",
   "TIMEZONE": "Timezone",
   "UI": {
     "ALERT": {
       "CONTENT": {
         "QUESTION": {
+          "GAME": {
+            "EXIT": "Do you want to exit the game?"
+          },
           "ROBOT": {
             "DELETE": "Do you want to delete this robot?",
             "REBOOT": "Do you want to reboot this robot?",
@@ -125,6 +146,7 @@
         },
         "CONFIRM": {
           "DELETE": "Confirm delete",
+          "EXIT": "Confirm exit",
           "REBOOT": "Confirm reboot",
           "SHUTDOWN": "Confirm shutdown",
           "UPDATE": "Confirm update"
@@ -166,6 +188,8 @@
     "SHUTDOWN": "Shutdown"
   },
   "VERSION": "Version",
+  "VICTORY": "Victory",
   "VOLUME": "Volume",
-  "YES": "Yes"
+  "YES": "Yes",
+  "YOU_WIN": "You win!"
 }

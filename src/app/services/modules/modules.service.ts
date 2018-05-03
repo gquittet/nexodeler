@@ -18,7 +18,7 @@ export class ModulesService implements IModulesService {
 
   readonly FILE_NAME: string = "modules.json";
   private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
-    <Module>{ id: 0, name: 'PAIR', category: 'LEARNING', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
+    <Module>{ id: 0, name: 'THEMATICALASSOCIATION', category: 'LEARNING', page: 'ModuleThematicalAssociationPage', fav: false, creator: 'Éspéranderie', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-26T11:45:00'), updated: new Date('2018-04-26T11:45:00'), last_access: null },
     <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.4', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
     <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
     <Module>{ id: 3, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.3', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null }

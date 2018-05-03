@@ -68,7 +68,7 @@
 
   <ng-container *ngIf="section === 'all'">
     <ion-item-group *ngFor="let categorie of categories">
-      <ion-item-divider>{{ 'MODULES.CATEGORIES.' + categorie | translate }}</ion-item-divider>
+      <ion-item-divider color="light">{{ 'MODULES.CATEGORIES.' + categorie | translate }}</ion-item-divider>
       <ng-container *ngFor="let module of modules">
         <button ion-item *ngIf="module.category === categorie" (tap)="openPage(module)">
           <h2>{{ 'MODULES.NAMES.' + module.name | translate }}</h2>

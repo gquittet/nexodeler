@@ -20,7 +20,7 @@
   <ion-list [virtualScroll]="searchResults" [virtualTrackBy]="identify" [headerFn]="getPosture" approxItemHeight="110px" approxHeaderHeight="80px">
     <ion-item-group>
       <ion-item-divider color="light" *virtualHeader="let header" sticky>
-        {{ 'NAOQI.ROBOT_POSTURES.' + header | translate }}
+        {{ header | translate }}
       </ion-item-divider>
       <button ion-item *virtualItem="let choregraphy" (tap)="startBehavior(choregraphy)">
         <h2>{{ choregraphy.name }}</h2>
