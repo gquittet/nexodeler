@@ -147,10 +147,10 @@ export class ListChoregraphiesPage {
           this.robotsAlertCombobox.present();
         }
       }).catch(err => {
-        console.log('[ERROR][PING][ROBOTS] Unable to find the robot.')
         if (++index === promises.length) {
           this.loading.dismiss();
           if (pass === 0) {
+            console.log('[ERROR][PING][ROBOTS] Unable to find the robot.');
             this.alertCtrl.create({
               title: this.errorText,
               subTitle: this.errorNoRobotFoundText,
@@ -178,36 +178,50 @@ export class ListChoregraphiesPage {
     robotsAlertCombobox.addButton({
       text: this.connectText,
       handler: data => {
-        this.robotsAlertCombobox.close();
-        this.loading = this.loadingCtrl.create({
-          content: this.pleaseWaitText
-        });
-        this.loading.present();
-        QiService.connect(new IP(data.split('.')));
-        let index: number = 0;
-        this.alBehaviorManager.getInstalledBehaviors().then(installedBehaviors => {
-          installedBehaviors.forEach(element => {
-            const pathSplit: string = element.split('/');
-            if (pathSplit.length > 3) {
-              const posture = pathSplit[1].replace(/-|_/gi, ' ');
-              const postureUppercase = posture.charAt(0).toUpperCase() + posture.slice(1);
-              const category = pathSplit[2].replace(/-|_/gi, ' ');
-              const categoryUppercase = category.charAt(0).toUpperCase() + category.slice(1);
-              const name: string = pathSplit[pathSplit.length - 1].replace(/-|_/gi, ' ');
-              const nameUppercase: string = name.charAt(0).toUpperCase() + name.slice(1);
-              if (postureUppercase !== 'SitOnPod') {
-                this.choregraphies.push(<Behavior>{ id: index, name: nameUppercase, posture: postureUppercase, category: categoryUppercase, creator: 'Aldebaran', path: element });
-                index++;
-              }
-            }
+        if (data) {
+          this.robotsAlertCombobox.close();
+          this.loading = this.loadingCtrl.create({
+            content: this.pleaseWaitText
           });
-          this.searchResults = this.choregraphies;
-          this.loading.dismiss();
-        }, error => {
-          console.error(error);
-          this.loading.dismiss();
-        });
-        this.robotsAlertCombobox.setResult(data);
+          this.loading.present();
+          QiService.connect(new IP(data.split('.')));
+          let index: number = 0;
+          this.alBehaviorManager.getInstalledBehaviors().then(installedBehaviors => {
+            installedBehaviors.forEach(element => {
+              const pathSplit: string = element.split('/');
+              if (pathSplit.length > 3) {
+                const author = pathSplit[0];
+                if (author.split('-')[0].toUpperCase() === 'HEH') {
+                  const name: string = pathSplit[pathSplit.length - 1].replace(/-|_/gi, ' ');
+                  const nameUppercase: string = name.charAt(0).toUpperCase() + name.slice(1);
+                  const posture = pathSplit[1].replace(/-|_/gi, ' ');
+                  const postureUppercase = posture.charAt(0).toUpperCase() + posture.slice(1);
+                  const category = pathSplit[2].replace(/-|_/gi, ' ');
+                  const categoryUppercase = category.charAt(0).toUpperCase() + category.slice(1);
+                  this.choregraphies.push(<Behavior>{ id: index, name: nameUppercase, posture: postureUppercase, category: categoryUppercase, creator: 'HEH', path: element });
+                  index++;
+                } else {
+                  const name: string = pathSplit[pathSplit.length - 1].replace(/-|_/gi, ' ');
+                  const nameUppercase: string = name.charAt(0).toUpperCase() + name.slice(1);
+                  const posture = pathSplit[1].replace(/-|_/gi, ' ');
+                  const postureUppercase = posture.charAt(0).toUpperCase() + posture.slice(1);
+                  const category = pathSplit[2].replace(/-|_/gi, ' ');
+                  const categoryUppercase = category.charAt(0).toUpperCase() + category.slice(1);
+                  if (postureUppercase !== 'SitOnPod') {
+                    this.choregraphies.push(<Behavior>{ id: index, name: nameUppercase, posture: postureUppercase, category: categoryUppercase, creator: 'Aldebaran', path: element });
+                    index++;
+                  }
+                }
+              }
+            });
+            this.searchResults = this.choregraphies;
+            this.loading.dismiss();
+          }, error => {
+            console.error(error);
+            this.loading.dismiss();
+          });
+          this.robotsAlertCombobox.setResult(data);
+        }
       }
     });
   }
@@ -248,10 +262,19 @@ export class ListChoregraphiesPage {
   }
 
   getPosture(record, recordIndex, records): string {
-    if (recordIndex === 0) {
-      return record.posture.toUpperCase();
-    } else if (records[recordIndex - 1].posture !== record.posture) {
-      return record.posture.toUpperCase();
+    if (record.creator === 'HEH') {
+      if (recordIndex === 0) {
+        return record.posture;
+      } else if (records[recordIndex - 1].posture !== record.posture) {
+        return record.posture;
+      }
+    } else {
+      const posture: string = 'NAOQI.ROBOT_POSTURES.' + record.posture.toUpperCase();
+      if (recordIndex === 0) {
+        return posture;
+      } else if (records[recordIndex - 1].posture !== record.posture) {
+        return posture;
+      }
     }
     return null;
   }
@@ -267,8 +290,11 @@ export class ListChoregraphiesPage {
   private filterItems(): void {
     let posture: string;
     this.searchResults = this.choregraphies.filter((choregraphy: Behavior) => {
-      this.translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
-      return this.isStringEquals(choregraphy.name, this.searchTerm) || this.isStringEquals(posture, this.searchTerm) || this.isStringEquals(choregraphy.category, this.searchTerm);
+      if (choregraphy.creator === 'Aldebaran')
+        this.translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
+      else
+        posture = choregraphy.posture;
+      return this.isStringEquals(choregraphy.name, this.searchTerm) || this.isStringEquals(posture, this.searchTerm) || this.isStringEquals(choregraphy.category, this.searchTerm) || this.isStringEquals(choregraphy.path, this.searchTerm) || this.isStringEquals(choregraphy.creator, this.searchTerm);
     });
     setTimeout(() => this.virtualScroll.resize(), 500);
   }

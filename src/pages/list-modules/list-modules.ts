@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, ModalController, LoadingController, Loading, AlertController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { ModulesService } from '../../app/services/modules/modules.service';
 import { Module } from '../../app/objects/Module';
@@ -10,6 +10,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { TranslateService } from '@ngx-translate/core';
 
 import 'rxjs/add/operator/debounceTime';
+import { AlertRadioButton } from '../../components/objects/alert/AlertRadioButton';
+import { RobotsService } from '../../app/services/robots/robots.service';
+import { Robot } from '../../app/objects/Robot';
+import { QiService } from '../../app/services/naoqi/qi.service';
+import { IP } from '../../app/objects/IP';
+
+declare var pingRobot: any;
 
 @IonicPage()
 @Component({
@@ -27,17 +34,50 @@ export class ListModulesPage {
   searching: boolean;
   @ViewChild(Content) content: Content;
 
+  private robots: Robot[];
   private dataSubscription: Subscription;
 
   private modulesOriginal: Module[];
   modules: Module[];
   categories: string[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, private modulesService: ModulesService, private translate: TranslateService) {
+  private robotsAlertCombobox: AlertRadioButton;
+  private loading: Loading;
+
+  private cancelText: string;
+  private connectText: string;
+  private errorAddAtLeastOneRobotText: string;
+  private errorNetworkDisconnectedText: string;
+  private errorNoRobotFoundText: string;
+  private errorText: string;
+  private informationText: string;
+  private okText: string;
+  private pleaseWaitText: string;
+  private robotsText: string;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController, private file: File, private modulesService: ModulesService, private translate: TranslateService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService) {
     this.searchControl = new FormControl();
+    translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
+    translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this.errorNetworkDisconnectedText = res);
+    translate.get('ERROR.ADD_AT_LEAST_A_ROBOT').subscribe((res: string) => this.errorAddAtLeastOneRobotText = res);
+    translate.get('ERROR.NO_ROBOT_FOUND').subscribe((res: string) => this.errorNoRobotFoundText = res);
+    translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this.informationText = res);
+    translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
+    translate.get("VERBS.CANCEL").subscribe((res: string) => this.cancelText = res);
+    translate.get("VERBS.CONNECT").subscribe((res: string) => this.connectText = res);
+    translate.get("OK").subscribe((res: string) => this.okText = res);
+    translate.get("ROBOTS").subscribe((res: string) => this.robotsText = res);
   }
 
   ionViewDidLoad(): void {
+    this.file.checkFile(this.file.dataDirectory, this.robotsService.FILE_NAME).then(res => {
+      if (res) {
+        this.file.readAsText(this.file.dataDirectory, this.robotsService.FILE_NAME).then(data => {
+          this.robots = JSON.parse(data);
+          this.robotsService.next(this.robots);
+        });
+      }
+    }, err => { });
     // this.file.removeFile(this.file.dataDirectory, this.modulesService.FILE_NAME);
     this.file.checkFile(this.file.dataDirectory, this.modulesService.FILE_NAME).then(res => {
       if (res) {
@@ -57,6 +97,7 @@ export class ListModulesPage {
     this.dataSubscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
     this.updateCategories(this.modulesOriginal);
     this.refreshModules();
+    this.robotsAlertCombobox = new AlertRadioButton(this.alertCtrl);
   }
 
   private updateCategories(modules: Module[]): void {
@@ -112,8 +153,82 @@ export class ListModulesPage {
   }
 
   openPage(module: Module): void {
-    this.modulesOriginal.forEach((element: Module) => element.id === module.id ? element.last_access = new Date() : null);
-    this.modulesService.next(this.modulesOriginal);
+    this.loading = this.loadingCtrl.create({
+      content: this.pleaseWaitText
+    });
+    this.loading.present();
+    const robotsAlertCombobox = this.robotsAlertCombobox.create(this.robotsText);
+    const promises = [];
+    if (this.robots.length > 0) {
+      this.robots.forEach((robot: Robot) => {
+        promises.push(pingRobot(robot));
+      });
+    } else {
+      this.loading.dismiss();
+      this.alertCtrl.create({
+        title: this.errorText,
+        subTitle: this.errorAddAtLeastOneRobotText,
+        buttons: [this.okText]
+      }).present();
+    }
+    this.dataSubscription.unsubscribe();
+    let index = 0;
+    let pass = 0;
+    promises.forEach((promise) => {
+      promise.then(robot => {
+        pass++;
+        robotsAlertCombobox.addInput({
+          type: 'radio',
+          label: robot.name + ' (' + robot.ip + ')',
+          value: robot.ip,
+          checked: false
+        });
+        if (++index === promises.length) {
+          this.loading.dismiss();
+          this.robotsAlertCombobox.present();
+        }
+      }).catch(err => {
+        if (++index === promises.length) {
+          this.loading.dismiss();
+          if (pass === 0) {
+            console.log('[ERROR][PING][ROBOTS] Unable to find the robot.')
+            this.alertCtrl.create({
+              title: this.errorText,
+              subTitle: this.errorNoRobotFoundText,
+              enableBackdropDismiss: false,
+              buttons: [this.okText]
+            }).present();
+          } else {
+            this.robotsAlertCombobox.present();
+          }
+        }
+      });
+    });
+    robotsAlertCombobox.addButton({
+      text: this.cancelText,
+      handler: () => {
+        this.robotsAlertCombobox.close();
+      }
+    });
+    robotsAlertCombobox.addButton({
+      text: this.connectText,
+      handler: data => {
+        if (data) {
+          this.robotsAlertCombobox.close();
+          this.loading = this.loadingCtrl.create({
+            content: this.pleaseWaitText
+          });
+          this.loading.present();
+          QiService.connect(new IP(data.split('.')));
+          this.robotsAlertCombobox.setResult(data);
+          this.modulesOriginal.forEach((element: Module) => element.id === module.id ? element.last_access = new Date() : null);
+          this.modulesService.next(this.modulesOriginal);
+          this.modalCtrl.create(module.page, null, { cssClass: "modules" }).present();
+          this.loading.dismiss();
+          this.robotsAlertCombobox.setResult(data);
+        }
+      }
+    });
   }
 
   segmentChanged(): void {
