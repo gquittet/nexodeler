@@ -39,7 +39,15 @@
     "NAMES": {
       "PAIR": "Paire",
       "MOVE": "Déplacement",
-      "SPEAK": "Parler"
+      "SPEAK": "Parler",
+      "THEMATICALASSOCIATION": "Association Thématique"
+    },
+    "TRANSLATE": {
+      "THEMATICALASSOCIATION": {
+        "THEMES": {
+          "BATHROOM": "Salle de bain"
+        }
+      }
     }
   },
   "MOTOR": "Moteur",
@@ -75,6 +83,15 @@
   "PERFECT": "Parfait",
   "PLEASE_WAIT": "Veuillez patienter...",
   "POWER": "Énergie",
+  "REACTIONS": {
+    "NEGATIVES": {
+      "NO_IT_IS_NOT_CORRECT": "Non, ce n'est pas correct."
+    },
+    "POSITIVES": {
+      "GOOD_GAME": "Bien joué !",
+      "YOUPI_YOU_WIN": "Bravo ! Tu as gagné !"
+    }
+  },
   "RECENT": "Récent",
   "RECENTS": "Récents",
   "ROBOT": "Robot",
@@ -88,12 +105,16 @@
   },
   "SHUTDOWN": "Arrêt",
   "STATE": "État",
+  "SUPER": "Super",
   "TEMPERATURE": "Température",
   "TIMEZONE": "Fuseau horaire",
   "UI": {
     "ALERT": {
       "CONTENT": {
         "QUESTION": {
+          "GAME": {
+            "EXIT": "Voulez-vous quitter le jeu ?"
+          },
           "ROBOT": {
             "DELETE": "Voulez-vous vraiment supprimer ce robot ?",
             "REBOOT": "Voulez-vous redémarrer ce robot ?",
@@ -125,6 +146,7 @@
         },
         "CONFIRM": {
           "DELETE": "Confirmation de suppression",
+          "EXIT": "Confirmation",
           "REBOOT": "Confirmation de redémarrage",
           "SHUTDOWN": "Confirmation d'extinction",
           "UPDATE": "Confirmation de mise à jour"
@@ -166,6 +188,8 @@
     "SHUTDOWN": "Arrêter"
   },
   "VERSION": "Version",
+  "VICTORY": "Victoire",
   "VOLUME": "Volume",
-  "YES": "Oui"
+  "YES": "Oui",
+  "YOU_WIN": "Tu as gagné !"
 }
