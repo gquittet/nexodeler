@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { ModuleThematicalAssociationPage } from './module-thematical-association';
 import { TranslateModule } from '@ngx-translate/core';
+import { IonicPageModule } from 'ionic-angular';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
+import { ModalTitleModule } from '../../../components/modal-title/modal-title.module';
+import { ModuleThematicalAssociationPage } from './module-thematical-association';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeec
   ],
   imports: [
     IonicPageModule.forChild(ModuleThematicalAssociationPage),
+    ModalTitleModule,
     TranslateModule
   ],
   providers: [

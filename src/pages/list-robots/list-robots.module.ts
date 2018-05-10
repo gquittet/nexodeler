@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
+import { Network } from '@ionic-native/network';
+import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
-
-import { ListRobotsPage } from './list-robots';
-
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { RobotsModule } from '../../app/services/robots/robots.module';
-import { TranslateModule } from '@ngx-translate/core';
-import { Network } from '@ionic-native/network';
+import { ListRobotsPage } from './list-robots';
+
+
 
 @NgModule({
   declarations: [

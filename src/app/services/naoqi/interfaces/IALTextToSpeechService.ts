@@ -42,5 +42,11 @@ export interface IALTextToSpeechService {
    * @param volume The volume of the robot.
    * @returns {Promise<any>} A promise with the result of this action.
    */
-  setVolume(volume: number): Promise<any>
+  setVolume(volume: number): Promise<any>;
+
+  /**
+   * This method stops the current and all the pending tasks immediately.
+   * @returns {Promise<any>} A promise with the result of this action.
+   */
+  stopAll(): Promise<any>;
 }

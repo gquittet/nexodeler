@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NavController, ViewController, IonicPage, NavParams, LoadingController, AlertController } from 'ionic-angular';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, IonicPage, LoadingController, NavController, NavParams, ViewController } from 'ionic-angular';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
-
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
-import { RobotsService } from '../../app/services/robots/robots.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
-import { TranslateService } from '@ngx-translate/core';
+import { RobotsService } from '../../app/services/robots/robots.service';
+
+
 
 declare var ping: any;
 

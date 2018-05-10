@@ -1,0 +1,8 @@
+<ion-item>
+  <ion-icon name="body" item-start></ion-icon>
+  <ion-label>{{ 'POSTURE' | translate }}</ion-label>
+  <ion-select okText="{{ 'VERBS.VALIDATE' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentPosture"
+    (ngModelChange)="changePosture(posture)">
+    <ion-option *ngFor="let posture of robotPostures" [value]="posture">{{ 'NAOQI.ROBOT_POSTURES.' + posture.toUpperCase() | translate }}</ion-option>
+  </ion-select>
+</ion-item>

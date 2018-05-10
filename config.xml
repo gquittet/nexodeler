@@ -3,7 +3,7 @@
     <name>Nexodeler</name>
     <description>An extensible and modular NAO wireless controller.</description>
     <author email="guillaume.quittet@gmail.com" href="http://gquittet.com/">Guillaume Quittet</author>
-    <content original-src="index.html" src="http://192.168.25.3:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <preference name="loadUrlTimeoutValue" value="30000" />
     <preference name="ScrollEnabled" value="false" />

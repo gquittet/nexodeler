@@ -66,9 +66,16 @@
       "WAKE_UP": "Marche"
     },
     "ROBOT_POSTURES": {
+      "CROUCH": "Accroupi",
+      "LYINGBACK": "Couché sur le dos",
+      "LYINGBELLY": "Couché sur le ventre",
       "SIT": "Assis",
+      "SITONCHAIR": "Assis sur une chaise",
       "SITONPOD": "Assis sur le socle de recharge",
-      "STAND": "Debout"
+      "SITRELAX": "Assis (relaxation)",
+      "STAND": "Debout",
+      "STANDINIT": "Debout (position de marche)",
+      "STANDZERO": "Debout (bras devants)"
     },
     "TEMPERATURE": {
       "PERFECT": "Parfaite",
@@ -79,9 +86,12 @@
   },
   "NO": "Non",
   "NUMBER": "Nombre",
+  "OFF": "Éteind",
   "OK": "D'accord",
+  "ON": "Allumé",
   "PERFECT": "Parfait",
   "PLEASE_WAIT": "Veuillez patienter...",
+  "POSTURE": "Posture",
   "POWER": "Énergie",
   "REACTIONS": {
     "NEGATIVES": {
@@ -153,6 +163,9 @@
         }
       }
     },
+    "PLACEHOLDER": {
+      "ENTER_TEXT_DOTS": "Entrez du texte ..."
+    },
     "NAVBAR": {
       "BUTTONS": {
         "BACK": "Retour"
@@ -177,6 +190,7 @@
   },
   "VERBS": {
     "CANCEL": "Annuler",
+    "CLEAR": "Effacer",
     "CLOSE": "Fermer",
     "CONNECT": "Connecter",
     "DELETE": "Supprimer",
@@ -185,7 +199,10 @@
     "REBOOT_NOW": "Redémarrer maintenant",
     "SAVE": "Enregistrer",
     "SEARCH": "Rechercher",
-    "SHUTDOWN": "Arrêter"
+    "SPEAK": "Parler",
+    "STOP": "Arrêter",
+    "SHUTDOWN": "Arrêter",
+    "VALIDATE": "Valider"
   },
   "VERSION": "Version",
   "VICTORY": "Victoire",

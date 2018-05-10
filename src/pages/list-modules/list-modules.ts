@@ -1,20 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content, ModalController, LoadingController, Loading, AlertController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
-import { ModulesService } from '../../app/services/modules/modules.service';
-import { Module } from '../../app/objects/Module';
-import { trigger, style, animate, transition, keyframes } from '@angular/animations';
-
-import { File } from '@ionic-native/file'
-import { Subscription } from 'rxjs/Subscription';
+import { File } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AlertController, Content, IonicPage, Loading, LoadingController, ModalController, NavController, NavParams } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import { AlertRadioButton } from '../../components/objects/alert/AlertRadioButton';
-import { RobotsService } from '../../app/services/robots/robots.service';
-import { Robot } from '../../app/objects/Robot';
-import { QiService } from '../../app/services/naoqi/qi.service';
+import { AlertRadioButton } from '../../app/objects/AlertRadioButton';
 import { IP } from '../../app/objects/IP';
+import { Module } from '../../app/objects/Module';
+import { Robot } from '../../app/objects/Robot';
+import { ModulesService } from '../../app/services/modules/modules.service';
+import { QiService } from '../../app/services/naoqi/qi.service';
+import { RobotsService } from '../../app/services/robots/robots.service';
+
+
 
 declare var pingRobot: any;
 
@@ -35,6 +34,7 @@ export class ListModulesPage {
   @ViewChild(Content) content: Content;
 
   private robots: Robot[];
+  private robotsSubscription: Subscription;
   private dataSubscription: Subscription;
 
   private modulesOriginal: Module[];
@@ -95,6 +95,7 @@ export class ListModulesPage {
 
   ionViewDidEnter(): void {
     this.dataSubscription = this.modulesService.modules.subscribe((modules: Module[]) => this.modulesOriginal = modules);
+    this.robotsSubscription = this.robotsService.robots.subscribe((robots: Robot[]) => this.robots = robots);
     this.updateCategories(this.modulesOriginal);
     this.refreshModules();
     this.robotsAlertCombobox = new AlertRadioButton(this.alertCtrl);
@@ -191,7 +192,7 @@ export class ListModulesPage {
         if (++index === promises.length) {
           this.loading.dismiss();
           if (pass === 0) {
-            console.log('[ERROR][PING][ROBOTS] Unable to find the robot.')
+            console.error('[ERROR][PING][ROBOTS] Unable to find the robot.')
             this.alertCtrl.create({
               title: this.errorText,
               subTitle: this.errorNoRobotFoundText,
@@ -268,5 +269,6 @@ export class ListModulesPage {
 
   ionViewWillLeave(): void {
     this.dataSubscription.unsubscribe();
+    this.robotsSubscription.unsubscribe();
   }
 }

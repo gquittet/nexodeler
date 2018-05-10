@@ -1,17 +1,5 @@
 <ion-header>
-
-  <ion-navbar color="primary">
-    <ion-title>
-      {{ 'MODULES.NAMES.THEMATICALASSOCIATION' | translate }}
-    </ion-title>
-    <ion-buttons start>
-      <button ion-button (tap)="exit()">
-        <span ion-text showWhen="ios">{{ 'VERBS.CLOSE' | translate }}</span>
-        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-
+  <modal-title title="{{ 'MODULES.NAMES.THEMATICALASSOCIATION' | translate }}"></modal-title>
 </ion-header>
 
 
@@ -34,7 +22,8 @@
     <ion-row>
       <ion-col *ngFor="let thematicalObject of selectedImages" col-6 col-sm-4 col-md-6 col-lg-4>
         <div *ngIf="thematicalObject.name === ''"></div>
-        <img *ngIf="thematicalObject.name !== ''" src="{{ thematicalObject.picture }}" class="picture" (click)="selectImage(thematicalObject, $event.currentTarget)" @bounce width="42" height="42">
+        <img *ngIf="thematicalObject.name !== ''" src="{{ thematicalObject.picture }}" class="picture" (click)="selectImage(thematicalObject, $event.currentTarget)"
+          @bounce width="42" height="42">
       </ion-col>
     </ion-row>
   </ion-grid>

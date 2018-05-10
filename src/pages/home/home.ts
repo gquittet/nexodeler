@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, AlertController, MenuController } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
+import { AlertController, IonicPage, MenuController } from 'ionic-angular';
 
 @IonicPage()
 @Component({

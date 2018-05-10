@@ -19,6 +19,15 @@ export interface IALMotionService {
   getStiffnesses(names: string[]): Promise<any>;
 
   /**
+   * Makes the robot move to the given position.
+   * @param x Distance in meters along the x axis.
+   * @param y Distance in meters along the y axis.
+   * @param theta Rotation around the Z axis in radians [-3.1415 to 3.1415].
+   * @returns {Promise<any>} A promise with the result of this action.
+   */
+  moveTo(x: number, y: number, theta: number): Promise<any>;
+
+  /**
    * Open the hands of the robot.
    * @returns {Promise<any>} A promise with the result of this action.
    */
@@ -35,6 +44,13 @@ export interface IALMotionService {
    * @returns {Promise<any>} True if the robot is awake.
    */
   robotIsWakeUp(): Promise<any>;
+
+  /**
+   * Rotate the robot.
+   * @param theta Rotation in radians [-3.1415 to 3.1415].
+   * @returns {Promise<any>} A promise with the result of this action.
+   */
+  rotate(theta: number): Promise<any>;
 
   /**
    * Sets the stiffness of one or more joints.
@@ -54,10 +70,14 @@ export interface IALMotionService {
   stiffnessInterpolation(names: string[], stiffnessList: number[], timeList: number[]): Promise<any>;
 
   /**
+   * Stop the current move of the robot.
+   * @returns {Promise<any>} A promise with the result of this action.
+   */
+  stopMove(): Promise<any>;
+
+  /**
    * Wake up the robot.
    * @returns {Promise<any>} A promise with the result of this action.
    */
   wakeUp(): Promise<any>;
-
-
 }

@@ -1,0 +1,35 @@
+<ion-grid>
+  <ion-row>
+    <ion-col offset-5 col-2 align-self-center>
+      <button ion-button icon-only large full (touchstart)="move(1)" (touchend)="stopMove()">
+        <ion-icon name="arrow-up"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col offset-2 col-2 align-self-center>
+      <button ion-button icon-only large full (touchstart)="turn(1)" (touchend)="stopMove()">
+        <ion-icon name="refresh" style="transform: scaleX(-1);"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col offset-1 col-2 align-self-center>
+      <button ion-button icon-only color="danger" large full (click)="stopMove()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col offset-1 col-2 align-self-center>
+      <button ion-button icon-only large full (touchstart)="turn(-1)" (touchend)="stopMove()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col offset-5 col-2 align-self-center>
+      <button ion-button icon-only large full (touchstart)="move(-1)" (touchend)="stopMove()">
+        <ion-icon name="arrow-down"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
