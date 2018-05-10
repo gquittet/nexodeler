@@ -3,7 +3,7 @@ import { MenuController, Nav } from 'ionic-angular';
 
 @Component({
   selector: 'sidenav-main',
-  templateUrl: 'sidenav-main.html'
+  templateUrl: 'sidenav-main.component.html'
 })
 export class SidenavMainComponent {
 
