@@ -1,0 +1,11 @@
+<ion-navbar color="primary">
+  <ion-title>
+    {{ title }}
+  </ion-title>
+  <ion-buttons start>
+    <button ion-button (tap)="exit()">
+      <span ion-text showWhen="ios">{{ 'VERBS.CLOSE' | translate }}</span>
+      <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>
