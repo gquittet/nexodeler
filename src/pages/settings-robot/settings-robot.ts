@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, IonicPage, ViewController, AlertController } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Subscription } from 'rxjs';
 import { IP } from '../../app/objects/IP';
 import { QiService } from '../../app/services/naoqi/qi.service';
-import { Network } from '@ionic-native/network';
-import { Subscription } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
