@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
+import { Network } from '@ionic-native/network';
 import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
-import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
