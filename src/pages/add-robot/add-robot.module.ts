@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
-
+import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
+import { RobotsModule } from '../../app/services/robots/robots.module';
 import { AddRobotPage } from './add-robot';
 
-import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
-import { TranslateModule } from '@ngx-translate/core';
-import { RobotsModule } from '../../app/services/robots/robots.module';
+
 
 @NgModule({
   declarations: [
