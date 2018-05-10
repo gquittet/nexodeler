@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { File } from '@ionic-native/file';
-
-import 'rxjs/add/operator/map';
-import { Module } from '../../objects/Module'
-import { IModulesService } from './interfaces/IModulesService';
 import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import { Module } from '../../objects/Module';
+import { IModulesService } from './interfaces/IModulesService';
+
 
 /**
  * The service to manage asynchronously the modules.
@@ -19,9 +19,8 @@ export class ModulesService implements IModulesService {
   readonly FILE_NAME: string = "modules.json";
   private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
     <Module>{ id: 0, name: 'THEMATICALASSOCIATION', category: 'LEARNING', page: 'ModuleThematicalAssociationPage', fav: false, creator: 'Éspéranderie', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-26T11:45:00'), updated: new Date('2018-04-26T11:45:00'), last_access: null },
-    <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.4', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
-    <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
-    <Module>{ id: 3, name: 'MOVE', category: 'MOVE', page: 'HomePage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.3', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null }
+    <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'ModuleSpeakPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
+    <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'ModuleMotionPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
   ]);
   modules: Observable<Module[]> = this.modulesSubject.asObservable();
 
