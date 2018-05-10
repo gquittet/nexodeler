@@ -1,0 +1,7 @@
+<ion-item>
+  <ion-icon name="flash" item-start></ion-icon>
+  <ion-label>{{ 'MOTORS' | translate }}</ion-label>
+  <ion-note item-end>{{ 'OFF' | translate }}</ion-note>
+  <ion-toggle [(ngModel)]="enable" (ngModelChange)="update()"></ion-toggle>
+  <ion-note item-end>{{ 'ON' | translate }}</ion-note>
+</ion-item>
