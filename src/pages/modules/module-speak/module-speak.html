@@ -1,0 +1,19 @@
+<ion-header>
+  <modal-title title="{{ 'MODULES.NAMES.SPEAK' | translate }}"></modal-title>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item padding-horizontal>
+      <ion-input placeholder="{{ 'UI.PLACEHOLDER.ENTER_TEXT_DOTS' | translate }}" type="text" [(ngModel)]="text" autocomplete="on"
+        autocorrect="on" clearInput style="padding: 5px; outline: 1px solid black;"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button full ion-button padding-vertical (tap)="speak()">{{ 'VERBS.SPEAK' | translate }}</button>
+    </ion-item>
+    <ion-item>
+      <button full ion-button padding-vertical color="danger" (tap)="alTextToSpeech.stopAll()">{{ 'VERBS.STOP' | translate }}</button>
+    </ion-item>
+  </ion-list>
+</ion-content>
