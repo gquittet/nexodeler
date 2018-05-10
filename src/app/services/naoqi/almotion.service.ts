@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-
-import { IALMotionService } from "./interfaces/IALMotionService";
 import { ALModuleService } from "./almodule.service";
+import { IALMotionService } from "./interfaces/IALMotionService";
 import { QiService } from "./qi.service";
+
 
 /**
  * The service implementation of the ALMotion NAOqi class.
@@ -36,6 +36,13 @@ export class ALMotionService extends ALModuleService implements IALMotionService
   /**
    * @override
    */
+  moveTo(x: number, y: number, theta: number): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALMotion => ALMotion.moveTo(x, y, theta).then(result => resolve(result), error => reject(error))));
+  }
+
+  /**
+   * @override
+   */
   rest(): Promise<any> {
     return new Promise((resolve, reject) => QiService.call(ALMotion => ALMotion.rest().then(result => resolve(result), error => reject(error))));
   }
@@ -43,8 +50,22 @@ export class ALMotionService extends ALModuleService implements IALMotionService
   /**
    * @override
    */
+  rotate(theta: number) {
+    return new Promise((resolve, reject) => QiService.call(ALMotion => ALMotion.moveTo(0, 0, theta).then(result => resolve(result), error => reject(error))));
+  }
+
+  /**
+   * @override
+   */
   robotIsWakeUp(): Promise<any> {
     return new Promise((resolve, reject) => QiService.call(ALMotion => ALMotion.robotIsWakeUp().then(result => resolve(result), error => reject(error))));
+  }
+
+  /**
+   * @override
+   */
+  stopMove(): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALMotion => ALMotion.stopMove().then(result => resolve(result), error => reject(error))));
   }
 
   /**
