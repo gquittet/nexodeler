@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-
 import { ALModuleService } from "./almodule.service";
 import { IALTextToSpeechService } from "./interfaces/IALTextToSpeechService";
 import { QiService } from "./qi.service";
+
 
 /**
  * The service implementation of the ALTextToSpeech NAOqi class.
@@ -54,5 +54,12 @@ export class ALTextToSpeechService extends ALModuleService implements IALTextToS
     if (volume > 100 || volume < 0)
       throw "[Error]: The volume must be between [0, 100]."
     return new Promise((resolve, reject) => QiService.call(ALTextToSpeech => ALTextToSpeech.setVolume(volume / 100).then(result => resolve(result), error => reject(error))));
+  }
+
+  /**
+   * @override
+   */
+  stopAll(): Promise<any> {
+    return new Promise((resolve, reject) => QiService.call(ALTextToSpeech => ALTextToSpeech.stopAll().then(result => resolve(result), error => reject(error))));
   }
 }
