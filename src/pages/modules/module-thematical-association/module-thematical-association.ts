@@ -1,9 +1,8 @@
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core';
+import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
-import { QiService } from '../../../app/services/naoqi/qi.service';
 
 
 @IonicPage()
@@ -191,10 +190,6 @@ export class ModuleThematicalAssociationPage {
           }]
       }).present();
     }
-  }
-
-  ionViewWillLeave(): void {
-    QiService.disconnect();
   }
 }
 
