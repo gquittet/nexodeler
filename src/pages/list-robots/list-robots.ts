@@ -1,21 +1,21 @@
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { App, NavController, AlertController, LoadingController, ItemSliding, IonicPage, ToastController, ModalController, Content } from 'ionic-angular';
-import { trigger, style, animate, transition, keyframes } from '@angular/animations';
-
-import { IP } from '../../app/objects/IP';
-import { Robot } from '../../app/objects/Robot';
-
-import { QiService } from '../../app/services/naoqi/qi.service';
-
-import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { File } from '@ionic-native/file';
-import { RobotsService } from '../../app/services/robots/robots.service';
+import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import { Network } from '@ionic-native/network';
+import { IP } from '../../app/objects/IP';
+import { Robot } from '../../app/objects/Robot';
+import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
+import { QiService } from '../../app/services/naoqi/qi.service';
+import { RobotsService } from '../../app/services/robots/robots.service';
+
+
+
+
 
 
 declare var ping: any;
