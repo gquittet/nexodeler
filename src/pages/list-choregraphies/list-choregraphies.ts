@@ -1,19 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, LoadingController, Loading, Content, VirtualScroll } from 'ionic-angular';
-import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
 import { FormControl } from '@angular/forms';
-import { AlertRadioButton } from '../../components/objects/alert/AlertRadioButton';
-import { TranslateService } from '@ngx-translate/core';
-import { RobotsService } from '../../app/services/robots/robots.service';
 import { File } from '@ionic-native/file';
-import { Robot } from '../../app/objects/Robot';
-import { QiService } from '../../app/services/naoqi/qi.service';
-import { IP } from '../../app/objects/IP';
 import { Network } from '@ionic-native/network';
-
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, Content, IonicPage, Loading, LoadingController, NavController, NavParams, ViewController, VirtualScroll } from 'ionic-angular';
 import { Subscription } from 'rxjs/Rx';
 import 'rxjs/add/operator/debounceTime';
+import { AlertRadioButton } from '../../app/objects/AlertRadioButton';
 import { Behavior } from '../../app/objects/Behavior';
+import { IP } from '../../app/objects/IP';
+import { Robot } from '../../app/objects/Robot';
+import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
+import { QiService } from '../../app/services/naoqi/qi.service';
+import { RobotsService } from '../../app/services/robots/robots.service';
+
 
 declare var pingRobot: any;
 
