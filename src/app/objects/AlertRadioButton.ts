@@ -1,5 +1,5 @@
-import { IAlertRadioButton } from "./IAlertRadioButton";
 import { Alert, AlertController } from "ionic-angular";
+import { IAlertRadioButton } from "./interfaces/IAlertRadioButton";
 
 export class AlertRadioButton implements IAlertRadioButton {
 
