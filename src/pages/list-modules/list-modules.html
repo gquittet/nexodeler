@@ -26,8 +26,7 @@
 
   <ion-toolbar *ngIf="searchBar" color="accent">
     <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
-      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()"
-      (ionCancel)="cancelSearch(); content.resize();"></ion-searchbar>
+      animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()" (ionCancel)="cancelSearch(); content.resize();"></ion-searchbar>
   </ion-toolbar>
 
 </ion-header>
@@ -40,7 +39,7 @@
   </div>
 
   <ion-list *ngIf="section !== 'all'">
-    <button ion-item *ngFor="let module of modules" (tap)="openPage(module)">
+    <button ion-item *ngFor="let module of modules" (tap)="loadPage(module)">
       <h2>{{ 'MODULES.NAMES.' + module.name | translate }}</h2>
       <p *ngIf="section === 'recents'">
         <b>{{ formatDate(module.last_access) }}</b>
@@ -70,7 +69,7 @@
     <ion-item-group *ngFor="let categorie of categories">
       <ion-item-divider color="light">{{ 'MODULES.CATEGORIES.' + categorie | translate }}</ion-item-divider>
       <ng-container *ngFor="let module of modules">
-        <button ion-item *ngIf="module.category === categorie" (tap)="openPage(module)">
+        <button ion-item *ngIf="module.category === categorie" (tap)="loadPage(module)">
           <h2>{{ 'MODULES.NAMES.' + module.name | translate }}</h2>
           <p>
             <b>{{ 'CREATOR' | translate }}</b>

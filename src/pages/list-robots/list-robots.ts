@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
+import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
@@ -71,6 +72,7 @@ export class ListRobotsPage {
 
   private dataSubscription: Subscription;
 
+  // String UI
   private cancelText: string;
   private confirmDeleteText: string;
   private confirmUpdateText: string;
@@ -89,7 +91,6 @@ export class ListRobotsPage {
   private noText: string;
   private numberText: string;
   private okText: string;
-  private pleaseWaitText: string;
   private questionRobotDelete: string;
   private questionRobotReboot: string;
   private questionRobotsDelete: string;
@@ -99,8 +100,12 @@ export class ListRobotsPage {
   private saveText: string;
   private yesText: string;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private network: Network, private alSystemService: ALSystemService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private translate: TranslateService) {
+  // UI
+  private loading: AlertLoading;
+
+  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private network: Network, private alSystemService: ALSystemService, private alertCtrl: AlertController, loadingCtrl: LoadingController, private translate: TranslateService) {
     this.searchControl = new FormControl();
+    this.loading = new AlertLoading(loadingCtrl, translate);
     translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this.errorEnterCorrectIpAddressText = res);
     translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this.errorEnterCorrectNameText = res);
     translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this.errorEnterCorrectNumberText = res);
@@ -112,7 +117,6 @@ export class ListRobotsPage {
     translate.get('NO').subscribe((res: string) => this.noText = res);
     translate.get('NUMBER').subscribe((res: string) => this.numberText = res);
     translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
     translate.get('UI.ALERT.TITLE.CONFIRM.DELETE').subscribe((res: string) => this.confirmDeleteText = res);
     translate.get('UI.ALERT.TITLE.CONFIRM.UPDATE').subscribe((res: string) => this.confirmUpdateText = res);
     translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.DELETE').subscribe((res: string) => this.questionRobotDelete = res);
@@ -321,10 +325,7 @@ export class ListRobotsPage {
   }
 
   openMonitor(robot: Robot): void {
-    const loading = this.loadingCtrl.create({
-      content: this.pleaseWaitText
-    });
-    loading.present();
+    this.loading.show();
     const self = this;
     if (this.network.type === 'none') {
       this.alertCtrl.create({
@@ -332,13 +333,13 @@ export class ListRobotsPage {
         subTitle: this.errorNoNetwork,
         buttons: [this.okText]
       }).present();
-      loading.dismiss();
+      this.loading.close();
     } else {
       ping('http://' + robot.ip).then(delta => {
-        loading.dismiss();
+        this.loading.close();
         this.modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
       }).catch(error => {
-        loading.dismiss();
+        this.loading.close();
         let errorUnableToFindText: string;
         self.translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
           (res: string) => errorUnableToFindText = res,

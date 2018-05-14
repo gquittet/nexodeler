@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from 'ionic-angular';
-import { AlertRadioButton } from '../../../app/objects/AlertRadioButton';
+import { AlertRadioButton } from '../../../app/objects/ionic/AlertRadioButton';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
 
 
