@@ -6,7 +6,6 @@ import { AlertController, Content, IonicPage, LoadingController, ModalController
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { Module } from '../../app/objects/Module';
-import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
 import { ModulesService } from '../../app/services/modules/modules.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
@@ -43,7 +42,6 @@ export class ListModulesPage {
   private robotsText: string;
 
   // UI
-  private loading: AlertLoading;
   private robotsChooser: RobotsChooser;
   @ViewChild(Content) content: Content;
   searchControl: FormControl;
@@ -53,7 +51,6 @@ export class ListModulesPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private modalCtrl: ModalController, private file: File, private modulesService: ModulesService, private translate: TranslateService, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService) {
     this.searchControl = new FormControl();
-    this.loading = new AlertLoading(loadingCtrl, translate);
     translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
     translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this.errorNetworkDisconnectedText = res);
     translate.get('ERROR.ADD_AT_LEAST_A_ROBOT').subscribe((res: string) => this.errorAddAtLeastOneRobotText = res);
