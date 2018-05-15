@@ -11,13 +11,13 @@ export class SidenavMainComponent {
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private menuCtrl: MenuController) { }
+  constructor(private _menuCtrl: MenuController) { }
 
   openPage(page: string): void {
     this.nav.setRoot(this.rootPage);
     if (page !== this.rootPage)
       this.nav.push(page);
-    this.menuCtrl.close();
+    this._menuCtrl.close();
   }
 
 }

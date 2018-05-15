@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, LoadingController, NavController, NavParams, ViewController } from 'ionic-angular';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
+import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
@@ -22,24 +23,25 @@ export class AddRobotPage {
   addForm: FormGroup;
   robots: Robot[];
 
-  private errorText: string;
-  private errorUnableToGetRobotName: string;
-  private errorVerifyNetworkConnection: string;
-  private pleaseWaitText: string;
-  private okText: string;
+  private _errorText: string;
+  private _errorUnableToGetRobotName: string;
+  private _errorVerifyNetworkConnection: string;
+  private _okText: string;
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private alertCtrl: AlertController, public loadingCtrl: LoadingController, private robotsService: RobotsService, private alSystemService: ALSystemService, translate: TranslateService) {
-    this.addForm = this.fb.group({
+  private _loading: AlertLoading;
+
+  constructor(private _fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService, private _alSystemService: ALSystemService, translate: TranslateService) {
+    this.addForm = this._fb.group({
       'number1': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number2': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number3': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number4': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])]
     });
-    translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
-    translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
-    translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').subscribe((res: string) => this.errorUnableToGetRobotName = res);
-    translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this.errorVerifyNetworkConnection = res);
-    translate.get('OK').subscribe((res: string) => this.okText = res);
+    this._loading = new AlertLoading(loadingCtrl, translate);
+    translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res);
+    translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').subscribe((res: string) => this._errorUnableToGetRobotName = res);
+    translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnection = res);
+    translate.get('OK').subscribe((res: string) => this._okText = res);
   }
 
   ionViewWillEnter(): void {
@@ -48,42 +50,39 @@ export class AddRobotPage {
 
   save(): void {
     const ip = new IP([this.addForm.controls['number1'].value, this.addForm.controls['number2'].value, this.addForm.controls['number3'].value, this.addForm.controls['number4'].value]);
-    const loading = this.loadingCtrl.create({
-      content: this.pleaseWaitText
-    });
-    loading.present();
+    this._loading.show();
     ping('http://' + ip.toString()).then(delta => {
       const timer = setTimeout(() => {
-        loading.dismiss();
-        this.alertCtrl.create({
-          title: this.errorText,
-          subTitle: this.errorUnableToGetRobotName,
-          buttons: [this.okText]
+        this._loading.close();
+        this._alertCtrl.create({
+          title: this._errorText,
+          subTitle: this._errorUnableToGetRobotName,
+          buttons: [this._okText]
         }).present();
       }, 5000);
       QiService.connect(ip);
-      this.alSystemService.getName().then(robotName => {
+      this._alSystemService.getName().then(robotName => {
         const robot = new Robot(robotName, ip.toString());
         this.robots.push(robot);
-        this.robotsService.next(this.robots);
+        this._robotsService.next(this.robots);
         clearTimeout(timer);
-        loading.dismiss();
+        this._loading.close();
         this.goBack();
       }).catch(error => {
         clearTimeout(timer);
-        loading.dismiss();
-        this.alertCtrl.create({
-          title: this.errorText,
-          subTitle: this.errorUnableToGetRobotName,
-          buttons: [this.okText]
+        this._loading.close();
+        this._alertCtrl.create({
+          title: this._errorText,
+          subTitle: this._errorUnableToGetRobotName,
+          buttons: [this._okText]
         }).present();
       });
     }).catch(err => {
-      loading.dismiss();
-      this.alertCtrl.create({
-        title: this.errorText,
-        subTitle: this.errorVerifyNetworkConnection,
-        buttons: [this.okText]
+      this._loading.close();
+      this._alertCtrl.create({
+        title: this._errorText,
+        subTitle: this._errorVerifyNetworkConnection,
+        buttons: [this._okText]
       }).present();
     });
   }

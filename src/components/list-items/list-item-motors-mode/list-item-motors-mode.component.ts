@@ -9,25 +9,25 @@ import { ALMotionService } from '../../../app/services/naoqi/almotion.service';
 })
 export class ListItemMotorsModeComponent {
 
-  private stateInterval;
+  private _stateInterval;
   enable: boolean;
 
-  constructor(translate: TranslateService, private alMotionService: ALMotionService) { }
+  constructor(translate: TranslateService, private _alMotionService: ALMotionService) { }
 
   ngOnInit(): void {
     this.getState();
-    this.stateInterval = setInterval(() => this.getState(), 2000);
+    this._stateInterval = setInterval(() => this.getState(), 2000);
   }
 
   private getState(): void {
-    this.alMotionService.robotIsWakeUp().then(wakeUp => this.enable = wakeUp).catch(error => console.error(error));
+    this._alMotionService.robotIsWakeUp().then(wakeUp => this.enable = wakeUp).catch(error => console.error(error));
   }
 
   update(): void {
-    this.enable ? this.alMotionService.wakeUp() : this.alMotionService.rest();
+    this.enable ? this._alMotionService.wakeUp() : this._alMotionService.rest();
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.stateInterval);
+    clearInterval(this._stateInterval);
   }
 }

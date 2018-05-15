@@ -11,14 +11,14 @@ export class ListItemPostureSelectorComponent {
   robotPostures: string[];
   currentPosture: string;
 
-  constructor(private alRobotPosture: ALRobotPosture) { }
+  constructor(private _alRobotPosture: ALRobotPosture) { }
 
   ngOnInit(): void {
-    this.alRobotPosture.getPosturesList().then(posturesList => this.robotPostures = posturesList);
-    this.alRobotPosture.getPosture().then(currentPosture => this.currentPosture = currentPosture);
+    this._alRobotPosture.getPosturesList().then(posturesList => this.robotPostures = posturesList);
+    this._alRobotPosture.getPosture().then(currentPosture => this.currentPosture = currentPosture);
   }
 
   changePosture(): void {
-    this.alRobotPosture.goToPosture(this.currentPosture, 1.0).then(() => console.log('[NAOQI][INFO][Posture] changePosture: Change posture to ' + this.currentPosture)).catch(error => console.error(error));
+    this._alRobotPosture.goToPosture(this.currentPosture, 1.0).then(() => console.log('[NAOQI][INFO][Posture] changePosture: Change posture to ' + this.currentPosture)).catch(error => console.error(error));
   }
 }

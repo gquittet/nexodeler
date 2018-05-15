@@ -25,6 +25,10 @@
   "IP_ADDRESS": "IP Address",
   "LANGUAGE": "Language",
   "LANGUAGES": "Languages",
+  "LANGUAGES_NAME": {
+    "ENGLISH": "English",
+    "FRENCH": "French"
+  },
   "MAINTAINER": "MAINTAINER",
   "MENU": "Menu",
   "MODE": "Mode",

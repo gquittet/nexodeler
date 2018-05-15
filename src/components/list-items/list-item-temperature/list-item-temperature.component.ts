@@ -8,46 +8,46 @@ import { ALBodyTemperatureService } from '../../../app/services/naoqi/albodytemp
 })
 export class ListItemTemperatureComponent {
 
-  private temperatureInterval;
+  private _temperatureInterval;
 
   temperature: string;
 
-  private temperatures: string[];
+  private _temperatures: string[];
 
-  constructor(translate: TranslateService, private alBodyTemperature: ALBodyTemperatureService) {
-    this.temperatures = [];
-    translate.get('NAOQI.TEMPERATURE.PERFECT').subscribe(res => this.temperatures[0] = res);
-    translate.get('NAOQI.TEMPERATURE.NEGLIGIBLE').subscribe(res => this.temperatures[1] = res);
-    translate.get('NAOQI.TEMPERATURE.SERIOUS').subscribe(res => this.temperatures[2] = res);
-    translate.get('NAOQI.TEMPERATURE.CRITICAL').subscribe(res => this.temperatures[3] = res);
+  constructor(translate: TranslateService, private _alBodyTemperature: ALBodyTemperatureService) {
+    this._temperatures = [];
+    translate.get('NAOQI.TEMPERATURE.PERFECT').subscribe(res => this._temperatures[0] = res);
+    translate.get('NAOQI.TEMPERATURE.NEGLIGIBLE').subscribe(res => this._temperatures[1] = res);
+    translate.get('NAOQI.TEMPERATURE.SERIOUS').subscribe(res => this._temperatures[2] = res);
+    translate.get('NAOQI.TEMPERATURE.CRITICAL').subscribe(res => this._temperatures[3] = res);
   }
 
   ngOnInit(): void {
     this.getTemperature();
-    this.temperatureInterval = setInterval(() => this.getTemperature(), 2000);
+    this._temperatureInterval = setInterval(() => this.getTemperature(), 2000);
   }
 
   private getTemperature(): void {
-    this.alBodyTemperature.getTemperatureDiagnosis().then(temperature => {
+    this._alBodyTemperature.getTemperatureDiagnosis().then(temperature => {
       if (temperature) {
         switch (temperature[0]) {
           case 0:
-            this.temperature = this.temperatures[1];
+            this.temperature = this._temperatures[1];
             break;
           case 1:
-            this.temperature = this.temperatures[2];
+            this.temperature = this._temperatures[2];
             break;
           case 2:
-            this.temperature = this.temperatures[3];
+            this.temperature = this._temperatures[3];
             break;
         }
       } else {
-        this.temperature = this.temperatures[0];
+        this.temperature = this._temperatures[0];
       }
     }).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.temperatureInterval);
+    clearInterval(this._temperatureInterval);
   }
 }

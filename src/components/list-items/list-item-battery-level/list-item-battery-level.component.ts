@@ -8,22 +8,22 @@ import { ALBatteryService } from '../../../app/services/naoqi/albattery.service'
 })
 export class ListItemBatteryLevelComponent {
 
-  private batteryInterval;
+  private _batteryInterval;
 
-  private batteryLevel: number;
+  batteryLevel: number;
 
-  constructor(private alBatteryService: ALBatteryService) { }
+  constructor(private _alBatteryService: ALBatteryService) { }
 
   ngOnInit(): void {
     this.getBatteryLevel();
-    this.batteryInterval = setInterval(() => this.getBatteryLevel(), 1500);
+    this._batteryInterval = setInterval(() => this.getBatteryLevel(), 1500);
   }
 
   private getBatteryLevel(): void {
-    this.alBatteryService.getLevel().then(level => this.batteryLevel = level).catch(error => console.error(error));
+    this._alBatteryService.getLevel().then(level => this.batteryLevel = level).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.batteryInterval);
+    clearInterval(this._batteryInterval);
   }
 }

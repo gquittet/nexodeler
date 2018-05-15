@@ -8,15 +8,15 @@ import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 })
 export class ListItemNaoqiVersionComponent {
 
-  private version: Object;
+  version: Object;
 
-  constructor(private alSystemService: ALSystemService) { }
+  constructor(private _alSystemService: ALSystemService) { }
 
   ngOnInit(): void {
     this.getVersion();
   }
 
   private getVersion(): void {
-    this.alSystemService.getSystemVersion().then(version => this.version = version).catch(error => console.error(error));
+    this._alSystemService.getSystemVersion().then(version => this.version = version).catch(error => console.error(error));
   }
 }

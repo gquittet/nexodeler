@@ -11,49 +11,49 @@ import { QiService } from '../../../app/services/naoqi/qi.service';
 })
 export class ListItemRebootButtonComponent {
 
-  private confirmRebootText: string;
-  private noText: string;
-  private okText: string;
-  private questionRebootText: string;
-  private rebootText: string;
-  private yesText: string;
+  private _confirmRebootText: string;
+  private _noText: string;
+  private _okText: string;
+  private _questionRebootText: string;
+  private _rebootText: string;
+  private _yesText: string;
 
-  constructor(private navCtrl: NavController, private viewCtrl: ViewController, private alertCtrl: AlertController, private translate: TranslateService, private alSystem: ALSystemService) {
-    translate.get('NO').subscribe((res: string) => this.noText = res);
-    translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('UI.ALERT.TITLE.CONFIRM.REBOOT').subscribe((res: string) => this.confirmRebootText = res);
-    translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this.questionRebootText = res);
-    translate.get('YES').subscribe((res: string) => this.yesText = res);
+  constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService) {
+    _translate.get('NO').subscribe((res: string) => this._noText = res);
+    _translate.get('OK').subscribe((res: string) => this._okText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.REBOOT').subscribe((res: string) => this._confirmRebootText = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this._questionRebootText = res);
+    _translate.get('YES').subscribe((res: string) => this._yesText = res);
   }
 
   ngOnInit(): void {
-    this.alSystem.getName().then((name: string) => {
-      this.translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_REBOOTING_DOTS', { value: name }).subscribe((res: string) => this.rebootText = res);
+    this._alSystem.getName().then((name: string) => {
+      this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_REBOOTING_DOTS', { value: name }).subscribe((res: string) => this._rebootText = res);
     }).catch(error => console.error(error));
   }
 
   reboot(): void {
-    this.alertCtrl.create({
-      title: this.confirmRebootText,
-      message: this.questionRebootText,
+    this._alertCtrl.create({
+      title: this._confirmRebootText,
+      message: this._questionRebootText,
       buttons: [
         {
-          text: this.noText,
+          text: this._noText,
           role: 'cancel'
         },
         {
-          text: this.yesText,
+          text: this._yesText,
           handler: () => {
-            this.alSystem.reboot().catch(error => console.error(error));
-            this.alertCtrl.create({
+            this._alSystem.reboot().catch(error => console.error(error));
+            this._alertCtrl.create({
               title: 'Info',
-              subTitle: this.rebootText,
+              subTitle: this._rebootText,
               buttons: [
                 {
-                  text: this.okText,
+                  text: this._okText,
                   handler: () => {
                     QiService.disconnect();
-                    this.navCtrl.remove(this.viewCtrl.index, 1);
+                    this._navCtrl.remove(this._viewCtrl.index, 1);
                   }
                 }
               ]

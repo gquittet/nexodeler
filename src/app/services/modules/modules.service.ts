@@ -17,19 +17,19 @@ import { IModulesService } from './interfaces/IModulesService';
 export class ModulesService implements IModulesService {
 
   readonly FILE_NAME: string = "modules.json";
-  private modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
+  private _modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
     <Module>{ id: 0, name: 'THEMATICALASSOCIATION', category: 'LEARNING', page: 'ModuleThematicalAssociationPage', fav: false, creator: 'Éspéranderie', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-26T11:45:00'), updated: new Date('2018-04-26T11:45:00'), last_access: null },
     <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'ModuleSpeakPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
     <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'ModuleMotionPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
   ]);
-  modules: Observable<Module[]> = this.modulesSubject.asObservable();
+  private _modules: Observable<Module[]> = this._modulesSubject.asObservable();
 
-  constructor(private file: File, private translate: TranslateService) { }
+  constructor(private _file: File, private _translate: TranslateService) { }
 
   update(modules: Module[]): void {
     // Fixing the bad sorting. Sort with the id.
     modules.sort((a, b) => a.id - b.id);
-    this.modulesSubject.value.forEach((module: Module, index: number) => {
+    this._modulesSubject.value.forEach((module: Module, index: number) => {
       let newModule: Module = modules[index];
       if (!newModule)
         modules.push(module);
@@ -44,22 +44,22 @@ export class ModulesService implements IModulesService {
         }
       }
     });
-    this.modulesSubject.next(modules);
-    this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
-      this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+    this._modulesSubject.next(modules);
+    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
     }, err => {
-      this.file.writeFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
     });
   }
 
   next(modules: Module[]): void {
     // Fixing the bad sorting. Sort with the id.
     modules.sort((a, b) => a.id - b.id);
-    this.modulesSubject.next(modules);
-    this.file.checkFile(this.file.dataDirectory, this.FILE_NAME).then(res => {
-      this.file.writeExistingFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+    this._modulesSubject.next(modules);
+    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
     }, err => {
-      this.file.writeFile(this.file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
     });
   }
 
@@ -70,10 +70,14 @@ export class ModulesService implements IModulesService {
   filter(value: string): Observable<Module[]> {
     let name: string;
     let category: string;
-    return this.modules.map((modules: Module[]) => modules.filter((module: Module) => {
-      this.translate.get('MODULES.NAMES.' + module.name).subscribe((res: string) => name = res);
-      this.translate.get('MODULES.CATEGORIES.' + module.category).subscribe((res: string) => category = res);
+    return this._modules.map((modules: Module[]) => modules.filter((module: Module) => {
+      this._translate.get('MODULES.NAMES.' + module.name).subscribe((res: string) => name = res);
+      this._translate.get('MODULES.CATEGORIES.' + module.category).subscribe((res: string) => category = res);
       return this.equals(name, value) || this.equals(category, value) || this.equals(module.creator, value) || this.equals(module.maintainer, value) || this.equals(module.version, value);
     }));
+  }
+
+  get modules(): Observable<Module[]> {
+    return this._modules;
   }
 }

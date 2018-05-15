@@ -11,10 +11,10 @@ export class ModalTitleComponent {
 
   @Input() title: string;
 
-  constructor(private viewCtrl: ViewController) { }
+  constructor(private _viewCtrl: ViewController) { }
 
   exit(): void {
-    this.viewCtrl.dismiss();
+    this._viewCtrl.dismiss();
   }
 
   ngOnDestroy(): void {

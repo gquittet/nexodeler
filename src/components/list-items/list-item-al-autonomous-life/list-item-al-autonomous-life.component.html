@@ -4,6 +4,7 @@
 <ion-item>
   <ion-icon name="heart" item-start></ion-icon>
   <ion-label>{{ 'MODE' | translate }}</ion-label>
-  <button ion-button item-end outline (tap)="show()">{{ 'VERBS.EDIT' | translate }}</button>
-  <ion-note item-end>{{ alert.getResult() }}</ion-note>
+  <ion-select okText="{{ 'OK' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentState" (ngModelChange)="alAutonomousLife.setState(convertState(currentState))">
+    <ion-option *ngFor="let state of statesToSelect" [value]="state">{{ state }}</ion-option>
+  </ion-select>
 </ion-item>

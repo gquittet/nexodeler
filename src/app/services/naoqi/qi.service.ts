@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { IP } from '../../objects/IP';
+
 
 declare var QiSession: any;
 
@@ -14,12 +14,12 @@ export class QiService {
   /**
    * The session with the robot.
    */
-  private static session;
+  private static _session;
 
   /**
    * The module that are already loaded.
    */
-  private static modulesLoaded = {};
+  private static _modulesLoaded = {};
 
   /**
    * Return a table with the parameters of a function.
@@ -43,10 +43,10 @@ export class QiService {
    * @returns {Promise<any>} A promise that is ended when the module is loaded.
    */
   private static loadModule(moduleName: string): Promise<any> {
-    if (!(moduleName in this.modulesLoaded)) {
-      this.modulesLoaded[moduleName] = this.session.service(moduleName);
+    if (!(moduleName in this._modulesLoaded)) {
+      this._modulesLoaded[moduleName] = this._session.service(moduleName);
     }
-    return this.modulesLoaded[moduleName];
+    return this._modulesLoaded[moduleName];
   }
 
   /**
@@ -79,9 +79,9 @@ export class QiService {
    * Disconnect the current connection of the robot.
    */
   static disconnect(): void {
-    if (this.session) {
+    if (this._session) {
       // this.session.socket().removeAllListeners();
-      this.session.socket().disconnect();
+      this._session.socket().disconnect();
     } else {
       console.error("[ERROR][NAOQI][Session] Cannot disconnect because there's no session active.");
     }
@@ -92,13 +92,13 @@ export class QiService {
    * @param ip The IP address of the robot.
    */
   static connect(ip: IP): void {
-    if (!this.session) {
-      this.session = new QiSession(ip.toString() + ':80');
-      this.modulesLoaded = {};
-      this.session.socket().on('connect', () => console.log("[INFO][NAOQI][Session] Connected"));
-      this.session.socket().on('disconnect', () => {
+    if (!this._session) {
+      this._session = new QiSession(ip.toString() + ':80');
+      this._modulesLoaded = {};
+      this._session.socket().on('connect', () => console.log("[INFO][NAOQI][Session] Connected"));
+      this._session.socket().on('disconnect', () => {
         console.log("[INFO][NAOQI][Session] Disconnected");
-        this.session = null;
+        this._session = null;
       });
     } else {
       this.disconnect();

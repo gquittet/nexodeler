@@ -16,15 +16,15 @@ export class RobotMoveJoystickComponent {
   *  0    NOTHING
   * -1    BACKWARD
   */
-  currentDirection: number = 1;
+  _currentDirection: number = 1;
 
-  constructor(private events: Events, private alMotion: ALMotionService, private alRobotPosture: ALRobotPosture) { }
+  constructor(private _events: Events, private _alMotion: ALMotionService, private _alRobotPosture: ALRobotPosture) { }
 
   ngOnInit(): void {
     // Create event to handle the exit of the page and stop the walk on exit.
-    this.events.subscribe('module:exit', () => {
-      this.alMotion.stopMove().then(() => {
-        this.alRobotPosture.getPosture().then((postureName: string) => this.alRobotPosture.goToPosture(postureName, 1.0));
+    this._events.subscribe('module:exit', () => {
+      this._alMotion.stopMove().then(() => {
+        this._alRobotPosture.getPosture().then((postureName: string) => this._alRobotPosture.goToPosture(postureName, 1.0));
       });
     });
   }
@@ -32,10 +32,10 @@ export class RobotMoveJoystickComponent {
   move(newDirection: number): void {
     // The distance to walk in meters.
     const distance: number = 10000;
-    if (newDirection === this.currentDirection) {
-      this.alMotion.moveTo(distance, 0, 0);
-    } else if (newDirection === -this.currentDirection) {
-      this.alMotion.moveTo(-distance, 0, 0);
+    if (newDirection === this._currentDirection) {
+      this._alMotion.moveTo(distance, 0, 0);
+    } else if (newDirection === -this._currentDirection) {
+      this._alMotion.moveTo(-distance, 0, 0);
     }
   }
 
@@ -43,17 +43,17 @@ export class RobotMoveJoystickComponent {
     // 180 degrees is the limit. A bigger angle and the robot fall.
     if (direction > 1 || direction < -1)
       throw '[ERROR][RobotMoveJoystick][turn] The direction have to be between [-1.0, 1.0].';
-    this.alMotion.rotate(direction * Math.PI);
+    this._alMotion.rotate(direction * Math.PI);
   }
 
   stopMove(): void {
-    this.alMotion.stopMove().then(() => {
-      this.alRobotPosture.goToPosture('Stand', 1.0);
+    this._alMotion.stopMove().then(() => {
+      this._alRobotPosture.goToPosture('Stand', 1.0);
     });
   }
 
   ngOnDestroy(): void {
     // Unsubscribe the event.
-    this.events.unsubscribe('module:exit');
+    this._events.unsubscribe('module:exit');
   }
 }
