@@ -98,7 +98,6 @@ export class RobotsChooser {
         }
         this.robotsSubcription.unsubscribe();
         for (let promise of promises) {
-            console.log("coucou");
             let robot: Robot;
             try {
                 robot = await promise;

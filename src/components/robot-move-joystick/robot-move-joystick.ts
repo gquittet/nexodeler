@@ -16,7 +16,8 @@ export class RobotMoveJoystickComponent {
   *  0    NOTHING
   * -1    BACKWARD
   */
-  _currentDirection: number = 1;
+  private _currentDirection: number = 1;
+  private _initPosture: string = 'StandInit';
 
   constructor(private _events: Events, private _alMotion: ALMotionService, private _alRobotPosture: ALRobotPosture) { }
 
@@ -48,7 +49,7 @@ export class RobotMoveJoystickComponent {
 
   stopMove(): void {
     this._alMotion.stopMove().then(() => {
-      this._alRobotPosture.goToPosture('Stand', 1.0);
+      this._alRobotPosture.goToPosture(this._initPosture, 1.0);
     });
   }
 
