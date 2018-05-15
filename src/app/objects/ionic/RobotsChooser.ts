@@ -98,9 +98,14 @@ export class RobotsChooser {
         }
         this.robotsSubcription.unsubscribe();
         for (let promise of promises) {
-            let robot = await promise;
-            if (robot) {
-                robotsPingSuccess.push(robot);
+            console.log("coucou");
+            let robot: Robot;
+            try {
+                robot = await promise;
+                if (robot)
+                    robotsPingSuccess.push(robot);
+            } catch (err) {
+                console.error('[ERROR][PING][ROBOTS] Unable to find any robot.');
             }
         }
         this.loading.close();
@@ -117,7 +122,7 @@ export class RobotsChooser {
         const robotsAlertCombobox = this.robotsAlertCombobox.create(this.robotsText);
         this.pingRobots().then((robots: Robot[]) => {
             if (robots.length == 0) {
-                console.log('[ERROR][PING][ROBOTS] Unable to find the robot.');
+                console.error('[ERROR][PING][ROBOTS] Unable to find any robot.');
                 this.alertCtrl.create({
                     title: this.errorText,
                     subTitle: this.errorNoRobotFoundText,
