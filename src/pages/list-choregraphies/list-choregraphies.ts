@@ -9,7 +9,7 @@ import 'rxjs/add/operator/debounceTime';
 import { Behavior } from '../../app/objects/Behavior';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
-import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
+import { ALBehaviorManagerService } from '../../app/services/naoqi/albehaviormanager.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
 import { SettingsService } from '../../app/services/settings/settings.service';
@@ -44,7 +44,7 @@ export class ListChoregraphiesPage {
   @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
   private _loading: AlertLoading;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManager) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManagerService) {
     this._loading = new AlertLoading(_loadingCtrl, _translate, this._settingsService);
     this.searchControl = new FormControl();
     this.choregraphies = [];

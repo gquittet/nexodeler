@@ -7,7 +7,7 @@ import { QiService } from "./qi.service";
  * @author Guillaume Quittet
  */
 @Injectable()
-export class ALRobotPosture extends ALModuleService {
+export class ALRobotPostureService extends ALModuleService {
 
   /**
    * Get all the postures of the robots.

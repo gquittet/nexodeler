@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
-import { ALRobotPosture } from '../../../app/services/naoqi/alrobotposture.service';
+import { ALRobotPostureService } from '../../../app/services/naoqi/alrobotposture.service';
 import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
@@ -21,7 +21,7 @@ export class ListItemPostureSelectorComponent {
   private _themeSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
-  constructor(private _alRobotPosture: ALRobotPosture, settingsService: SettingsService) {
+  constructor(private _alRobotPosture: ALRobotPostureService, settingsService: SettingsService) {
     this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
   }
 

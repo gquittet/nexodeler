@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
 import { ALMotionService } from '../../app/services/naoqi/almotion.service';
-import { ALRobotPosture } from '../../app/services/naoqi/alrobotposture.service';
+import { ALRobotPostureService } from '../../app/services/naoqi/alrobotposture.service';
 import { RobotMoveJoystickComponent } from './robot-move-joystick';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { RobotMoveJoystickComponent } from './robot-move-joystick';
   exports: [RobotMoveJoystickComponent],
   providers: [
     ALMotionService,
-    ALRobotPosture
+    ALRobotPostureService
   ]
 })
 export class RobotMoveJoystickModule { }

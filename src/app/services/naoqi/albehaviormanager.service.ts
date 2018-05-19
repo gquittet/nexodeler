@@ -8,7 +8,7 @@ import { QiService } from './qi.service';
  * @author Guillaume Quittet
  */
 @Injectable()
-export class ALBehaviorManager extends ALModuleService {
+export class ALBehaviorManagerService extends ALModuleService {
 
     /**
      * Return the list of the installed behaviors.

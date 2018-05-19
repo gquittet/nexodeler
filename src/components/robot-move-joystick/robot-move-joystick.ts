@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { ALMotionService } from '../../app/services/naoqi/almotion.service';
-import { ALRobotPosture } from '../../app/services/naoqi/alrobotposture.service';
+import { ALRobotPostureService } from '../../app/services/naoqi/alrobotposture.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class RobotMoveJoystickComponent {
   private _currentDirection: number = 1;
   private _initPosture: string = 'StandInit';
 
-  constructor(private _events: Events, private _alMotion: ALMotionService, private _alRobotPosture: ALRobotPosture) { }
+  constructor(private _events: Events, private _alMotion: ALMotionService, private _alRobotPosture: ALRobotPostureService) { }
 
   ngOnInit(): void {
     // Create event to handle the exit of the page and stop the walk on exit.
