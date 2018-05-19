@@ -6,9 +6,11 @@ import { AlertController, Content, IonicPage, LoadingController, ModalController
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { Module } from '../../app/objects/Module';
+import { Theme } from '../../app/objects/Theme';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
 import { ModulesService } from '../../app/services/modules/modules.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 
 
@@ -36,29 +38,25 @@ export class ListModulesPage {
   searchBar: boolean = false;
   searching: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, private _translate: TranslateService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService) {
+  // Modal Theme
+  private theme: Theme;
+  private _themeSubscription: Subscription;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, settingsService: SettingsService, private _translate: TranslateService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService, private _settingsService: SettingsService) {
     this.searchControl = new FormControl();
-    this._robotsChooser = new RobotsChooser(this.navCtrl, this.viewCtrl, this._translate, this._alertCtrl, this._robotsService, loadingCtrl, this._file);
+    this._robotsChooser = new RobotsChooser(this.navCtrl, this.viewCtrl, this._translate, this._alertCtrl, this._robotsService, loadingCtrl, this._file, settingsService);
   }
 
   ionViewDidLoad(): void {
-    // this.file.removeFile(this.file.dataDirectory, this.modulesService.FILE_NAME);
-    this._file.checkFile(this._file.dataDirectory, this._modulesService.FILE_NAME).then(res => {
-      if (res) {
-        this._file.readAsText(this._file.dataDirectory, this._modulesService.FILE_NAME).then(data => {
-          this._modulesOriginal = JSON.parse(data);
-          this._modulesService.update(this._modulesOriginal);
-        });
-      }
-    }, err => { });
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();
     });
+    this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => this.theme = theme);
+    this._dataSubscription = this._modulesService.modules.subscribe((modules: Module[]) => this._modulesOriginal = modules);
   }
 
   ionViewDidEnter(): void {
-    this._dataSubscription = this._modulesService.modules.subscribe((modules: Module[]) => this._modulesOriginal = modules);
     this.updateCategories(this._modulesOriginal);
     this.refreshModules();
   }
@@ -106,23 +104,24 @@ export class ListModulesPage {
     });
   }
 
-  toggleFavorite(module: Module, event: { srcEvent: Event }): void {
+  toggleFavorite(module: Module, event: Event): void {
+    event.stopPropagation();
     this._modulesOriginal = this._modulesOriginal.map((element: Module) => {
       element === module ? element.fav = !element.fav : null;
       return element;
     });
-    event.srcEvent.stopPropagation();
     this._modulesService.next(this._modulesOriginal);
   }
 
-  loadPage(module: Module): void {
+  loadPage(module: Module, event: Event): void {
+    event.stopPropagation();
     this._robotsChooser.show(this, this.openPage, module);
   }
 
   openPage(module: Module): void {
     this._modulesOriginal.forEach((element: Module) => element.id === module.id ? element.last_access = new Date() : null);
     this._modulesService.next(this._modulesOriginal);
-    this._modalCtrl.create(module.page, null, { cssClass: "modules" }).present();
+    this._modalCtrl.create(module.page, null, { cssClass: "modules " + this.theme.class }, ).present();
   }
 
   segmentChanged(): void {
@@ -162,5 +161,6 @@ export class ListModulesPage {
 
   ionViewWillLeave(): void {
     this._dataSubscription.unsubscribe();
+    this._themeSubscription.unsubscribe();
   }
 }

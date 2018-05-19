@@ -12,6 +12,7 @@ import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
 import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 
 @IonicPage()
@@ -43,8 +44,8 @@ export class ListChoregraphiesPage {
   @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
   private _loading: AlertLoading;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManager) {
-    this._loading = new AlertLoading(_loadingCtrl, _translate);
+  constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManager) {
+    this._loading = new AlertLoading(_loadingCtrl, _translate, this._settingsService);
     this.searchControl = new FormControl();
     this.choregraphies = [];
     this.searchResults = [];
@@ -70,7 +71,7 @@ export class ListChoregraphiesPage {
   }
 
   ionViewDidLoad(): void {
-    this._robotsChooser = new RobotsChooser(this.navCtrl, this._viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file);
+    this._robotsChooser = new RobotsChooser(this.navCtrl, this._viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file, this._settingsService);
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();

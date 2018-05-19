@@ -1,7 +1,6 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { File } from '@ionic-native/file';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, ToastController } from 'ionic-angular';
@@ -9,15 +8,12 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
+import { Theme } from '../../app/objects/Theme';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
-
-
-
-
-
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 declare var ping: any;
 
@@ -102,10 +98,13 @@ export class ListRobotsPage {
 
   // UI
   private loading: AlertLoading;
+  private _theme: Theme;
+  private _themeSubscription: Subscription;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _file: File, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService) {
     this.searchControl = new FormControl();
-    this.loading = new AlertLoading(loadingCtrl, _translate);
+    this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
+    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
     _translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this._errorEnterCorrectIpAddressText = res);
     _translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this._errorEnterCorrectNameText = res);
     _translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this._errorEnterCorrectNumberText = res);
@@ -135,22 +134,14 @@ export class ListRobotsPage {
   }
 
   ionViewDidLoad(): void {
-    this._file.checkFile(this._file.dataDirectory, this._robotsService.FILE_NAME).then(res => {
-      if (res) {
-        this._file.readAsText(this._file.dataDirectory, this._robotsService.FILE_NAME).then(data => {
-          this.robots = JSON.parse(data);
-          this._robotsService.next(this.robots);
-        });
-      }
-    }, err => { });
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();
     });
+    this._dataSubscription = this._robotsService.robots.subscribe(robots => this.robots = robots);
   }
 
   ionViewDidEnter(): void {
-    this._dataSubscription = this._robotsService.robots.subscribe(robots => this.robots = robots);
     this._selectedRobots = [];
   }
 
@@ -161,7 +152,8 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._errorErrorText,
         subTitle: this._errorNoNetwork,
-        buttons: [this._okText]
+        buttons: [this._okText],
+        cssClass: this._theme.class
       }).present();
     }
   }
@@ -331,13 +323,14 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._errorErrorText,
         subTitle: this._errorNoNetwork,
-        buttons: [this._okText]
+        buttons: [this._okText],
+        cssClass: this._theme.class
       }).present();
       this.loading.close();
     } else {
       ping('http://' + robot.ip).then(delta => {
         this.loading.close();
-        this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
+        this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class }).present();
       }).catch(error => {
         this.loading.close();
         let errorUnableToFindText: string;
@@ -414,6 +407,7 @@ export class ListRobotsPage {
 
   ionViewWillLeave(): void {
     this._dataSubscription.unsubscribe();
+    this._themeSubscription.unsubscribe();
   }
 
   cancelSearch(): void {

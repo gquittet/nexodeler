@@ -1,39 +1,42 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <ion-title>
-            {{ 'SETTINGS.SETTINGS' | translate }}
-        </ion-title>
-        <ion-buttons start>
-            <button ion-button (click)="viewCtrl.dismiss()">
-                <span ion-text showWhen="ios">{{ 'VERBS.CLOSE' | translate }}</span>
-                <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-navbar>
+  <ion-navbar color="primary">
+    <ion-title>
+      {{ 'SETTINGS.SETTINGS' | translate }}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="viewCtrl.dismiss()">
+        <span ion-text showWhen="ios">{{ 'VERBS.CLOSE' | translate }}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-    <ion-list>
-        <ion-list-header>
-            {{ 'GENERAL' | translate: param }}
-        </ion-list-header>
-        <list-item-battery-level></list-item-battery-level>
-        <list-item-temperature></list-item-temperature>
-        <list-item-naoqi-version></list-item-naoqi-version>
-        <list-item-volume-control></list-item-volume-control>
-        <list-item-al-autonomous-life></list-item-al-autonomous-life>
-        <list-item-posture-selector></list-item-posture-selector>
-        <list-item-motors-mode></list-item-motors-mode>
-        <ion-list-header>
-            {{ 'SETTINGS.LOCALES' | translate }}
-        </ion-list-header>
-        <list-item-languages-available></list-item-languages-available>
-        <list-item-timezone></list-item-timezone>
-        <ion-list-header>
-            {{ 'SHUTDOWN' | translate }}
-        </ion-list-header>
-        <list-item-shutdown-button></list-item-shutdown-button>
-        <list-item-reboot-button></list-item-reboot-button>
-    </ion-list>
+  <ion-list>
+    <ion-item-divider>
+      {{ 'GENERAL' | translate: param }}
+    </ion-item-divider>
+    <list-item-battery-level></list-item-battery-level>
+    <list-item-temperature></list-item-temperature>
+    <list-item-naoqi-version></list-item-naoqi-version>
+    <list-item-volume-control></list-item-volume-control>
+    <ion-item-divider>
+      {{ 'NAOQI.AUTONOMOUS_LIFE.AUTONOMOUS_LIFE' | translate }}
+    </ion-item-divider>
+    <list-item-al-autonomous-life></list-item-al-autonomous-life>
+    <list-item-posture-selector></list-item-posture-selector>
+    <list-item-motors-mode></list-item-motors-mode>
+    <ion-item-divider>
+      {{ 'SETTINGS.LOCALES' | translate }}
+    </ion-item-divider>
+    <list-item-languages-available></list-item-languages-available>
+    <list-item-timezone></list-item-timezone>
+    <ion-item-divider>
+      {{ 'SHUTDOWN' | translate }}
+    </ion-item-divider>
+    <list-item-shutdown-button></list-item-shutdown-button>
+    <list-item-reboot-button></list-item-reboot-button>
+  </ion-list>
 </ion-content>

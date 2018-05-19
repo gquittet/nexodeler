@@ -102,7 +102,9 @@ export class ModuleThematicalAssociationPage {
   selectImage(thematicalObject: ThematicalObject, event: any): void {
     if (this.selectedThematicalObjects.length < 2) {
       if (this.selectedThematicalObjects.indexOf(thematicalObject) === -1) {
+        event.classList.add('animation');
         event.classList.add('selected');
+        event.classList.add('dashed');
         this.selectedTargets.push(event);
         this.selectedThematicalObjects.push(thematicalObject);
         if (this.selectedThematicalObjects.length === 2) {
@@ -129,7 +131,9 @@ export class ModuleThematicalAssociationPage {
           }, 700);
         }
       } else {
+        event.classList.remove('animation');
         event.classList.remove('selected');
+        event.classList.remove('dashed');
         this.selectedTargets.splice(this.selectedTargets.indexOf(thematicalObject), 1);
         this.selectedThematicalObjects.splice(this.selectedThematicalObjects.indexOf(thematicalObject), 1);
       }

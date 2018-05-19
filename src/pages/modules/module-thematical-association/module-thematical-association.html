@@ -1,12 +1,22 @@
 <ion-header>
-  <modal-title title="{{ 'MODULES.NAMES.THEMATICALASSOCIATION' | translate }}"></modal-title>
+  <ion-navbar color="primary">
+    <ion-title>
+      {{ 'MODULES.NAMES.THEMATICALASSOCIATION' | translate }}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (tap)="exit()">
+        <span ion-text showWhen="ios">{{ 'VERBS.CLOSE' | translate }}</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content>
 
-  <ion-toolbar padding>
-    <ion-grid no-padding>
+  <ion-toolbar>
+    <ion-grid>
       <ion-row align-items-center>
         <ion-col col-10 col-md-11>
           <h2>{{ 'MODULES.TRANSLATE.THEMATICALASSOCIATION.THEMES.' + theme | translate }}</h2>

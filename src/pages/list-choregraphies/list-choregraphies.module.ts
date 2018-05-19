@@ -4,7 +4,7 @@ import { Zeroconf } from '@ionic-native/zeroconf';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
-import { RobotsModule } from '../../app/services/robots/robots.module';
+import { RobotsService } from '../../app/services/robots/robots.service';
 import { ListChoregraphiesPage } from './list-choregraphies';
 
 @NgModule({
@@ -13,7 +13,6 @@ import { ListChoregraphiesPage } from './list-choregraphies';
   ],
   imports: [
     IonicPageModule.forChild(ListChoregraphiesPage),
-    RobotsModule,
     TranslateModule
   ],
   exports: [
@@ -21,8 +20,9 @@ import { ListChoregraphiesPage } from './list-choregraphies';
   ],
   providers: [
     ALBehaviorManager,
-    Zeroconf,
-    Network
+    Network,
+    RobotsService,
+    Zeroconf
   ]
 })
-export class ListChoregraphiesPageModule {}
+export class ListChoregraphiesPageModule { }
