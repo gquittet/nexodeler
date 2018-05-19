@@ -46,7 +46,7 @@ export class SettingsService {
           this.changeTheme(settings.theme);
         });
       }
-    }, err => console.error(err));
+    }, err => this.changeTheme(this.settings.theme));
   }
 
   /**
