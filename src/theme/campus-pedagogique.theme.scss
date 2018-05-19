@@ -1,0 +1,4 @@
+.theme-campus-pedagogique {
+  $theme-colors: (primary: #72214b, secondary: #b8b7aa, danger: #c80b0e, light: #f4f4f4, dark: #4f514f);
+  @include apply-theme($theme-colors);
+}

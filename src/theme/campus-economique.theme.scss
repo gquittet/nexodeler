@@ -1,0 +1,4 @@
+.theme-campus-economique {
+  $theme-colors: (primary: #dfae00, secondary: #b8b7aa, danger: #dfae00, light: #f4f4f4, dark: #4f514f);
+  @include apply-theme($theme-colors);
+}
