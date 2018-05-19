@@ -15,4 +15,10 @@ export interface Theme {
      * @readonly
      */
     readonly class: string;
+
+    /**
+     * The primary color of the theme.
+     * @readonly
+     */
+    readonly primaryColor: string;
 }

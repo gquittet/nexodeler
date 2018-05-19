@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { File } from '@ionic-native/file';
+import { StatusBar } from '@ionic-native/status-bar';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Settings } from '../../objects/Settings';
@@ -24,11 +25,11 @@ export class SettingsService {
    * @readonly
    */
   private readonly _THEMES: Theme[] = [
-    <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism' },
-    <Theme>{ name: 'Campus Economique', class: 'theme-campus-economique' },
-    <Theme>{ name: 'Campus Pédagogique', class: 'theme-campus-pedagogique' },
-    <Theme>{ name: 'Campus Social', class: 'theme-campus-social' },
-    <Theme>{ name: 'Campus Technique', class: 'theme-campus-technique' }
+    <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism', primaryColor: '#5191CE' },
+    <Theme>{ name: 'Campus Economique', class: 'theme-campus-economique', primaryColor: '#dfae00' },
+    <Theme>{ name: 'Campus Pédagogique', class: 'theme-campus-pedagogique', primaryColor: '#72214b' },
+    <Theme>{ name: 'Campus Social', class: 'theme-campus-social', primaryColor: '#d16003' },
+    <Theme>{ name: 'Campus Technique', class: 'theme-campus-technique', primaryColor: '#c80b0e' }
   ];
 
   /**
@@ -36,7 +37,7 @@ export class SettingsService {
    */
   private _themeSubject: BehaviorSubject<Theme>;
 
-  constructor(private _file: File) {
+  constructor(private _file: File, private _statusBar: StatusBar) {
     this._themeSubject = new BehaviorSubject<Theme>(this._THEMES[0]);
     this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
       if (res) {
@@ -54,6 +55,7 @@ export class SettingsService {
    */
   changeTheme(theme: Theme): void {
     this._themeSubject.next(theme);
+    this._statusBar.backgroundColorByHexString(theme.primaryColor);
     this.udpateFile();
   }
 

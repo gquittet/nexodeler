@@ -23,7 +23,7 @@ export class MyApp {
 
   private initializeApp(): void {
     this._platform.ready().then(() => {
-      this._statusBar.styleBlackTranslucent();
+      this._statusBar.styleLightContent();
       this._splashScreen.hide();
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
       this._platform.registerBackButtonAction(() => {
