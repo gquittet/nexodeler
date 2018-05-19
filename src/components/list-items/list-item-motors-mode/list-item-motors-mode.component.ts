@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { ALMotionService } from '../../../app/services/naoqi/almotion.service';
 
 
@@ -12,7 +11,7 @@ export class ListItemMotorsModeComponent {
   private _stateInterval;
   enable: boolean;
 
-  constructor(translate: TranslateService, private _alMotionService: ALMotionService) { }
+  constructor(private _alMotionService: ALMotionService) { }
 
   ngOnInit(): void {
     this.getState();

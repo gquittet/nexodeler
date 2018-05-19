@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Theme } from '../../../app/objects/Theme';
 import { ALRobotPosture } from '../../../app/services/naoqi/alrobotposture.service';
+import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
 @Component({
@@ -13,7 +16,14 @@ export class ListItemPostureSelectorComponent {
   robotPostures: string[];
   currentPosture: string;
 
-  constructor(private _alRobotPosture: ALRobotPosture) { }
+  // UI
+  // Theme
+  private _themeSubscription: Subscription;
+  selectOptions: Object = { cssClass: '' };
+
+  constructor(private _alRobotPosture: ALRobotPosture, settingsService: SettingsService) {
+    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+  }
 
   ngOnInit(): void {
     this._alRobotPosture.getPosturesList().then(posturesList => this.robotPostures = posturesList);
@@ -31,5 +41,6 @@ export class ListItemPostureSelectorComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._postureInterval);
+    this._themeSubscription.unsubscribe();
   }
 }

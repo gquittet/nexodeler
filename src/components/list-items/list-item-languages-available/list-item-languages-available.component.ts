@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { AlertRadioButton } from '../../../app/objects/ionic/AlertRadioButton';
+import { Subscription } from 'rxjs';
+import { Theme } from '../../../app/objects/Theme';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
+import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
 @Component({
@@ -10,20 +11,18 @@ import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeec
 })
 export class ListItemLanguagesAvailableComponent {
 
-  alert: AlertRadioButton;
   private _languagesInterval;
-
-  private _alertTitle: string;
-  private _okText: string;
-  private _cancelText: string;
 
   languages: string[];
   currentLanguage: string;
 
-  constructor(translate: TranslateService, public alTextToSpeech: ALTextToSpeechService) {
-    translate.get('OK').subscribe((res: string) => this._okText = res);
-    translate.get('VERBS.CANCEL').subscribe((res: string) => this._cancelText = res);
-    translate.get('LANGUAGES').subscribe((res: string) => this._alertTitle = res);
+  // UI
+  // Theme
+  selectOptions: Object = { cssClass: '' };
+  private _themeSubscription: Subscription;
+
+  constructor(public alTextToSpeech: ALTextToSpeechService, _settingsService: SettingsService) {
+    this._themeSubscription = _settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
   }
 
   ngOnInit(): void {
@@ -40,5 +39,6 @@ export class ListItemLanguagesAvailableComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._languagesInterval);
+    this._themeSubscription.unsubscribe();
   }
 }

@@ -1,7 +1,12 @@
 <ion-item>
   <ion-icon name="text" item-start></ion-icon>
   <ion-label>{{ 'LANGUAGE' | translate }}</ion-label>
-  <ion-select okText="{{ 'OK' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentLanguage" (ngModelChange)="alTextToSpeech.setLanguage(currentLanguage)">
+  <ion-select showWhen="ios" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'OK' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}"
+    [(ngModel)]="currentLanguage" (ngModelChange)="alTextToSpeech.setLanguage(currentLanguage)">
+    <ion-option *ngFor="let language of languages" [value]="language">{{ 'LANGUAGES_NAME.' + language.toUpperCase() | translate }}</ion-option>
+  </ion-select>
+  <ion-select showWhen="android,windows" interface="alert" [selectOptions]="selectOptions" okText="{{ 'OK' | translate }}"
+    cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentLanguage" (ngModelChange)="alTextToSpeech.setLanguage(currentLanguage)">
     <ion-option *ngFor="let language of languages" [value]="language">{{ 'LANGUAGES_NAME.' + language.toUpperCase() | translate }}</ion-option>
   </ion-select>
 </ion-item>

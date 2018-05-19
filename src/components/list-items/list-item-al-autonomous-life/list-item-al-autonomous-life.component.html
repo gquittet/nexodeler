@@ -1,10 +1,12 @@
-<ion-list-header>
-  {{ 'NAOQI.AUTONOMOUS_LIFE.AUTONOMOUS_LIFE' | translate }}
-</ion-list-header>
 <ion-item>
   <ion-icon name="heart" item-start></ion-icon>
   <ion-label>{{ 'MODE' | translate }}</ion-label>
-  <ion-select okText="{{ 'OK' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentState" (ngModelChange)="alAutonomousLife.setState(convertState(currentState))">
+  <ion-select showWhen="ios" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'OK' | translate }}" cancelText="{{ 'VERBS.CANCEL' | translate }}"
+    [(ngModel)]="currentState" (ngModelChange)="alAutonomousLife.setState(convertState(currentState))">
+    <ion-option *ngFor="let state of statesToSelect" [value]="state">{{ state }}</ion-option>
+  </ion-select>
+  <ion-select showWhen="android,windows" interface="alert" [selectOptions]="selectOptions" okText="{{ 'OK' | translate }}"
+    cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentState" (ngModelChange)="alAutonomousLife.setState(convertState(currentState))">
     <ion-option *ngFor="let state of statesToSelect" [value]="state">{{ state }}</ion-option>
   </ion-select>
 </ion-item>

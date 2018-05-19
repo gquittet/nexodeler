@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertRadioButton } from '../../../app/objects/ionic/AlertRadioButton';
+import { Subscription } from 'rxjs';
+import { Theme } from '../../../app/objects/Theme';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
+import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
 @Component({
@@ -10,15 +12,20 @@ import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomou
 })
 export class ListItemALAutonomousLifeComponent {
 
-  alert: AlertRadioButton;
   private _stateInterval;
 
   states: string[];
   statesToSelect: string[];
   currentState: string;
 
-  constructor(translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService) {
+  // UI
+  // Theme
+  private _themeSubscription: Subscription;
+  selectOptions: Object = { cssClass: '' };
+
+  constructor(translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService, settingsService: SettingsService) {
     this.states = [];
+    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').subscribe((res: string) => this.states[1] = res);
     translate.get('NAOQI.AUTONOMOUS_LIFE.SAFEGARD').subscribe((res: string) => this.states[2] = res);
@@ -74,5 +81,6 @@ export class ListItemALAutonomousLifeComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._stateInterval);
+    this._themeSubscription.unsubscribe();
   }
 }
