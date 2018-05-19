@@ -56,11 +56,23 @@
         <b>{{ 'VERSION' | translate }}</b>
         <i>{{ module.version }}</i>
       </p>
-      <button ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+      <button showWhen="android" ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
         <ion-icon color="primary" style="zoom: 1.6;" name="star"></ion-icon>
       </button>
-      <button ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+      <button showWhen="android" ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
         <ion-icon color="secondary" style="zoom: 1.6;" name="star-outline"></ion-icon>
+      </button>
+      <button showWhen="ios" ion-button clear style="zoom: 1.4;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+        <ion-icon color="primary" style="zoom: 1.4;" name="star"></ion-icon>
+      </button>
+      <button showWhen="ios" ion-button clear style="zoom: 1.4;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+        <ion-icon color="secondary" style="zoom: 1.4;" name="star-outline"></ion-icon>
+      </button>
+      <button showWhen="windows" ion-button clear style="zoom: 1.5;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+        <ion-icon color="primary" style="zoom: 1.5;" name="star"></ion-icon>
+      </button>
+      <button showWhen="windows" ion-button clear style="zoom: 1.5;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+        <ion-icon color="secondary" style="zoom: 1.5;" name="star-outline"></ion-icon>
       </button>
     </button>
   </ion-list>
@@ -83,11 +95,23 @@
             <b>{{ 'VERSION' | translate }}</b>
             <i>{{ module.version }}</i>
           </p>
-          <button ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+          <button showWhen="android" ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
             <ion-icon color="primary" style="zoom: 1.6;" name="star"></ion-icon>
           </button>
-          <button ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+          <button showWhen="android" ion-button clear style="zoom: 1.6;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
             <ion-icon color="secondary" style="zoom: 1.6;" name="star-outline"></ion-icon>
+          </button>
+          <button showWhen="ios" ion-button clear style="zoom: 1.4;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+            <ion-icon color="primary" style="zoom: 1.4;" name="star"></ion-icon>
+          </button>
+          <button showWhen="ios" ion-button clear style="zoom: 1.4;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+            <ion-icon color="secondary" style="zoom: 1.4;" name="star-outline"></ion-icon>
+          </button>
+          <button showWhen="windows" ion-button clear style="zoom: 1.5;" item-end (click)="toggleFavorite(module, $event)" *ngIf="module.fav">
+            <ion-icon color="primary" style="zoom: 1.5;" name="star"></ion-icon>
+          </button>
+          <button showWhen="windows" ion-button clear style="zoom: 1.5;" item-end (click)="toggleFavorite(module, $event)" *ngIf="!module.fav">
+            <ion-icon color="secondary" style="zoom: 1.5;" name="star-outline"></ion-icon>
           </button>
         </button>
       </ng-container>
