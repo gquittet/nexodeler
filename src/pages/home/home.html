@@ -10,6 +10,63 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+
+  <ion-grid no-padding>
+
+    <ion-row showWhen="android" class="background-primary-color" align-items-center>
+      <ion-col col-6>
+        <button ion-button color="light" large icon-only round (tap)="openPage('ListRobotsPage')">
+          <ion-icon class="color-primary-color" name="outlet"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <h3>{{ 'MANAGE_YOUR_ROBOTS' | translate }}</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row showWhen="ios,windows" class="background-primary-color" align-items-center>
+      <ion-col col-6>
+        <button ion-button color="light" large icon-only round (tap)="openPage('ListRobotsPage')">
+          <ion-icon class="color-primary-color" name="outlet"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <h3>{{ 'MANAGE_YOUR_ROBOTS' | translate }}</h3>
+      </ion-col>
+    </ion-row>
+
+    <ion-row align-items-center>
+      <ion-col col-6>
+        <h3>{{ 'LAUNCH_A_MODULE' | translate }}</h3>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button color="primary" large icon-only round (tap)="openPage('ListModulesPage')">
+          <ion-icon name="archive"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row showWhen="android" class="background-primary-color" align-items-center>
+      <ion-col col-6>
+        <button ion-button color="light" large icon-only round (tap)="openPage('ListChoregraphiesPage')">
+          <ion-icon class="color-primary-color" name="filing"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <h3>{{ 'PLAY_AN_ACTIVITY' | translate }}</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row showWhen="ios,windows" class="background-primary-color" align-items-center>
+      <ion-col col-6>
+        <button ion-button color="light" large icon-only round (tap)="openPage('ListChoregraphiesPage')">
+          <ion-icon class="color-primary-color" name="filing"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <h3>{{ 'PLAY_AN_ACTIVITY' | translate }}</h3>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
 
 </ion-content>

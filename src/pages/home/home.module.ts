@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Network } from '@ionic-native/network';
+import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 
@@ -8,7 +9,8 @@ import { HomePage } from './home';
     HomePage
   ],
   imports: [
-    IonicPageModule.forChild(HomePage)
+    IonicPageModule.forChild(HomePage),
+    TranslateModule
   ],
   exports: [
     HomePage
@@ -17,4 +19,4 @@ import { HomePage } from './home';
     Network
   ]
 })
-export class HomeModule {}
+export class HomeModule { }

@@ -1,3 +1,29 @@
 page-home {
-
+  .grid {
+    width: 100%;
+    height: 100%;
+  }
+  ion-row {
+    width: 100%;
+    height: 33.33%;
+    text-align: center;
+    h3 {
+      color: white;
+    }
+  }
+  ion-row:nth-child(1) {
+    box-shadow: 1px 0px 5px #4f514f;
+  }
+  ion-row:nth-child(4) {
+    box-shadow: -1px 0px 5px #4f514f;
+  }
+  ion-row:nth-child(3) {
+    h3 {
+      color: black;
+    }
+  }
+  .button[icon-only] {
+    width: 15vh;
+    height: 15vh;
+  }
 }
