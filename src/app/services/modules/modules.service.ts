@@ -5,28 +5,50 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Module } from '../../objects/Module';
-import { IModulesService } from './interfaces/IModulesService';
 
 
 /**
  * The service to manage asynchronously the modules.
  * @author Guillaume Quittet
- * @implements
  */
 @Injectable()
-export class ModulesService implements IModulesService {
+export class ModulesService {
 
+  /**
+   * The file name where the data will be saved.
+   * @readonly
+   */
   readonly FILE_NAME: string = "modules.json";
+
+  /**
+   * The list of the modules.
+   */
   private _modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
     <Module>{ id: 0, name: 'THEMATICALASSOCIATION', category: 'LEARNING', page: 'ModuleThematicalAssociationPage', fav: false, creator: 'Éspéranderie', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-26T11:45:00'), updated: new Date('2018-04-26T11:45:00'), last_access: null },
     <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'ModuleSpeakPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
     <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'ModuleMotionPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
   ]);
+
+  /**
+   * The observer of the modules.
+   */
   private _modules: Observable<Module[]> = this._modulesSubject.asObservable();
 
-  constructor(private _file: File, private _translate: TranslateService) { }
+  constructor(private _file: File, private _translate: TranslateService) {
+    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+      if (res) {
+        this._file.readAsText(this._file.dataDirectory, this.FILE_NAME).then((data: string) => {
+          this.update(JSON.parse(data));
+        });
+      }
+    }, err => console.error(err));
+  }
 
-  update(modules: Module[]): void {
+  /**
+   * Read the file and update the modules inside it with the subject.
+   * @param modules The old list of the modules.
+   */
+  private update(modules: Module[]): void {
     // Fixing the bad sorting. Sort with the id.
     modules.sort((a, b) => a.id - b.id);
     this._modulesSubject.value.forEach((module: Module, index: number) => {
@@ -52,6 +74,10 @@ export class ModulesService implements IModulesService {
     });
   }
 
+  /**
+   * Update the list of the modules.
+   * @param modules The new list of the modules.
+   */
   next(modules: Module[]): void {
     // Fixing the bad sorting. Sort with the id.
     modules.sort((a, b) => a.id - b.id);
@@ -63,10 +89,21 @@ export class ModulesService implements IModulesService {
     });
   }
 
+  /**
+   * Verify the equality between 2 strings.
+   * @param text0 The first string
+   * @param text1 The second string
+   * @returns {boolean} True if the 2 strings are equals and False otherwise.
+   */
   private equals(text0: string, text1: string): boolean {
     return text0.toLowerCase().indexOf(text1.toLowerCase()) > -1;
   }
 
+  /**
+   * Filter the list of the modules with a value.
+   * @param value The value that used to filter the list of the modules.
+   * @returns {Observable<Module[]>} An observer with the list of the modules.
+   */
   filter(value: string): Observable<Module[]> {
     let name: string;
     let category: string;
@@ -77,6 +114,10 @@ export class ModulesService implements IModulesService {
     }));
   }
 
+  /**
+   * Return the list of the modules.
+   * @returns {Observable<Module[]>} The list of the modules.
+   */
   get modules(): Observable<Module[]> {
     return this._modules;
   }

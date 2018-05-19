@@ -1,44 +1,92 @@
 import { Alert, AlertController } from "ionic-angular";
+import { Subscription } from "rxjs";
+import { SettingsService } from "../../services/settings/settings.service";
+import { Theme } from "../Theme";
 import { IAlertRadioButton } from "./interfaces/IAlertRadioButton";
 
+/**
+ * An AlertRadioButton object.
+ * @author Guillaume Quittet
+ * @implements
+ */
 export class AlertRadioButton implements IAlertRadioButton {
 
   protected isRadioOpen: boolean = false;
-  private alert: Alert;
-  private result: string;
+  private _alert: Alert;
+  private _result: string;
 
-  constructor(private alertCtrl: AlertController) { }
+  // UI
+  // Theme
+  private _theme: Theme;
+  private _settingsSubscription: Subscription;
 
+  /**
+   * Create a new AlertRadioButton object.
+   * @param _alertCtrl The alert controller.
+   * @param _settingsService The settings service.
+   * @constructor
+   */
+  constructor(private _alertCtrl: AlertController, private _settingsService: SettingsService) { }
+
+  /**
+   * Create a new alert.
+   * @param title The title of the alert.
+   * @override
+   */
   create(title: string): Alert {
-    this.alert = this.alertCtrl.create({
-      enableBackdropDismiss: false
+    this._settingsSubscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+    this._alert = this._alertCtrl.create({
+      enableBackdropDismiss: false,
+      cssClass: this._theme.class
     });
-    this.alert.setTitle(title);
-    return this.alert;
+    this._alert.setTitle(title);
+    return this._alert;
   }
 
-  getResult(): string {
-    return this.result;
+  /**
+   * Return the result of the alert.
+   * @returns {string} The result of the alert.
+   */
+  get result(): string {
+    return this._result;
   }
 
-  setResult(result: string): void {
-    this.result = result;
+  /**
+   * Set the result of the alert.
+   * @param result The result of the alert.
+   */
+  set result(result: string) {
+    this._result = result;
   }
 
+  /**
+   * Close the alert.
+   * @override
+   */
   close(): void {
     this.isRadioOpen = false;
+    this._settingsSubscription.unsubscribe();
   }
 
+  /**
+   * Create a new input for the alert.
+   * @param name The name of the input.
+   * @override
+   */
   createInput(name: string): void {
-    this.alert.addInput({
+    this._alert.addInput({
       type: 'radio',
       label: name,
       value: name,
-      checked: name === this.result
+      checked: name === this._result
     });
   }
 
+  /**
+   * Show the alert.
+   * @override
+   */
   present(): void {
-    this.alert.present().then(() => this.isRadioOpen = true);
+    this._alert.present().then(() => this.isRadioOpen = true);
   }
 }

@@ -4,8 +4,10 @@ import { AlertController, LoadingController, NavController, ViewController } fro
 import { Subscription } from "rxjs";
 import { QiService } from "../../services/naoqi/qi.service";
 import { RobotsService } from "../../services/robots/robots.service";
+import { SettingsService } from "../../services/settings/settings.service";
 import { IP } from "../IP";
 import { Robot } from "../Robot";
+import { Theme } from "../Theme";
 import { AlertLoading } from "./AlertLoading";
 import { AlertRadioButton } from "./AlertRadioButton";
 
@@ -22,58 +24,61 @@ export class RobotsChooser {
     private _exitOnCancel: boolean = false;
 
     // Objects
-    private robots: Robot[];
-    private robotsSubcription: Subscription;
+    private _robots: Robot[];
+    private _robotsSubcription: Subscription;
 
     // String UI
-    private cancelText: string;
-    private connectText: string;
-    private errorAddAtLeastOneRobotText: string;
-    private errorNoRobotFoundText: string;
-    private errorText: string;
-    private okText: string;
-    private robotsText: string;
+    private _cancelText: string;
+    private _connectText: string;
+    private _errorAddAtLeastOneRobotText: string;
+    private _errorNoRobotFoundText: string;
+    private _errorText: string;
+    private _okText: string;
+    private _robotsText: string;
 
     // UI
-    private robotsAlertCombobox: AlertRadioButton;
-    private loading: AlertLoading;
+    private _robotsAlertCombobox: AlertRadioButton;
+    private _loading: AlertLoading;
+    // Theme
+    private _theme: Theme;
+    private _themeSubscription: Subscription;
 
     /**
      * Create an alert of type of robots chooser.
-     * @param navCtrl The navigation controller.
-     * @param viewCtrl The view controller.
-     * @param translate The translate service.
-     * @param alertCtrl The alert controller.
-     * @param robotsService The robots service.
+     * @param _navCtrl The navigation controller.
+     * @param _viewCtrl The view controller.
+     * @param _translate The translate service.
+     * @param _alertCtrl The alert controller.
+     * @param _robotsService The robots service.
      * @param loadingCtrl The loading controller.
      * @param file The file service.
      */
-    constructor(private navCtrl: NavController, private viewCtrl: ViewController, private translate: TranslateService, private alertCtrl: AlertController, private robotsService: RobotsService, loadingCtrl: LoadingController, file: File) {
+    constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _translate: TranslateService, private _alertCtrl: AlertController, private _robotsService: RobotsService, loadingCtrl: LoadingController, file: File, private _settingsService: SettingsService) {
         this.loadTranslations();
-        this.loading = new AlertLoading(loadingCtrl, translate);
-        file.checkFile(file.dataDirectory, this.robotsService.FILE_NAME).then(res => {
+        this._loading = new AlertLoading(loadingCtrl, _translate, _settingsService);
+        file.checkFile(file.dataDirectory, this._robotsService.FILE_NAME).then(res => {
             if (res) {
-                file.readAsText(file.dataDirectory, this.robotsService.FILE_NAME).then(data => {
-                    this.robots = JSON.parse(data);
-                    this.robotsService.next(this.robots);
+                file.readAsText(file.dataDirectory, this._robotsService.FILE_NAME).then(data => {
+                    this._robots = JSON.parse(data);
+                    this._robotsService.next(this._robots);
                 });
             }
         }, err => { });
-        this.robotsSubcription = this.robotsService.robots.subscribe((robots: Robot[]) => this.robots = robots);
-        this.robotsAlertCombobox = new AlertRadioButton(this.alertCtrl);
+        this._robotsSubcription = this._robotsService.robots.subscribe((robots: Robot[]) => this._robots = robots);
+        this._robotsAlertCombobox = new AlertRadioButton(this._alertCtrl, _settingsService);
     }
 
     /**
      * Load the translation for the UI
      */
     private loadTranslations(): void {
-        this.translate.get("ERROR.ERROR").subscribe((res: string) => (this.errorText = res));
-        this.translate.get("ERROR.ADD_AT_LEAST_A_ROBOT").subscribe((res: string) => (this.errorAddAtLeastOneRobotText = res));
-        this.translate.get("ERROR.NO_ROBOT_FOUND").subscribe((res: string) => (this.errorNoRobotFoundText = res));
-        this.translate.get("VERBS.CANCEL").subscribe((res: string) => (this.cancelText = res));
-        this.translate.get("VERBS.CONNECT").subscribe((res: string) => (this.connectText = res));
-        this.translate.get("OK").subscribe((res: string) => (this.okText = res));
-        this.translate.get("ROBOTS").subscribe((res: string) => (this.robotsText = res));
+        this._translate.get("ERROR.ERROR").subscribe((res: string) => (this._errorText = res));
+        this._translate.get("ERROR.ADD_AT_LEAST_A_ROBOT").subscribe((res: string) => (this._errorAddAtLeastOneRobotText = res));
+        this._translate.get("ERROR.NO_ROBOT_FOUND").subscribe((res: string) => (this._errorNoRobotFoundText = res));
+        this._translate.get("VERBS.CANCEL").subscribe((res: string) => (this._cancelText = res));
+        this._translate.get("VERBS.CONNECT").subscribe((res: string) => (this._connectText = res));
+        this._translate.get("OK").subscribe((res: string) => (this._okText = res));
+        this._translate.get("ROBOTS").subscribe((res: string) => (this._robotsText = res));
     }
 
     /**
@@ -88,15 +93,15 @@ export class RobotsChooser {
      * @returns {Promise<Robot[]>} The array of robots that have respond to the request.
      */
     private async pingRobots(): Promise<Robot[]> {
-        this.loading.show();
+        this._loading.show();
         let robotsPingSuccess: Robot[] = [];
         const promises = [];
-        if (this.robots.length > 0) {
-            this.robots.forEach((robot: Robot) => {
+        if (this._robots.length > 0) {
+            this._robots.forEach((robot: Robot) => {
                 promises.push(pingRobot(robot));
             });
         }
-        this.robotsSubcription.unsubscribe();
+        this._robotsSubcription.unsubscribe();
         for (let promise of promises) {
             let robot: Robot;
             try {
@@ -107,7 +112,7 @@ export class RobotsChooser {
                 console.error('[ERROR][PING][ROBOTS] Unable to find any robot.');
             }
         }
-        this.loading.close();
+        this._loading.close();
         return robotsPingSuccess;
     }
 
@@ -118,19 +123,22 @@ export class RobotsChooser {
      * @param args The arguments (optional).
      */
     show(obj: Object, func: Function, ...args): void {
-        const robotsAlertCombobox = this.robotsAlertCombobox.create(this.robotsText);
+        this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+        const robotsAlertCombobox = this._robotsAlertCombobox.create(this._robotsText);
         this.pingRobots().then((robots: Robot[]) => {
             if (robots.length == 0) {
-                console.error('[ERROR][PING][ROBOTS] Unable to find any robot.');
-                this.alertCtrl.create({
-                    title: this.errorText,
-                    subTitle: this.errorNoRobotFoundText,
+                console.error('[ERROR][PING][ROBOTS] Add at least one robot.');
+                this._alertCtrl.create({
+                    title: this._errorText,
+                    subTitle: this._errorAddAtLeastOneRobotText,
                     enableBackdropDismiss: false,
+                    cssClass: this._theme.class,
                     buttons: [{
-                        text: this.okText,
+                        text: this._okText,
+                        cssClass: this._theme.class,
                         handler: () => {
                             if (this._exitOnCancel)
-                                this.navCtrl.remove(this.viewCtrl.index, 1)
+                                this._navCtrl.remove(this._viewCtrl.index, 1)
                         }
                     }]
                 }).present();
@@ -145,27 +153,31 @@ export class RobotsChooser {
                 });
 
                 robotsAlertCombobox.addButton({
-                    text: this.cancelText,
+                    text: this._cancelText,
+                    cssClass: this._theme.class,
                     handler: () => {
-                        this.robotsAlertCombobox.close();
+                        this._robotsAlertCombobox.close();
+                        this._themeSubscription.unsubscribe();
                         if (this._exitOnCancel)
-                            this.navCtrl.remove(this.viewCtrl.index, 1)
+                            this._navCtrl.remove(this._viewCtrl.index, 1)
                     }
                 });
 
                 robotsAlertCombobox.addButton({
-                    text: this.connectText,
+                    text: this._connectText,
+                    cssClass: this._theme.class,
                     handler: data => {
                         if (data) {
-                            this.robotsAlertCombobox.close();
-                            this.loading.show();
+                            this._robotsAlertCombobox.close();
+                            this._themeSubscription.unsubscribe();
+                            this._loading.show();
                             QiService.connect(new IP(data.split('.')));
                             if (args)
                                 func.apply(obj, args);
                             else
                                 func.call(obj);
-                            this.loading.close();
-                            this.robotsAlertCombobox.setResult(data);
+                            this._loading.close();
+                            this._robotsAlertCombobox.result = data;
                         }
                     }
                 });
