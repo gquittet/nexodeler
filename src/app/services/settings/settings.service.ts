@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { File } from '@ionic-native/file';
-import { StatusBar } from '@ionic-native/status-bar';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Settings } from '../../objects/Settings';
@@ -37,7 +36,7 @@ export class SettingsService {
    */
   private _themeSubject: BehaviorSubject<Theme>;
 
-  constructor(private _file: File, private _statusBar: StatusBar) {
+  constructor(private _file: File) {
     this._themeSubject = new BehaviorSubject<Theme>(this._THEMES[0]);
     this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
       if (res) {
@@ -55,14 +54,13 @@ export class SettingsService {
    */
   changeTheme(theme: Theme): void {
     this._themeSubject.next(theme);
-    this._statusBar.backgroundColorByHexString(theme.primaryColor);
-    this.udpateFile();
+    this.updateFile();
   }
 
   /**
    * Update the file where the settings are saved.
    */
-  private udpateFile(): void {
+  private updateFile(): void {
     this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
       this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(this.settings));
     }, err => {
