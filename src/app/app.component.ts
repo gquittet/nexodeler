@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { App, Config, Platform } from 'ionic-angular';
+import { Color } from './objects/Color';
 import { Theme } from './objects/Theme';
 import { SettingsService } from './services/settings/settings.service';
 
@@ -14,10 +15,10 @@ import { SettingsService } from './services/settings/settings.service';
 })
 export class MyApp {
 
-  theme: Theme;
+  splash: boolean = true;
+  theme: Theme = <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism', primaryColor: '#5191CE' };
 
-  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _translate: TranslateService, private _globalization: Globalization, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _config: Config, settingsService: SettingsService) {
-    settingsService.theme.subscribe((theme: Theme) => this.theme = theme);
+  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _translate: TranslateService, private _globalization: Globalization, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _config: Config, private _settingsService: SettingsService) {
     this.initializeApp();
   }
 
@@ -25,6 +26,12 @@ export class MyApp {
     this._platform.ready().then(() => {
       this._statusBar.styleLightContent();
       this._splashScreen.hide();
+      setTimeout(() => this.splash = false, 3000);
+      this._settingsService.theme.subscribe((theme: Theme) => {
+        this.theme = theme;
+        if (this._platform.is('android'))
+          this._statusBar.backgroundColorByHexString(Color.shade(theme.primaryColor, -20));
+      });
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
       this._platform.registerBackButtonAction(() => {
         const nav = this._app.getActiveNavs()[0];
