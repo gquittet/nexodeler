@@ -20,9 +20,9 @@ export class SidenavMainComponent {
   }
 
   ngOnInit(): void {
-    const naoPhoto: HTMLElement = document.getElementById('naoPhoto');
+    const naoPhoto: HTMLElement = document.getElementById('menuTopPanel');
     this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
-      naoPhoto.style.backgroundColor = Color.shade(theme.primaryColor, 20);
+      naoPhoto.style.backgroundColor = Color.shade(theme.primaryColor, 13);
     });
   }
 
