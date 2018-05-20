@@ -1,23 +1,33 @@
 # Nexodeler
 
+![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
+
 The goal of this project is to make an extensible and modular application to control the NAO robot.
+
+<div style="text-align:center">
+<img src="./assets/nexodeler-1.png" alt="Nexodeler screenshot" width="180" height="360" style="margin-right: 70px">
+<img src="./assets/nexodeler-2.png" alt="Nexodeler screenshot" width="180" height="360">
+</div>
 
 ## Technologies used
 
-- HTML/HTML5
-- CSS/CSS3
-- TypeScript
-- JavaScript
-- NodeJS
-- Ionic
 - Angular
-- Lazy Loading
+- compodoc
 - Git
+- HTML/HTML5
+- Ionic
+- JavaScript
+- Lazy Loading
+- ngx-translate
+- NodeJS
+- SASS/CSS/CSS3
+- TypeScript
+- Yarn
 
 ## Librairies used
 
-- **QIMessaging** I need it to connect to the robot. It's a fork of **Socket.io**.
-- **JQuery** I need it because QIMessaging use *done* and *fail* function of JQuery.
+- **QIMessaging** I need it to connect to the robot.
+- **Socket.io** I need it to send and receive data from the robot.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.6.
 
@@ -25,8 +35,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 #### Contribute to the project
 
-Clone the repository and run the `npm install` command.
+1. Install `yarn`;
+2. Clone the repository;
+3. Run the `yarn install` command.
 
 #### Development server
 
-Run `ionic lab` for a dev server.
+Run `ionic lab -c --debug` for a dev server.
+
+**OR**
+
+Run `ionic cordova run platform -c --debug` to develop on your device. Where ***platform*** is *ios*, *android* or *windows*.
