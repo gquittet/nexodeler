@@ -34,15 +34,18 @@ export class MyApp {
     this.initializeApp();
   }
 
+  /**
+   * Initialize the application.
+   */
   private initializeApp(): void {
     this._platform.ready().then(() => {
       this._statusBar.styleLightContent();
       this._splashScreen.hide();
       setTimeout(() => this.splash = false, 1000);
+      setTimeout(() => this.changeStatusBarColor(), 1250);
       this._settingsService.theme.subscribe((theme: Theme) => {
         this.theme = theme;
-        if (this._platform.is('android'))
-          this._statusBar.backgroundColorByHexString(Color.shade(theme.primaryColor, -20));
+        this.changeStatusBarColor();
       });
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
       this._platform.registerBackButtonAction(() => {
@@ -62,6 +65,21 @@ export class MyApp {
     });
   }
 
+  /**
+   * Change the color of the status bar.
+   */
+  private changeStatusBarColor(): void {
+    const shadeValue: number = -20;
+    const colorCode: string = (this.splash) ? '#5191CE' : this.theme.primaryColor;
+    if (this._platform.is('android'))
+      this._statusBar.backgroundColorByHexString(Color.shade(colorCode, shadeValue));
+    else
+      this._statusBar.backgroundColorByHexString(colorCode);
+  }
+
+  /**
+   * Initialize the translations.
+   */
   private initializeTranslation(): void {
     this._translate.setDefaultLang('en');
     this._globalization.getPreferredLanguage().then(lang => {
@@ -77,6 +95,9 @@ export class MyApp {
     });
   }
 
+  /**
+   * Ask for permissions on a Android system.
+   */
   private initializeAndroidPermissions(): void {
     this._androidPermissions.requestPermissions([
       this._androidPermissions.PERMISSION.ACCESS_NETWORK_STATE,
