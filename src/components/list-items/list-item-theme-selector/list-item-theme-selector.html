@@ -1,5 +1,5 @@
 <ion-item>
-  <ion-icon name="brush" item-start></ion-icon>
+  <ion-icon name="color-palette" item-start></ion-icon>
   <ion-label>{{ 'THEMES' | translate }}</ion-label>
   <ion-select showWhen="ios" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
     cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentThemeClass" (ngModelChange)="changeTheme()">
