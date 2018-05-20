@@ -63,7 +63,6 @@ export class MyApp {
       this._androidPermissions.PERMISSION.ACCESS_NETWORK_STATE,
       this._androidPermissions.PERMISSION.ACCESS_WIFI_STATE,
       this._androidPermissions.PERMISSION.CHANGE_NETWORK_STATE,
-      this._androidPermissions.PERMISSION.CHANGE_WIFI_MULTICAST_STATE,
       this._androidPermissions.PERMISSION.CHANGE_WIFI_STATE,
       this._androidPermissions.PERMISSION.INTERNET,
       this._androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
