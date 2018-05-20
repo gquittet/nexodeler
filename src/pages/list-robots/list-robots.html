@@ -5,7 +5,7 @@
 
     <ion-buttons start *ngIf="isSelection" @easeInOutLeft>
       <button ion-button (tap)="cancelSelection()">
-        {{ cancelText }}
+        {{ 'VERBS.CANCEL' | translate }}
       </button>
     </ion-buttons>
     <ion-buttons end *ngIf="!isSelection" @easeInOutRightToLeft>
@@ -34,9 +34,7 @@
   <ion-list>
     <ion-item-sliding #item *ngFor="let robot of robots" @easeInOutRightToLeft>
       <button ion-item (press)="isSelection = true" (tap)="isSelection ? null : openMonitor(robot)">
-        <ion-avatar *ngIf="!isSelection" item-start>
-          <img src="assets/imgs/nao.png">
-        </ion-avatar>
+        <ion-icon *ngIf="!isSelection" name="ionitron" item-start></ion-icon>
         <ion-checkbox (ionChange)="selectRobot(robot)" *ngIf="isSelection"></ion-checkbox>
         <ion-label padding-vertical>{{ robot.name }}</ion-label>
         <ion-note item-end>{{ robot.ip }}</ion-note>
