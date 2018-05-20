@@ -38,7 +38,7 @@ export class MyApp {
     this._platform.ready().then(() => {
       this._statusBar.styleLightContent();
       this._splashScreen.hide();
-      setTimeout(() => this.splash = false, 3000);
+      setTimeout(() => this.splash = false, 1000);
       this._settingsService.theme.subscribe((theme: Theme) => {
         this.theme = theme;
         if (this._platform.is('android'))
