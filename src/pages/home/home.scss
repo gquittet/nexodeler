@@ -9,6 +9,14 @@ page-home {
     text-align: center;
     h3 {
       color: white;
+      @media screen and (min-width: 1024px) {
+        @media screen and (orientation: portrait) {
+          font-size: 5vw;
+        }
+        @media screen and (orientation: landscape) {
+          font-size: 4vh;
+        }
+      }
     }
   }
   ion-row:nth-child(1) {
@@ -25,5 +33,13 @@ page-home {
   .button[icon-only] {
     width: 15vh;
     height: 15vh;
+  }
+  ion-icon.icon {
+    @media screen and (orientation: portrait) {
+      font-size: 13vw;
+    }
+    @media screen and (orientation: landscape) {
+      font-size: 7vh;
+    }
   }
 }
