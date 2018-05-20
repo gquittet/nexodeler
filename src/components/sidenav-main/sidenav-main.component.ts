@@ -1,5 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { MenuController, Nav } from 'ionic-angular';
+import { Subscription } from 'rxjs';
+import { Color } from '../../app/objects/Color';
+import { Theme } from '../../app/objects/Theme';
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 @Component({
   selector: 'sidenav-main',
@@ -8,14 +12,27 @@ import { MenuController, Nav } from 'ionic-angular';
 export class SidenavMainComponent {
 
   rootPage: string = 'HomePage';
+  private _themeSubscription: Subscription;
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private _menuCtrl: MenuController) { }
+  constructor(private _menuCtrl: MenuController, private _settingsService: SettingsService) {
+  }
+
+  ngOnInit(): void {
+    const naoPhoto: HTMLElement = document.getElementById('naoPhoto');
+    this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
+      naoPhoto.style.backgroundColor = Color.shade(theme.primaryColor, 20);
+    });
+  }
 
   openPage(page: string): void {
     this.nav.push(page);
     this._menuCtrl.close();
+  }
+
+  ngOnDestroy(): void {
+    this._themeSubscription.unsubscribe();
   }
 
 }
