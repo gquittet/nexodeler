@@ -1,1 +1,7 @@
-<sidenav-main></sidenav-main>
+<div *ngIf="splash" id="splash-screen" @leaveAnimation>
+
+  <div class="spinner"></div>
+
+</div>
+
+<sidenav-main [ngClass]="theme.class"></sidenav-main>

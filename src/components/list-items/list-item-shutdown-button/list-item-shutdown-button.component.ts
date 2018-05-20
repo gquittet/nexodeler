@@ -11,49 +11,49 @@ import { QiService } from '../../../app/services/naoqi/qi.service';
 })
 export class ListItemShutdownButtonComponent {
 
-  private confirmShutdownText: string;
-  private noText: string;
-  private okText: string;
-  private questionShutdownText: string;
-  private shutdownText: string;
-  private yesText: string;
+  private _confirmShutdownText: string;
+  private _noText: string;
+  private _okText: string;
+  private _questionShutdownText: string;
+  private _shutdownText: string;
+  private _yesText: string;
 
-  constructor(private navCtrl: NavController, private viewCtrl: ViewController, private alertCtrl: AlertController, private translate: TranslateService, private alSystem: ALSystemService) {
-    translate.get('NO').subscribe((res: string) => this.noText = res);
-    translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('UI.ALERT.TITLE.CONFIRM.SHUTDOWN').subscribe((res: string) => this.confirmShutdownText = res);
-    translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.SHUTDOWN').subscribe((res: string) => this.questionShutdownText = res);
-    translate.get('YES').subscribe((res: string) => this.yesText = res);
+  constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService) {
+    _translate.get('NO').subscribe((res: string) => this._noText = res);
+    _translate.get('OK').subscribe((res: string) => this._okText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.SHUTDOWN').subscribe((res: string) => this._confirmShutdownText = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.SHUTDOWN').subscribe((res: string) => this._questionShutdownText = res);
+    _translate.get('YES').subscribe((res: string) => this._yesText = res);
   }
 
   ngOnInit(): void {
-    this.alSystem.getName().then((name: string) => {
-      this.translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_SHUTTINGDOWN_DOTS', { value: name }).subscribe((res: string) => this.shutdownText = res);
+    this._alSystem.getName().then((name: string) => {
+      this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_SHUTTINGDOWN_DOTS', { value: name }).subscribe((res: string) => this._shutdownText = res);
     }).catch(error => console.error(error));
   }
 
   shutdown(): void {
-    this.alertCtrl.create({
-      title: this.confirmShutdownText,
-      message: this.questionShutdownText,
+    this._alertCtrl.create({
+      title: this._confirmShutdownText,
+      message: this._questionShutdownText,
       buttons: [
         {
-          text: this.noText,
+          text: this._noText,
           role: 'cancel'
         },
         {
-          text: this.yesText,
+          text: this._yesText,
           handler: () => {
-            this.alSystem.shutdown().catch(error => console.error(error));
-            this.alertCtrl.create({
+            this._alSystem.shutdown().catch(error => console.error(error));
+            this._alertCtrl.create({
               title: 'Info',
-              subTitle: this.shutdownText,
+              subTitle: this._shutdownText,
               buttons: [
                 {
-                  text: this.okText,
+                  text: this._okText,
                   handler: () => {
                     QiService.disconnect();
-                    this.navCtrl.remove(this.viewCtrl.index, 1);
+                    this._navCtrl.remove(this._viewCtrl.index, 1);
                   }
                 }
               ]

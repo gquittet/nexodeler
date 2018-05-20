@@ -8,22 +8,22 @@ import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 })
 export class ListItemTimezoneComponent {
 
-  private timezoneInterval;
+  private _timezoneInterval;
 
   private timezone: string;
 
-  constructor(private alSystem: ALSystemService) { }
+  constructor(private _alSystem: ALSystemService) { }
 
   ngOnInit(): void {
     this.getTimezone();
-    this.timezoneInterval = setInterval(() => this.getTimezone(), 5000);
+    this._timezoneInterval = setInterval(() => this.getTimezone(), 5000);
   }
 
   getTimezone(): void {
-    this.alSystem.getTimezone().then(timezone => this.timezone = timezone).catch(error => console.error(error));
+    this._alSystem.getTimezone().then(timezone => this.timezone = timezone).catch(error => console.error(error));
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.timezoneInterval);
+    clearInterval(this._timezoneInterval);
   }
 }

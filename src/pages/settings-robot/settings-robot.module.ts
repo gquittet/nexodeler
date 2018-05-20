@@ -13,6 +13,7 @@ import { ListItemShutdownButtonModule } from '../../components/list-items/list-i
 import { ListItemTemperatureModule } from '../../components/list-items/list-item-temperature/list-item-temperature.module';
 import { ListItemTimezoneModule } from '../../components/list-items/list-item-timezone/list-item-timezone.module';
 import { ListItemVolumeControlModule } from '../../components/list-items/list-item-volume-control/list-item-volume-control.module';
+import { ModalTitleModule } from '../../components/modal-title/modal-title.module';
 import { SettingsRobotPage } from './settings-robot';
 
 
@@ -35,6 +36,7 @@ import { SettingsRobotPage } from './settings-robot';
     ListItemTemperatureModule,
     ListItemTimezoneModule,
     ListItemVolumeControlModule,
+    ModalTitleModule,
     TranslateModule
   ],
   exports: [
@@ -44,4 +46,4 @@ import { SettingsRobotPage } from './settings-robot';
     Network
   ]
 })
-export class SettingsRobotModule {}
+export class SettingsRobotModule { }

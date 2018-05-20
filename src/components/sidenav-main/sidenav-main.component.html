@@ -1,27 +1,29 @@
 <ion-menu [content]="sidenavMain">
   <ion-header>
-      <ion-toolbar>
-          <ion-title>{{ 'MENU' | translate }}</ion-title>
-      </ion-toolbar>
+    <ion-toolbar color="primary">
+      <ion-title>{{ 'MENU' | translate }}</ion-title>
+    </ion-toolbar>
   </ion-header>
   <ion-content>
-      <ion-list>
-          <button ion-item (tap)="openPage('HomePage')">
-              <ion-icon name="home" item-left></ion-icon> {{ 'UI.SIDENAV.HOME' | translate }}
-          </button>
-          <button ion-item (tap)="openPage('ListRobotsPage')">
-              <ion-icon name="outlet" item-left></ion-icon> {{ 'UI.SIDENAV.ROBOTS' | translate }}
-          </button>
-          <button ion-item (tap)="openPage('ListModulesPage')">
-              <ion-icon name="archive" item-left></ion-icon> {{ 'UI.SIDENAV.MODULES' | translate }}
-          </button>
-          <button ion-item (tap)="openPage('ListChoregraphiesPage')">
-              <ion-icon name="filing" item-left></ion-icon> {{ 'UI.SIDENAV.CHOREGRAPHIES' | translate }}
-          </button>
-          <button ion-item (tap)="openPage('ListRobotsPage')">
-              <ion-icon name="settings" item-left></ion-icon> {{ 'SETTINGS.SETTINGS' | translate }}
-          </button>
-      </ion-list>
+    <div id="menuTopPanel">
+      <div class="photoDiv background-primary-color">
+        <img src="assets/imgs/nao.png" alt="nao picture">
+      </div>
+    </div>
+    <ion-list>
+      <button ion-item (tap)="openPage('ListRobotsPage')">
+        <ion-icon name="ionitron" item-left></ion-icon> {{ 'UI.SIDENAV.ROBOTS' | translate }}
+      </button>
+      <button ion-item (tap)="openPage('ListModulesPage')">
+        <ion-icon name="apps" item-left></ion-icon> {{ 'UI.SIDENAV.MODULES' | translate }}
+      </button>
+      <button ion-item (tap)="openPage('ListChoregraphiesPage')">
+        <ion-icon name="filing" item-left></ion-icon> {{ 'UI.SIDENAV.CHOREGRAPHIES' | translate }}
+      </button>
+      <button ion-item (tap)="openPage('AppSettingsPage')">
+        <ion-icon name="settings" item-left></ion-icon> {{ 'SETTINGS.SETTINGS' | translate }}
+      </button>
+    </ion-list>
   </ion-content>
 </ion-menu>
 <ion-nav [root]="rootPage" #sidenavMain></ion-nav>

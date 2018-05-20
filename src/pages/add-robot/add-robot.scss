@@ -1,15 +1,5 @@
-form {
-    margin: 0 30%;
-}
-
-@media screen and (max-width: 1024px) {
-    form {
-        margin: 0 20%;
-    }
-}
-
-@media screen and (max-width: 840px) {
-    form {
-        margin: 0;
-    }
+page-add-robot {
+  .text-input {
+    text-align: center;
+  }
 }

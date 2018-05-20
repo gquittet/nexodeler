@@ -9,9 +9,9 @@ import { Events, IonicPage } from 'ionic-angular';
 })
 export class ModuleMotionPage {
 
-  constructor(private events: Events) { }
+  constructor(private _events: Events) { }
 
   ionViewWillLeave(): void {
-    this.events.publish('module:exit');
+    this._events.publish('module:exit');
   }
 }

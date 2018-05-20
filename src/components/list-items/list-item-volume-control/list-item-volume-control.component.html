@@ -1,10 +1,10 @@
-<ion-list-header>
+<ion-item-divider>
   <ion-label> {{ 'VOLUME' | translate }}: {{ volume }}%</ion-label>
   <ion-toggle [(ngModel)]="enable" (ngModelChange)="setMute()"></ion-toggle>
-</ion-list-header>
+</ion-item-divider>
 <ion-item>
   <ion-range min="0" max="100" pin="true" [(ngModel)]="volume" (ngModelChange)="update()">
-      <ion-icon range-left name="volume-down"></ion-icon>
-      <ion-icon range-right name="volume-up"></ion-icon>
+    <ion-icon range-left name="volume-down"></ion-icon>
+    <ion-icon range-right name="volume-up"></ion-icon>
   </ion-range>
 </ion-item>

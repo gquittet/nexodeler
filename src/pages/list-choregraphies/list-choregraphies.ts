@@ -9,9 +9,10 @@ import 'rxjs/add/operator/debounceTime';
 import { Behavior } from '../../app/objects/Behavior';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
-import { ALBehaviorManager } from '../../app/services/naoqi/albehaviormanager.service';
+import { ALBehaviorManagerService } from '../../app/services/naoqi/albehaviormanager.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 
 @IonicPage()
@@ -21,50 +22,48 @@ import { RobotsService } from '../../app/services/robots/robots.service';
 })
 export class ListChoregraphiesPage {
 
-
   // Object
-  private isConnectedToWireless: Subscription;
+  private _isConnectedToWireless: Subscription;
   choregraphies: Behavior[];
   searchResults: Behavior[];
 
-
   // String UI
-  private choregraphyStartingText: string;
-  private errorNetworkDisconnectedText: string;
-  private errorBehaviorStartText: string;
-  private errorText: string;
-  private informationText: string;
-  private okText: string;
+  private _choregraphyStartingText: string;
+  private _errorNetworkDisconnectedText: string;
+  private _errorBehaviorStartText: string;
+  private _errorText: string;
+  private _informationText: string;
+  private _okText: string;
 
   // UI
   searchControl: FormControl;
   searchTerm: string = '';
   searching: boolean;
-  private robotsChooser: RobotsChooser;
+  private _robotsChooser: RobotsChooser;
   @ViewChild('content') content: Content;
   @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
-  private loading: AlertLoading;
+  private _loading: AlertLoading;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController, private translate: TranslateService, network: Network, private file: File, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private robotsService: RobotsService, private alBehaviorManager: ALBehaviorManager) {
-    this.loading = new AlertLoading(loadingCtrl, translate);
+  constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManagerService) {
+    this._loading = new AlertLoading(_loadingCtrl, _translate, this._settingsService);
     this.searchControl = new FormControl();
     this.choregraphies = [];
     this.searchResults = [];
-    translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
-    translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this.errorNetworkDisconnectedText = res);
-    translate.get('ERROR.ERROR_BEHAVIOR_START').subscribe((res: string) => this.errorBehaviorStartText = res);
-    translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this.informationText = res);
-    translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this.choregraphyStartingText = res);
-    translate.get("OK").subscribe((res: string) => this.okText = res);
-    this.isConnectedToWireless = network.onDisconnect().subscribe(() => {
+    _translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res);
+    _translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this._errorNetworkDisconnectedText = res);
+    _translate.get('ERROR.ERROR_BEHAVIOR_START').subscribe((res: string) => this._errorBehaviorStartText = res);
+    _translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this._informationText = res);
+    _translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this._choregraphyStartingText = res);
+    _translate.get("OK").subscribe((res: string) => this._okText = res);
+    this._isConnectedToWireless = network.onDisconnect().subscribe(() => {
       console.log('[INFO][NETWORK] Network access disconnected.');
-      this.alertCtrl.create({
-        title: this.errorText,
-        subTitle: this.errorNetworkDisconnectedText,
+      this._alertCtrl.create({
+        title: this._errorText,
+        subTitle: this._errorNetworkDisconnectedText,
         buttons: [{
-          text: this.okText,
+          text: this._okText,
           handler: () => {
-            this.navCtrl.remove(this.viewCtrl.index, 1)
+            this.navCtrl.remove(this._viewCtrl.index, 1)
           }
         }]
       }).present();
@@ -72,7 +71,7 @@ export class ListChoregraphiesPage {
   }
 
   ionViewDidLoad(): void {
-    this.robotsChooser = new RobotsChooser(this.navCtrl, this.viewCtrl, this.translate, this.alertCtrl, this.robotsService, this.loadingCtrl, this.file);
+    this._robotsChooser = new RobotsChooser(this.navCtrl, this._viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file, this._settingsService);
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();
@@ -80,13 +79,13 @@ export class ListChoregraphiesPage {
   }
 
   ionViewDidEnter(): void {
-    this.robotsChooser.exitOnCancel = true;
-    this.robotsChooser.show(this, this.loadBehaviors);
+    this._robotsChooser.exitOnCancel = true;
+    this._robotsChooser.show(this, this.loadBehaviors);
   }
 
   loadBehaviors(): void {
     let index: number = 0;
-    this.alBehaviorManager.getInstalledBehaviors().then(installedBehaviors => {
+    this._alBehaviorManager.getInstalledBehaviors().then(installedBehaviors => {
       installedBehaviors.forEach(element => {
         const pathSplit: string = element.split('/');
         if (pathSplit.length > 3) {
@@ -121,26 +120,26 @@ export class ListChoregraphiesPage {
   }
 
   startBehavior(behavior: Behavior) {
-    this.loading.show();
-    this.alBehaviorManager.startBehavior(behavior.path).then(result => {
-      this.loading.close();
-      const alert = this.alertCtrl.create({
-        title: this.informationText,
-        subTitle: this.choregraphyStartingText,
-        buttons: [this.okText]
+    this._loading.show();
+    this._alBehaviorManager.startBehavior(behavior.path).then(result => {
+      this._loading.close();
+      const alert = this._alertCtrl.create({
+        title: this._informationText,
+        subTitle: this._choregraphyStartingText,
+        buttons: [this._okText]
       })
       alert.present();
       console.log("[INFO][NAOQI][ALBehaviorManager] startBehavior(): activity started.");
       setTimeout(() => alert.dismiss(), 2000);
     }).catch(err => {
-      this.loading.close();
-      this.alertCtrl.create({
-        title: this.errorText,
-        subTitle: this.errorBehaviorStartText,
+      this._loading.close();
+      this._alertCtrl.create({
+        title: this._errorText,
+        subTitle: this._errorBehaviorStartText,
         buttons: [{
-          text: this.okText,
+          text: this._okText,
           handler: () => {
-            this.navCtrl.remove(this.viewCtrl.index, 1)
+            this.navCtrl.remove(this._viewCtrl.index, 1)
           }
         }]
       }).present();
@@ -181,7 +180,7 @@ export class ListChoregraphiesPage {
     let posture: string;
     this.searchResults = this.choregraphies.filter((choregraphy: Behavior) => {
       if (choregraphy.creator === 'Aldebaran')
-        this.translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
+        this._translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
       else
         posture = choregraphy.posture;
       return this.isStringEquals(choregraphy.name, this.searchTerm) || this.isStringEquals(posture, this.searchTerm) || this.isStringEquals(choregraphy.category, this.searchTerm) || this.isStringEquals(choregraphy.path, this.searchTerm) || this.isStringEquals(choregraphy.creator, this.searchTerm);
@@ -191,11 +190,11 @@ export class ListChoregraphiesPage {
 
   stopAll(): void {
     console.log("[INFO][NAOQI][ALBehaviorManager] Stop all the activities.");
-    this.alBehaviorManager.stopAllBehaviors();
+    this._alBehaviorManager.stopAllBehaviors();
   }
 
   ionViewWillLeave(): void {
-    this.isConnectedToWireless.unsubscribe();
+    this._isConnectedToWireless.unsubscribe();
     QiService.disconnect();
   }
 }

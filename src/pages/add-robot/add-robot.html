@@ -1,31 +1,49 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <ion-title>
-            {{ 'UI.TITLE.ADD_ROBOT' | translate }}
-        </ion-title>
-    </ion-navbar>
+  <ion-navbar color="primary">
+    <ion-title>
+      {{ 'UI.TITLE.ADD_ROBOT' | translate }}
+    </ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <h2>{{ 'IP_ADDRESS' | translate }}</h2>
-    <form [formGroup]="addForm">
-        <ion-item>
-            <ion-input formControlName="number1" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 1" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-input formControlName="number2" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 2" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-input formControlName="number3" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 3" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-input formControlName="number4" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 4" required></ion-input>
-        </ion-item>
-        <ion-label *ngIf="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid"
-            color="danger">{{ 'ERROR.ENTER_CORRECT_IP_ADDRESS' | translate }}</ion-label>
-        <ion-buttons end padding>
-            <button default ion-button (tap)="save()" [disabled]="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid">{{ 'VERBS.SAVE' | translate }}</button>
-            <button default ion-button color="light" (tap)="goBack()">{{ 'VERBS.CANCEL' | translate }}</button>
-        </ion-buttons>
-    </form>
+  <h2 class="color-dark-color">{{ 'IP_ADDRESS' | translate }}</h2>
+  <form [formGroup]="addForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col offset-2 col-8>
+          <ion-input formControlName="number1" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 1"
+            required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col offset-2 col-8>
+          <ion-input formControlName="number2" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 2"
+            required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col offset-2 col-8>
+          <ion-input formControlName="number3" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 3"
+            required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col offset-2 col-8>
+          <ion-input formControlName="number4" type="number" pattern="[0-9]*" minlength="1" maxlength="3" placeholder="{{ 'NUMBER' | translate }} 4"
+            required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row padding-vertical>
+        <ion-col offset-2 col-4 align-self-stretch>
+          <button full ion-button color="light" (tap)="goBack()">{{ 'VERBS.CANCEL' | translate }}</button>
+        </ion-col>
+        <ion-col col-4 align-self-stretch>
+          <button full ion-button color="primary" (tap)="save()" [disabled]="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid">{{ 'VERBS.SAVE' | translate }}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-label *ngIf="!addForm.controls['number1'].valid || !addForm.controls['number2'].valid || !addForm.controls['number3'].valid || !addForm.controls['number4'].valid"
+      color="danger">{{ 'ERROR.ENTER_CORRECT_IP_ADDRESS' | translate }}</ion-label>
+  </form>
 </ion-content>

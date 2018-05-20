@@ -1,12 +1,14 @@
 {
+  "ABOUT": "À propos",
   "ALL": "Tout",
   "BATTERY": "Batterie",
   "CATEGORY": "Catégorie",
   "CREATOR": "Créateur",
+  "CUSTOMIZATION": "Personnalisation",
   "DISABLED": "Désactivé",
   "ERROR": {
     "ERROR": "Erreur",
-    "ADD_AT_LEAST_A_ROBOT": "Ajouter au moins un robot.",
+    "ADD_AT_LEAST_A_ROBOT": "Ajoutez au moins un robot.",
     "ERROR_BEHAVIOR_START": "L'activité Chorégraphe a eu une erreur inattendue.",
     "ENTER_CORRECT_IP_ADDRESS": "Entrez une adresse IP correcte.",
     "ENTER_CORRECT_NAME": "Entrez un nom correct.",
@@ -14,6 +16,7 @@
     "NETWORK_DISCONNECTED": "L'accès au réseau vient d'être coupé.",
     "NETWORK_ERROR": "Erreur réseau",
     "NO_ROBOT_FOUND": "Aucun robot trouvé.",
+    "ROBOT_ALREADY_EXIST_IN_YOUR_LIST": "Le robot existe déjà dans votre liste.",
     "UNABLE_TO_COMMUNICATE_WITH_VALUE": "Impossible de communiquer avec {{value}} !",
     "UNABLE_TO_FIND_VALUE": "Impossible de trouver {{value}} !",
     "UNABLE_TO_GET_ROBOT_NAME": "Impossible de récupérer le nom du robot !",
@@ -25,7 +28,14 @@
   "IP_ADDRESS": "Adresse IP",
   "LANGUAGE": "Langue",
   "LANGUAGES": "Langues",
+  "LANGUAGES_NAME": {
+    "ENGLISH": "Anglais",
+    "FRENCH": "Français"
+  },
+  "LAUNCH_A_MODULE": "Lancez un module",
   "MAINTAINER": "Mainteneur",
+  "MAKE_ROBOT_SPEAK": "Faites parler le robot",
+  "MANAGE_YOUR_ROBOTS": "Gérez vos robots",
   "MENU": "Menu",
   "MODE": "Mode",
   "MODULES": {
@@ -90,6 +100,7 @@
   "OK": "D'accord",
   "ON": "Allumé",
   "PERFECT": "Parfait",
+  "PLAY_AN_ACTIVITY": "Jouez une activité",
   "PLEASE_WAIT": "Veuillez patienter...",
   "POSTURE": "Posture",
   "POWER": "Énergie",
@@ -117,6 +128,15 @@
   "STATE": "État",
   "SUPER": "Super",
   "TEMPERATURE": "Température",
+  "THEME": "Thème",
+  "THEMES": "Thèmes",
+  "THEMES_NAME": {
+    "BLUE-AUTISM": "Couleur de l'autisme",
+    "CAMPUS-ECONOMIQUE": "Campus économique",
+    "CAMPUS-PEDAGOGIQUE": "Campus pédagogique",
+    "CAMPUS-SOCIAL": "Campus social",
+    "CAMPUS-TECHNIQUE": "Campus technique"
+  },
   "TIMEZONE": "Fuseau horaire",
   "UI": {
     "ALERT": {

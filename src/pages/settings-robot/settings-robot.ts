@@ -13,22 +13,22 @@ import { QiService } from '../../app/services/naoqi/qi.service';
 })
 export class SettingsRobotPage {
 
-  private isConnectedToNetwork: Subscription;
+  private _isConnectedToNetwork: Subscription;
 
-  private errorText: string;
-  private errorNetworkDisconnectedText: string;
-  private okText: string;
+  private _errorText: string;
+  private _errorNetworkDisconnectedText: string;
+  private _okText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, alertCtrl: AlertController, network: Network) {
-    translate.get('ERROR.ERROR').subscribe((res: string) => this.errorText = res);
-    translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this.errorNetworkDisconnectedText = res);
-    translate.get("OK").subscribe((res: string) => this.okText = res);
-    this.isConnectedToNetwork = network.onDisconnect().subscribe(() => {
+    translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res);
+    translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this._errorNetworkDisconnectedText = res);
+    translate.get("OK").subscribe((res: string) => this._okText = res);
+    this._isConnectedToNetwork = network.onDisconnect().subscribe(() => {
       console.log('[INFO][NETWORK] Network access disconnected.');
       alertCtrl.create({
-        title: this.errorText,
-        subTitle: this.errorNetworkDisconnectedText,
-        buttons: [this.okText]
+        title: this._errorText,
+        subTitle: this._errorNetworkDisconnectedText,
+        buttons: [this._okText]
       }).present();
       this.navCtrl.remove(this.viewCtrl.index, 1);
     });
@@ -40,7 +40,7 @@ export class SettingsRobotPage {
   }
 
   ionViewWillLeave(): void {
-    this.isConnectedToNetwork.unsubscribe();
+    this._isConnectedToNetwork.unsubscribe();
     QiService.disconnect();
   }
 }

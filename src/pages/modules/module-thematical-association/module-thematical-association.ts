@@ -34,21 +34,21 @@ import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeec
 })
 export class ModuleThematicalAssociationPage {
 
-  private themes = [
+  private _themes = [
     Theme.Bathroom
   ];
 
-  private path: string = "./assets/modules/thematicalassociation/imgs/";
+  private _path: string = "./assets/modules/thematicalassociation/imgs/";
 
   theme: string;
 
   thematicalObjects: ThematicalObject[] = [
-    <ThematicalObject>{ name: 'toothbrush', picture: this.path + 'toothbrush.jpg', category: Category.DentalCare, theme: Theme.Bathroom },
-    <ThematicalObject>{ name: 'toothpaste', picture: this.path + 'toothpaste.jpg', category: Category.DentalCare, theme: Theme.Bathroom },
-    <ThematicalObject>{ name: 'comb', picture: this.path + 'comb.jpg', category: Category.HairCare, theme: Theme.Bathroom },
-    <ThematicalObject>{ name: 'hair', picture: this.path + 'hair.jpg', category: Category.HairCare, theme: Theme.Bathroom },
-    <ThematicalObject>{ name: 'soap', picture: this.path + 'soap.jpg', category: Category.Wash, theme: Theme.Bathroom },
-    <ThematicalObject>{ name: 'washcloth', picture: this.path + 'washcloth.jpg', category: Category.Wash, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'toothbrush', picture: this._path + 'toothbrush.jpg', category: Category.DentalCare, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'toothpaste', picture: this._path + 'toothpaste.jpg', category: Category.DentalCare, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'comb', picture: this._path + 'comb.jpg', category: Category.HairCare, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'hair', picture: this._path + 'hair.jpg', category: Category.HairCare, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'soap', picture: this._path + 'soap.jpg', category: Category.Wash, theme: Theme.Bathroom },
+    <ThematicalObject>{ name: 'washcloth', picture: this._path + 'washcloth.jpg', category: Category.Wash, theme: Theme.Bathroom },
   ];
 
   selectedImages: ThematicalObject[];
@@ -56,34 +56,34 @@ export class ModuleThematicalAssociationPage {
   selectedThematicalObjects: ThematicalObject[];
   selectedTargets: any[];
 
-  private confirmExitText: string;
-  private notCorrectText: string;
-  private noText: string;
-  private okText: string;
-  private questionGameExitText: string;
-  private superText: string;
-  private victoryText: string;
-  private yesText: string;
-  private youpieWinText: string;
-  private correctText: string;
-  private youWinText: string;
+  private _confirmExitText: string;
+  private _notCorrectText: string;
+  private _noText: string;
+  private _okText: string;
+  private _questionGameExitText: string;
+  private _superText: string;
+  private _victoryText: string;
+  private _yesText: string;
+  private _youpieWinText: string;
+  private _correctText: string;
+  private _youWinText: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private alertCtrl: AlertController, private alTextToSpeech: ALTextToSpeechService) {
-    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this.confirmExitText = res)
-    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this.questionGameExitText = res)
-    translate.get('NO').subscribe((res: string) => this.noText = res);
-    translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('VICTORY').subscribe((res: string) => this.victoryText = res);
-    translate.get('YES').subscribe((res: string) => this.yesText = res);
-    translate.get('YOU_WIN').subscribe((res: string) => this.youWinText = res);
-    translate.get('SUPER').subscribe((res: string) => this.superText = res);
-    translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this.notCorrectText = res);
-    translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this.youpieWinText = res);
-    translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this.correctText = res);
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService) {
+    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this._confirmExitText = res)
+    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this._questionGameExitText = res)
+    translate.get('NO').subscribe((res: string) => this._noText = res);
+    translate.get('OK').subscribe((res: string) => this._okText = res);
+    translate.get('VICTORY').subscribe((res: string) => this._victoryText = res);
+    translate.get('YES').subscribe((res: string) => this._yesText = res);
+    translate.get('YOU_WIN').subscribe((res: string) => this._youWinText = res);
+    translate.get('SUPER').subscribe((res: string) => this._superText = res);
+    translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this._notCorrectText = res);
+    translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this._youpieWinText = res);
+    translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this._correctText = res);
     this.selectedImages = [];
     this.selectedThematicalObjects = [];
     this.selectedTargets = [];
-    this.theme = this.themes[Math.floor(Math.random() * this.themes.length)];
+    this.theme = this._themes[Math.floor(Math.random() * this._themes.length)];
     let element: ThematicalObject;
     while (this.selectedImages.length < 6) {
       element = this.thematicalObjects[Math.floor(Math.random() * this.thematicalObjects.length)];
@@ -102,7 +102,9 @@ export class ModuleThematicalAssociationPage {
   selectImage(thematicalObject: ThematicalObject, event: any): void {
     if (this.selectedThematicalObjects.length < 2) {
       if (this.selectedThematicalObjects.indexOf(thematicalObject) === -1) {
+        event.classList.add('animation');
         event.classList.add('selected');
+        event.classList.add('dashed');
         this.selectedTargets.push(event);
         this.selectedThematicalObjects.push(thematicalObject);
         if (this.selectedThematicalObjects.length === 2) {
@@ -116,10 +118,10 @@ export class ModuleThematicalAssociationPage {
                   return elem;
                 });
               });
-              this.alTextToSpeech.say(this.correctText);
+              this._alTextToSpeech.say(this._correctText);
               setTimeout(() => this.hasWon(), 500);
             } else {
-              this.alTextToSpeech.say(this.notCorrectText);
+              this._alTextToSpeech.say(this._notCorrectText);
             }
             this.selectedTargets.forEach(element => {
               element.classList.remove('selected');
@@ -129,7 +131,9 @@ export class ModuleThematicalAssociationPage {
           }, 700);
         }
       } else {
+        event.classList.remove('animation');
         event.classList.remove('selected');
+        event.classList.remove('dashed');
         this.selectedTargets.splice(this.selectedTargets.indexOf(thematicalObject), 1);
         this.selectedThematicalObjects.splice(this.selectedThematicalObjects.indexOf(thematicalObject), 1);
       }
@@ -151,13 +155,13 @@ export class ModuleThematicalAssociationPage {
       }
     }
     if (win) {
-      this.alTextToSpeech.say(this.youpieWinText);
-      this.alertCtrl.create({
-        title: this.victoryText,
-        subTitle: this.youWinText,
+      this._alTextToSpeech.say(this._youpieWinText);
+      this._alertCtrl.create({
+        title: this._victoryText,
+        subTitle: this._youWinText,
         enableBackdropDismiss: false,
         buttons: [{
-          text: this.okText,
+          text: this._okText,
           handler: () => {
             this.dismiss();
           }
@@ -173,17 +177,17 @@ export class ModuleThematicalAssociationPage {
 
   exit(): void {
     if (!this.hasWon()) {
-      this.alTextToSpeech.say(this.questionGameExitText);
-      this.alertCtrl.create({
-        title: this.confirmExitText,
-        subTitle: this.questionGameExitText,
+      this._alTextToSpeech.say(this._questionGameExitText);
+      this._alertCtrl.create({
+        title: this._confirmExitText,
+        subTitle: this._questionGameExitText,
         enableBackdropDismiss: false,
         buttons: [
           {
-            text: this.noText
+            text: this._noText
           },
           {
-            text: this.yesText,
+            text: this._yesText,
             handler: () => {
               this.dismiss();
             }

@@ -1,0 +1,414 @@
+@mixin apply-theme($colors: $colors) {
+  @function getColor($colorName) {
+    @each $color in $colors {
+      @if nth($color, 1)==$colorName {
+        @return nth($color, 2);
+      }
+    }
+  } //
+  // ==========================================================================
+  // Action Sheet
+  // ==========================================================================
+  .action-sheet-button {
+    color: getColor(primary) !important;
+  }
+  .action-sheet-cancel {
+    color: getColor(primary) !important;
+  } //
+  // ==========================================================================
+  // Alert
+  // ==========================================================================
+  .alert-button-ios,
+  .alert-button-md {
+    color: getColor(primary) !important;
+  }
+  .alert-radio-label {
+    color: getColor(dark) !important;
+  }
+  .alert-radio-inner {
+    background-color: getColor(primary) !important;
+  }
+  .alert-radio-icon {
+    border-color: getColor(primary) !important;
+  } //
+  //
+  //
+  //
+  //
+  // ==========================================================================
+  //                                  THEME
+  // ==========================================================================
+  //
+  //
+  .background-primary-color {
+    background-color: getColor(primary) !important;
+  }
+  .background-secondary-color {
+    background-color: getColor(secondary) !important;
+  }
+  .background-danger-color {
+    background-color: getColor(danger) !important;
+  }
+  .background-light-color {
+    background-color: getColor(light) !important;
+  }
+  .background-dark-color {
+    background-color: getColor(dark) !important;
+  }
+  .color-primary-color {
+    color: getColor(primary) !important;
+  }
+  .color-secondary-color {
+    color: getColor(secondary) !important;
+  }
+  .color-danger-color {
+    color: getColor(danger) !important;
+  }
+  .color-light-color {
+    color: getColor(light) !important;
+  }
+  .color-dark-color {
+    color: getColor(dark) !important;
+  } //
+  //
+  //
+  // ==========================================================================
+  // Button
+  // ==========================================================================
+  button.button-clear-ios {
+    color: getColor(light);
+  }
+  button.button-clear-md {
+    color: getColor(dark);
+  }
+  .button-full,
+  .button-ios-primary,
+  .button-md-primary,
+  .button-wp-primary {
+    background-color: getColor(primary);
+    &.activated {
+      background-color: getColor(primary);
+    }
+    &:hover:not(.disable-hover) {
+      background-color: getColor(primary);
+    }
+  }
+  .button-ios-secondary,
+  .button-md-secondary,
+  .button-wp-secondary {
+    background-color: getColor(secondary);
+    &.activated {
+      background-color: getColor(secondary);
+    }
+    &:hover:not(.disable-hover) {
+      background-color: getColor(secondary);
+    }
+  }
+  .button-full.button-md-danger,
+  .button-ios-danger,
+  .button-md-danger,
+  .button-wp-danger {
+    background-color: getColor(danger);
+    &.activated {
+      background-color: getColor(danger);
+    }
+    &:hover:not(.disable-hover) {
+      background-color: getColor(danger);
+    }
+  }
+  .button-ios-light,
+  .button-md-light,
+  .button-wp-light {
+    background-color: getColor(light);
+    color: getColor(dark);
+    &.activated {
+      background-color: getColor(light);
+      color: getColor(dark);
+    }
+    &:hover:not(.disable-hover) {
+      background-color: getColor(light);
+      color: getColor(dark);
+    }
+  }
+  .button-ios-dark,
+  .button-md-dark,
+  .button-wp-dark {
+    background-color: getColor(dark);
+    &.activated {
+      background-color: getColor(dark);
+    }
+    &:hover:not(.disable-hover) {
+      background-color: getColor(dark);
+    }
+  } //
+  // ==========================================================================
+  // Fab
+  // ==========================================================================
+  .fab-ios,
+  .fab-md,
+  .fab-wp,
+  .fab-ios-primary,
+  .fab-md-primary,
+  .fab-wp-primary {
+    background: getColor(primary);
+    &.activated {
+      background: getColor(primary);
+    }
+  }
+  .fab-ios-secondary,
+  .fab-md-secondary,
+  .fab-wp-secondary {
+    background: getColor(secondary);
+    &.activated {
+      background: getColor(secondary);
+    }
+  }
+  .fab-ios-danger,
+  .fab-md-danger,
+  .fab-wp-danger {
+    background: getColor(danger);
+    &.activated {
+      background: getColor(danger);
+    }
+  }
+  .fab-ios-light,
+  .fab-md-light,
+  .fab-wp-light {
+    background: getColor(light);
+    &.activated {
+      background: getColor(light);
+    }
+  }
+  .fab-ios-dark,
+  .fab-md-dark,
+  .fab-wp-dark {
+    background: getColor(dark);
+    &.activated {
+      background: getColor(dark);
+    }
+  } //
+  // ==========================================================================
+  // Icon
+  // ==========================================================================
+  .icon-ios-primary,
+  .icon-md-primary,
+  .icon-wp-primary {
+    color: getColor(primary);
+  }
+  .icon-ios-secondary,
+  .icon-md-secondary,
+  .icon-wp-secondary {
+    color: getColor(secondary);
+  } //
+  // ==========================================================================
+  // Ion-Input
+  // ==========================================================================
+  ion-input {
+    background-color: getColor(light);
+    border-radius: 5px;
+  }
+  .text-input-wp {
+    padding: 0;
+    border: none;
+    line-height: 0;
+  } //
+  // ==========================================================================
+  // Ion-Modal
+  // ==========================================================================
+  ion-modal {
+    background: getColor(primary);
+  } //
+  // ==========================================================================
+  // Label
+  // ==========================================================================
+  .label-ios-primary,
+  .label-md-primary,
+  .label-wp-primary {
+    color: getColor(primary);
+  }
+  .label-ios-secondary,
+  .label-md-secondary,
+  .label-wp-secondary {
+    color: getColor(secondary);
+  }
+  .label-ios-danger,
+  .label-md-danger,
+  .label-wp-danger {
+    color: getColor(danger);
+  }
+  .label-ios-light,
+  .label-md-light,
+  .label-wp-light {
+    color: getColor(light);
+  }
+  .label-ios-dark,
+  .label-md-dark,
+  .label-wp-dark {
+    color: getColor(dark);
+  } //
+  // ==========================================================================
+  // Note
+  // ==========================================================================
+  .note-ios,
+  .note-md,
+  .note-wp {
+    color: #999;
+  } //
+  // ==========================================================================
+  // Range
+  // ==========================================================================
+  .range-ios {
+    .range-bar-active {
+      background: getColor(primary);
+    }
+  }
+  .range-md,
+  .range-wp {
+    .range-knob {
+      background: getColor(primary);
+    }
+    .range-bar-active {
+      background: getColor(primary);
+    }
+  } //
+  // ==========================================================================
+  // Search bar
+  // ==========================================================================
+  .searchbar-input {
+    background: getColor(light) !important;
+  }
+  .searchbar-wp {
+    .searchbar-input-container {
+      border: 2px solid getColor(light);
+    }
+    &.searchbar-has-focus .searchbar-input-container {
+      border-color: getColor(secondary) !important;
+    }
+  } //
+  // ==========================================================================
+  // Segment
+  // ==========================================================================
+  .segment-ios {
+    .segment-button {
+      color: getColor(light) !important;
+      border-color: getColor(light) !important;
+    }
+    .segment-button.segment-activated {
+      background: getColor(light) !important;
+      color: getColor(primary) !important;
+      border-color: getColor(light) !important;
+    }
+  }
+  .segment-md {
+    .segment-button {
+      color: getColor(light) !important;
+      border-color: getColor(light) !important;
+    }
+  }
+  .segment-wp {
+    .segment-button {
+      color: getColor(light) !important;
+    }
+  } //
+  // ==========================================================================
+  // Select
+  // ==========================================================================
+  .item-select {
+    .label-ios,
+    .label-md,
+    .label-wp {
+      color: black;
+    }
+  }
+  .select-text {
+    color: #999;
+  } //
+  // ==========================================================================
+  // Spinner
+  // ==========================================================================
+  .spinner-md-crescent circle {
+    stroke: getColor(primary) !important;
+  } //
+  // ==========================================================================
+  // Toggle
+  // ==========================================================================
+  .toggle-md.toggle-checked {
+    .toggle-icon {
+      background-color: rgba(getColor(primary), 0.3);
+    }
+    .toggle-inner {
+      background-color: getColor(primary);
+    }
+  }
+  .toggle-ios.toggle-checked,
+  .toggle-wp.toggle-checked {
+    .toggle-icon {
+      background-color: getColor(primary);
+    }
+  }
+  .toggle-wp.toggle-checked {
+    .toggle-icon {
+      border-color: getColor(primary);
+    }
+  } //
+  // ==========================================================================
+  // Toolbar
+  // ==========================================================================
+  .toolbar-ios-primary .toolbar-background-ios {
+    background-color: getColor(primary);
+  }
+  .toolbar-md-primary .toolbar-background-md {
+    background-color: getColor(primary);
+  }
+  .toolbar-wp-primary .toolbar-background-wp {
+    background-color: getColor(primary);
+  }
+  .toolbar-ios-secondary .toolbar-background-ios {
+    background-color: getColor(secondary);
+  }
+  .toolbar-md-secondary .toolbar-background-md {
+    background-color: getColor(secondary);
+  }
+  .toolbar-wp-secondary .toolbar-background-wp {
+    background-color: getColor(secondary);
+  }
+  .toolbar-ios-danger .toolbar-background-ios {
+    background-color: getColor(danger);
+  }
+  .toolbar-md-danger .toolbar-background-md {
+    background-color: getColor(danger);
+  }
+  .toolbar-wp-danger .toolbar-background-wp {
+    background-color: getColor(danger);
+  } //
+  //
+  //
+  //
+  //
+  // ==========================================================================
+  //                               CUSTOM ELEMENTS
+  // ==========================================================================
+  //
+  //
+  //
+  //
+  // ==========================================================================
+  // Selected animation
+  // ==========================================================================
+  .animation.selected.dashed {
+    box-shadow: 0px 1px 5px black;
+    background: linear-gradient(90deg, getColor(primary) 50%, transparent 50%), linear-gradient(90deg, getColor(primary) 50%, transparent 50%), linear-gradient(0deg, getColor(primary) 50%, transparent 50%), linear-gradient(0deg, getColor(primary) 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 30px 4px, 30px 4px, 4px 30px, 4px 30px;
+    background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
+    animation: border-dance 2s infinite linear;
+    @keyframes border-dance {
+      0% {
+        background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
+      }
+      100% {
+        background-position: 100% 0%, 0% 100%, 0% 0%, 100% 100%;
+      }
+    }
+  }
+}

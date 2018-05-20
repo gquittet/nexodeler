@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ModulesModule } from '../../app/services/modules/modules.module';
-import { RobotsModule } from '../../app/services/robots/robots.module';
+import { ModulesService } from '../../app/services/modules/modules.service';
+import { RobotsService } from '../../app/services/robots/robots.service';
 import { ListModulesPage } from './list-modules';
 
 @NgModule({
@@ -11,12 +11,14 @@ import { ListModulesPage } from './list-modules';
   ],
   imports: [
     IonicPageModule.forChild(ListModulesPage),
-    ModulesModule,
-    RobotsModule,
     TranslateModule
   ],
   exports: [
     ListModulesPage
+  ],
+  providers: [
+    ModulesService,
+    RobotsService
   ]
 })
-export class ListModulesPageModule {}
+export class ListModulesPageModule { }

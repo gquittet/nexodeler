@@ -4,7 +4,7 @@
     <ion-title>{{ 'UI.SIDENAV.CHOREGRAPHIES' | translate }}</ion-title>
   </ion-navbar>
 
-  <ion-toolbar color="accent">
+  <ion-toolbar color="primary">
     <ion-searchbar placeholder="{{ 'VERBS.SEARCH' | translate }}" cancelButtonText="{{ 'VERBS.CANCEL' | translate }}" showCancelButton="true"
       animated="true" [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="inputSearch()" (ionCancel)="searchTerm = ''; content.resize();"></ion-searchbar>
   </ion-toolbar>

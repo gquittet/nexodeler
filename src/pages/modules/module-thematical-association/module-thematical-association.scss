@@ -1,6 +1,5 @@
 page-module-thematical-association {
   $toolbar-height: 10vh;
-  $autism-color: #5091CD;
   ion-toolbar {
     height: $toolbar-height;
     margin-bottom: 5px;
@@ -20,22 +19,6 @@ page-module-thematical-association {
         width: auto;
         height: 100%;
         box-shadow: 0px 1px 2px black;
-      }
-    }
-  }
-  .selected {
-    box-shadow: 0px 1px 5px black;
-    background: linear-gradient(90deg, $autism-color 50%, transparent 50%), linear-gradient(90deg, $autism-color 50%, transparent 50%), linear-gradient(0deg, $autism-color 50%, transparent 50%), linear-gradient(0deg, $autism-color 50%, transparent 50%);
-    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-    background-size: 30px 4px, 30px 4px, 4px 30px, 4px 30px;
-    background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
-    animation: border-dance 2s infinite linear;
-    @keyframes border-dance {
-      0% {
-        background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
-      }
-      100% {
-        background-position: 100% 0%, 0% 100%, 0% 0%, 100% 100%;
       }
     }
   }

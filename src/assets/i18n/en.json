@@ -1,8 +1,10 @@
 {
+  "ABOUT": "About",
   "ALL": "All",
   "BATTERY": "Battery",
   "CATEGORY": "Category",
   "CREATOR": "Creator",
+  "CUSTOMIZATION": "Customization",
   "DISABLED": "Disabled",
   "ERROR": {
     "ERROR": "Error",
@@ -14,6 +16,7 @@
     "NETWORK_DISCONNECTED": "Network disconnected",
     "NETWORK_ERROR": "Network error",
     "NO_ROBOT_FOUND": "No robot found.",
+    "ROBOT_ALREADY_EXIST_IN_YOUR_LIST": "The robot is already in your list.",
     "UNABLE_TO_COMMUNICATE_WITH_VALUE": "Unable to communicate with {{value}}!",
     "UNABLE_TO_FIND_VALUE": "Unable to find {{value}}!",
     "UNABLE_TO_GET_ROBOT_NAME": "Unable to get the robot name!",
@@ -25,7 +28,14 @@
   "IP_ADDRESS": "IP Address",
   "LANGUAGE": "Language",
   "LANGUAGES": "Languages",
-  "MAINTAINER": "MAINTAINER",
+  "LANGUAGES_NAME": {
+    "ENGLISH": "English",
+    "FRENCH": "French"
+  },
+  "LAUNCH_A_MODULE": "Launch a module",
+  "MAINTAINER": "Maintainer",
+  "MAKE_ROBOT_SPEAK": "Make the robot speak",
+  "MANAGE_YOUR_ROBOTS": "Manage your robots",
   "MENU": "Menu",
   "MODE": "Mode",
   "MODULES": {
@@ -90,6 +100,7 @@
   "OK": "OK",
   "ON": "On",
   "PERFECT": "Perfect",
+  "PLAY_AN_ACTIVITY": "Play an activity",
   "PLEASE_WAIT": "Please wait...",
   "POSTURE": "Posture",
   "POWER": "Power",
@@ -118,6 +129,15 @@
   "SUPER": "Super",
   "TEMPERATURE": "Temperature",
   "TIMEZONE": "Timezone",
+  "THEME": "Theme",
+  "THEMES": "Themes",
+  "THEMES_NAME": {
+    "BLUE-AUTISM": "Autism color",
+    "CAMPUS-ECONOMIQUE": "Economic campus",
+    "CAMPUS-PEDAGOGIQUE": "Educational campus",
+    "CAMPUS-SOCIAL": "Social campus",
+    "CAMPUS-TECHNIQUE": "Technical campus"
+  },
   "UI": {
     "ALERT": {
       "CONTENT": {

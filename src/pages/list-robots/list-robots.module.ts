@@ -3,7 +3,7 @@ import { Network } from '@ionic-native/network';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
-import { RobotsModule } from '../../app/services/robots/robots.module';
+import { RobotsService } from '../../app/services/robots/robots.service';
 import { ListRobotsPage } from './list-robots';
 
 
@@ -14,7 +14,6 @@ import { ListRobotsPage } from './list-robots';
   ],
   imports: [
     IonicPageModule.forChild(ListRobotsPage),
-    RobotsModule,
     TranslateModule
   ],
   exports: [
@@ -22,7 +21,8 @@ import { ListRobotsPage } from './list-robots';
   ],
   providers: [
     ALSystemService,
-    Network
+    Network,
+    RobotsService
   ]
 })
 export class ListRobotsModule { }

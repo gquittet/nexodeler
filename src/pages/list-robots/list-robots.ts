@@ -1,7 +1,6 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { File } from '@ionic-native/file';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, ToastController } from 'ionic-angular';
@@ -9,15 +8,12 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
+import { Theme } from '../../app/objects/Theme';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
-
-
-
-
-
+import { SettingsService } from '../../app/services/settings/settings.service';
 
 declare var ping: any;
 
@@ -61,133 +57,129 @@ declare var ping: any;
 })
 export class ListRobotsPage {
 
-  private robots: Robot[];
-  private selectedRobots: Robot[];
-  private isSelection: boolean = false;
+  robots: Robot[];
+  private _selectedRobots: Robot[];
+  isSelection: boolean = false;
   searchControl: FormControl;
   searchTerm: string = '';
   showSearchBar: boolean = false;
   searching: boolean;
   @ViewChild(Content) content: Content;
 
-  private dataSubscription: Subscription;
+  private _dataSubscription: Subscription;
 
   // String UI
-  private cancelText: string;
-  private confirmDeleteText: string;
-  private confirmUpdateText: string;
-  private deleteText: string;
-  private editText: string;
-  private errorEnterCorrectIpAddressText: string;
-  private errorEnterCorrectNameText: string;
-  private errorEnterCorrectNumberText: string;
-  private errorErrorText: string;
-  private errorNoNetwork: string;
-  private errorNetworkErrorText: string;
-  private errorUnableToFindValueText: string;
-  private errorVerifyNetworkConnectionText: string;
-  private labelNameAppliedAfterRebootText: string;
-  private nameText: string;
-  private noText: string;
-  private numberText: string;
-  private okText: string;
-  private questionRobotDelete: string;
-  private questionRobotReboot: string;
-  private questionRobotsDelete: string;
-  private toastRobotSelectedDeleteText: string;
-  private toastRobotNoDeleteText: string;
-  private rebootText: string;
-  private saveText: string;
-  private yesText: string;
+  private _cancelText: string;
+  private _confirmDeleteText: string;
+  private _confirmUpdateText: string;
+  private _deleteText: string;
+  private _editText: string;
+  private _errorEnterCorrectIpAddressText: string;
+  private _errorEnterCorrectNameText: string;
+  private _errorEnterCorrectNumberText: string;
+  private _errorErrorText: string;
+  private _errorNoNetwork: string;
+  private _errorNetworkErrorText: string;
+  private _errorUnableToFindValueText: string;
+  private _errorVerifyNetworkConnectionText: string;
+  private _labelNameAppliedAfterRebootText: string;
+  private _nameText: string;
+  private _noText: string;
+  private _numberText: string;
+  private _okText: string;
+  private _questionRobotDelete: string;
+  private _questionRobotReboot: string;
+  private _questionRobotsDelete: string;
+  private _toastRobotSelectedDeleteText: string;
+  private _toastRobotNoDeleteText: string;
+  private _rebootText: string;
+  private _saveText: string;
+  private _yesText: string;
 
   // UI
   private loading: AlertLoading;
+  private _theme: Theme;
+  private _themeSubscription: Subscription;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private modalCtrl: ModalController, private toastCtrl: ToastController, private file: File, private robotsService: RobotsService, private network: Network, private alSystemService: ALSystemService, private alertCtrl: AlertController, loadingCtrl: LoadingController, private translate: TranslateService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService) {
     this.searchControl = new FormControl();
-    this.loading = new AlertLoading(loadingCtrl, translate);
-    translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this.errorEnterCorrectIpAddressText = res);
-    translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this.errorEnterCorrectNameText = res);
-    translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this.errorEnterCorrectNumberText = res);
-    translate.get('ERROR.ERROR').subscribe((res: string) => this.errorErrorText = res);
-    translate.get('ERROR.NETWORK_ERROR').subscribe((res: string) => this.errorNetworkErrorText = res);
-    translate.get('ERROR.UNABLE_TO_COMMUNICATE_WITH_VALUE').subscribe((res: string) => this.errorUnableToFindValueText = res);
-    translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this.errorVerifyNetworkConnectionText = res);
-    translate.get('NAME').subscribe((res: string) => this.nameText = res);
-    translate.get('NO').subscribe((res: string) => this.noText = res);
-    translate.get('NUMBER').subscribe((res: string) => this.numberText = res);
-    translate.get('OK').subscribe((res: string) => this.okText = res);
-    translate.get('UI.ALERT.TITLE.CONFIRM.DELETE').subscribe((res: string) => this.confirmDeleteText = res);
-    translate.get('UI.ALERT.TITLE.CONFIRM.UPDATE').subscribe((res: string) => this.confirmUpdateText = res);
-    translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.DELETE').subscribe((res: string) => this.questionRobotDelete = res);
-    translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this.questionRobotReboot = res);
-    translate.get('UI.ALERT.CONTENT.QUESTION.ROBOTS.DELETE').subscribe((res: string) => this.questionRobotsDelete = res);
-    translate.get('UI.TOAST.ROBOTS.SELECTED_DELETE').subscribe((res: string) => this.toastRobotSelectedDeleteText = res);
-    translate.get('UI.TOAST.ROBOTS.NO_DELETE').subscribe((res: string) => this.toastRobotNoDeleteText = res);
-    translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.NAME_APPLIED_AFTER_REBOOT').subscribe((res: string) => this.labelNameAppliedAfterRebootText = res);
-    translate.get('UI.ALERT.CONTENT.LABEL.NETWORK.CONNECT_TO_NETWORK').subscribe((res: string) => this.errorNoNetwork = res);
-    translate.get('VERBS.CANCEL').subscribe((res: string) => this.cancelText = res);
-    translate.get('VERBS.DELETE').subscribe((res: string) => this.deleteText = res);
-    translate.get('VERBS.EDIT').subscribe((res: string) => this.editText = res);
-    translate.get('VERBS.REBOOT').subscribe((res: string) => this.rebootText = res);
-    translate.get('VERBS.SAVE').subscribe((res: string) => this.saveText = res);
-    translate.get('YES').subscribe((res: string) => this.yesText = res);
+    this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
+    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+    _translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this._errorEnterCorrectIpAddressText = res);
+    _translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this._errorEnterCorrectNameText = res);
+    _translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this._errorEnterCorrectNumberText = res);
+    _translate.get('ERROR.ERROR').subscribe((res: string) => this._errorErrorText = res);
+    _translate.get('ERROR.NETWORK_ERROR').subscribe((res: string) => this._errorNetworkErrorText = res);
+    _translate.get('ERROR.UNABLE_TO_COMMUNICATE_WITH_VALUE').subscribe((res: string) => this._errorUnableToFindValueText = res);
+    _translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnectionText = res);
+    _translate.get('NAME').subscribe((res: string) => this._nameText = res);
+    _translate.get('NO').subscribe((res: string) => this._noText = res);
+    _translate.get('NUMBER').subscribe((res: string) => this._numberText = res);
+    _translate.get('OK').subscribe((res: string) => this._okText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.DELETE').subscribe((res: string) => this._confirmDeleteText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.UPDATE').subscribe((res: string) => this._confirmUpdateText = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.DELETE').subscribe((res: string) => this._questionRobotDelete = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this._questionRobotReboot = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOTS.DELETE').subscribe((res: string) => this._questionRobotsDelete = res);
+    _translate.get('UI.TOAST.ROBOTS.SELECTED_DELETE').subscribe((res: string) => this._toastRobotSelectedDeleteText = res);
+    _translate.get('UI.TOAST.ROBOTS.NO_DELETE').subscribe((res: string) => this._toastRobotNoDeleteText = res);
+    _translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.NAME_APPLIED_AFTER_REBOOT').subscribe((res: string) => this._labelNameAppliedAfterRebootText = res);
+    _translate.get('UI.ALERT.CONTENT.LABEL.NETWORK.CONNECT_TO_NETWORK').subscribe((res: string) => this._errorNoNetwork = res);
+    _translate.get('VERBS.CANCEL').subscribe((res: string) => this._cancelText = res);
+    _translate.get('VERBS.DELETE').subscribe((res: string) => this._deleteText = res);
+    _translate.get('VERBS.EDIT').subscribe((res: string) => this._editText = res);
+    _translate.get('VERBS.REBOOT').subscribe((res: string) => this._rebootText = res);
+    _translate.get('VERBS.SAVE').subscribe((res: string) => this._saveText = res);
+    _translate.get('YES').subscribe((res: string) => this._yesText = res);
   }
 
   ionViewDidLoad(): void {
-    this.file.checkFile(this.file.dataDirectory, this.robotsService.FILE_NAME).then(res => {
-      if (res) {
-        this.file.readAsText(this.file.dataDirectory, this.robotsService.FILE_NAME).then(data => {
-          this.robots = JSON.parse(data);
-          this.robotsService.next(this.robots);
-        });
-      }
-    }, err => { });
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();
     });
+    this._dataSubscription = this._robotsService.robots.subscribe(robots => this.robots = robots);
   }
 
   ionViewDidEnter(): void {
-    this.dataSubscription = this.robotsService.robots.subscribe(robots => this.robots = robots);
-    this.selectedRobots = [];
+    this._selectedRobots = [];
   }
 
   addRobot(): void {
-    if (this.network.type !== 'none') {
+    if (this._network.type !== 'none') {
       this.navCtrl.push('AddRobotPage', { robots: this.robots });
     } else {
-      this.alertCtrl.create({
-        title: this.errorErrorText,
-        subTitle: this.errorNoNetwork,
-        buttons: [this.okText]
+      this._alertCtrl.create({
+        title: this._errorErrorText,
+        subTitle: this._errorNoNetwork,
+        buttons: [this._okText],
+        cssClass: this._theme.class
       }).present();
     }
   }
 
   delete(item: ItemSliding, robot: Robot): void {
     item.close();
-    this.alertCtrl.create({
-      title: this.confirmDeleteText,
-      message: this.questionRobotDelete,
+    this._alertCtrl.create({
+      title: this._confirmDeleteText,
+      message: this._questionRobotDelete,
       buttons: [
         {
-          text: this.cancelText,
+          text: this._cancelText,
           role: 'cancel'
         },
         {
-          text: this.deleteText,
+          text: this._deleteText,
           handler: () => {
             let index = 0;
-            this.robotsService.robots.subscribe(robots => this.robots = robots);
+            this._robotsService.robots.subscribe(robots => this.robots = robots);
             this.robots.forEach(element => {
               if (element === robot) {
                 this.robots.splice(index, 1);
               }
               index++;
             });
-            this.robotsService.next(this.robots);
+            this._robotsService.next(this.robots);
           }
         }
       ]
@@ -197,65 +189,65 @@ export class ListRobotsPage {
   edit(item: ItemSliding, robot: Robot): void {
     item.close();
     const ipPart = robot.ip.split('.');
-    this.alertCtrl.create({
-      title: this.editText,
+    this._alertCtrl.create({
+      title: this._editText,
       inputs: [
         {
           name: 'name',
-          placeholder: this.nameText,
+          placeholder: this._nameText,
           value: robot.name
         },
         {
           name: 'ipPart0',
-          placeholder: this.numberText + ' 1',
+          placeholder: this._numberText + ' 1',
           value: ipPart[0],
           type: 'number'
         },
         {
           name: 'ipPart1',
-          placeholder: this.numberText + ' 2',
+          placeholder: this._numberText + ' 2',
           value: ipPart[1],
           type: 'number'
         },
         {
           name: 'ipPart2',
-          placeholder: this.numberText + ' 3',
+          placeholder: this._numberText + ' 3',
           value: ipPart[2],
           type: 'number'
         },
         {
           name: 'ipPart3',
-          placeholder: this.numberText + ' 4',
+          placeholder: this._numberText + ' 4',
           value: ipPart[3],
           type: 'number'
         }
       ],
       buttons: [
         {
-          text: this.cancelText,
+          text: this._cancelText,
           role: 'cancel'
         },
         {
-          text: this.saveText,
+          text: this._saveText,
           handler: data => {
             const ip = new IP([data.ipPart0, data.ipPart1, data.ipPart2, data.ipPart3]);
             if (!data.name || data.name.trim() === '') {
-              this.alertCtrl.create({
-                title: this.errorErrorText,
-                subTitle: this.errorEnterCorrectNameText,
-                buttons: [this.okText]
+              this._alertCtrl.create({
+                title: this._errorErrorText,
+                subTitle: this._errorEnterCorrectNameText,
+                buttons: [this._okText]
               }).present();
               return false;
             } else if (!ip.isValid()) {
-              this.alertCtrl.create({
-                title: this.errorErrorText,
-                subTitle: this.errorEnterCorrectIpAddressText,
-                buttons: [this.okText]
+              this._alertCtrl.create({
+                title: this._errorErrorText,
+                subTitle: this._errorEnterCorrectIpAddressText,
+                buttons: [this._okText]
               }).present();
               return false;
             } else {
               if (robot.name != data.name.trim() || ipPart[0] != data.ipPart0 || ipPart[1] != data.ipPart1 || ipPart[2] != data.ipPart2 || ipPart[3] != data.ipPart3) {
-                this.robotsService.robots.subscribe(robots => this.robots = robots);
+                this._robotsService.robots.subscribe(robots => this.robots = robots);
                 this.robots.forEach(element => {
                   if (element === robot) {
                     element.ip = ip.toString();
@@ -273,7 +265,7 @@ export class ListRobotsPage {
                     }
                   }
                 });
-                this.robotsService.next(this.robots);
+                this._robotsService.next(this.robots);
               }
             }
           }
@@ -283,36 +275,36 @@ export class ListRobotsPage {
   }
 
   filterItems(): void {
-    const searchSubscription = this.robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
+    const searchSubscription = this._robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
     searchSubscription.unsubscribe();
   }
 
   updateName(name: string, ip: IP): void {
     QiService.connect(ip);
-    this.alSystemService.setName(name).then(() => {
-      this.alertCtrl.create({
-        title: this.confirmUpdateText,
-        message: this.labelNameAppliedAfterRebootText + ' ' + this.questionRobotReboot,
+    this._alSystemService.setName(name).then(() => {
+      this._alertCtrl.create({
+        title: this._confirmUpdateText,
+        message: this._labelNameAppliedAfterRebootText + ' ' + this._questionRobotReboot,
         buttons: [
           {
-            text: this.noText,
+            text: this._noText,
             role: 'cancel',
             handler: () => {
             }
           },
           {
-            text: this.rebootText,
+            text: this._rebootText,
             handler: () => {
-              this.alSystemService.reboot().then(() => {
+              this._alSystemService.reboot().then(() => {
                 let labelRebootText: string;
-                this.translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.REBOOT', { value: name }).subscribe(
+                this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.REBOOT', { value: name }).subscribe(
                   (res: string) => labelRebootText = res,
                   () => { },
                   () => {
-                    this.alertCtrl.create({
+                    this._alertCtrl.create({
                       title: 'Info',
                       subTitle: labelRebootText,
-                      buttons: [this.okText]
+                      buttons: [this._okText]
                     }).present();
                   });
               });
@@ -320,35 +312,36 @@ export class ListRobotsPage {
           }
         ]
       }).present();
-      this.robotsService.next(this.robots);
+      this._robotsService.next(this.robots);
     });
   }
 
   openMonitor(robot: Robot): void {
     this.loading.show();
     const self = this;
-    if (this.network.type === 'none') {
-      this.alertCtrl.create({
-        title: this.errorErrorText,
-        subTitle: this.errorNoNetwork,
-        buttons: [this.okText]
+    if (this._network.type === 'none') {
+      this._alertCtrl.create({
+        title: this._errorErrorText,
+        subTitle: this._errorNoNetwork,
+        buttons: [this._okText],
+        cssClass: this._theme.class
       }).present();
       this.loading.close();
     } else {
       ping('http://' + robot.ip).then(delta => {
         this.loading.close();
-        this.modalCtrl.create('SettingsRobotPage', { ip: robot.ip }).present();
+        this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class }).present();
       }).catch(error => {
         this.loading.close();
         let errorUnableToFindText: string;
-        self.translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
+        self._translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
           (res: string) => errorUnableToFindText = res,
           () => { },
           () => {
-            self.alertCtrl.create({
-              title: self.errorNetworkErrorText,
+            self._alertCtrl.create({
+              title: self._errorNetworkErrorText,
               subTitle: errorUnableToFindText,
-              buttons: [self.okText]
+              buttons: [self._okText]
             }).present();
           }
         );
@@ -358,14 +351,14 @@ export class ListRobotsPage {
   }
 
   selectRobot(robot: Robot): void {
-    if (this.selectedRobots.find(elem => elem === robot))
-      this.selectedRobots = this.selectedRobots.filter(element => element !== robot);
+    if (this._selectedRobots.find(elem => elem === robot))
+      this._selectedRobots = this._selectedRobots.filter(element => element !== robot);
     else
-      this.selectedRobots.push(robot);
+      this._selectedRobots.push(robot);
   }
 
   cancelSelection(): void {
-    this.selectedRobots = [];
+    this._selectedRobots = [];
     // Fix bug that tap on the back button on iOS when cancel selection.
     setTimeout(() => this.isSelection = false, 50);
   }
@@ -376,24 +369,24 @@ export class ListRobotsPage {
   }
 
   removeRobots(): void {
-    if (this.selectedRobots.length > 0) {
-      this.alertCtrl.create({
-        title: this.confirmDeleteText,
-        message: this.questionRobotsDelete,
+    if (this._selectedRobots.length > 0) {
+      this._alertCtrl.create({
+        title: this._confirmDeleteText,
+        message: this._questionRobotsDelete,
         buttons: [
           {
-            text: this.noText,
+            text: this._noText,
             role: 'cancel',
             handler: () => {
             }
           },
           {
-            text: this.yesText,
+            text: this._yesText,
             handler: () => {
-              this.robotsService.next(this.robots.filter(element => this.selectedRobots.indexOf(element) < 0));
-              this.robotsService.robots.subscribe(robots => this.robots = robots);
-              this.toastCtrl.create({
-                message: this.toastRobotSelectedDeleteText,
+              this._robotsService.next(this.robots.filter(element => this._selectedRobots.indexOf(element) < 0));
+              this._robotsService.robots.subscribe(robots => this.robots = robots);
+              this._toastCtrl.create({
+                message: this._toastRobotSelectedDeleteText,
                 duration: 3000,
                 position: 'bottom'
               }).present();
@@ -403,8 +396,8 @@ export class ListRobotsPage {
         ]
       }).present();
     } else {
-      this.toastCtrl.create({
-        message: this.toastRobotNoDeleteText,
+      this._toastCtrl.create({
+        message: this._toastRobotNoDeleteText,
         duration: 3000,
         position: 'bottom'
       }).present();
@@ -413,7 +406,8 @@ export class ListRobotsPage {
   }
 
   ionViewWillLeave(): void {
-    this.dataSubscription.unsubscribe();
+    this._dataSubscription.unsubscribe();
+    this._themeSubscription.unsubscribe();
   }
 
   cancelSearch(): void {
