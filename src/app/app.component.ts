@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Brightness } from '@ionic-native/brightness';
@@ -10,8 +11,19 @@ import { Color } from './objects/Color';
 import { Theme } from './objects/Theme';
 import { SettingsService } from './services/settings/settings.service';
 
+
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  animations: [
+    trigger(
+      'leaveAnimation', [
+        transition(':leave', [
+          style({ opacity: 1, transform: 'scale(1)' }),
+          animate('500ms', style({ opacity: 0, transform: 'scale(10)' }))
+        ])
+      ]
+    )
+  ],
 })
 export class MyApp {
 
