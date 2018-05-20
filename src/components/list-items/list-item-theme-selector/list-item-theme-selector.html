@@ -1,11 +1,11 @@
 <ion-item>
   <ion-icon name="color-palette" item-start></ion-icon>
   <ion-label>{{ 'THEMES' | translate }}</ion-label>
-  <ion-select showWhen="ios" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
+  <ion-select *ngIf="isIOS" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
     cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentThemeClass" (ngModelChange)="changeTheme()">
     <ion-option *ngFor="let theme of themes" [value]="theme.class">{{ 'THEMES_NAME.' + theme.class.split('theme-')[1].toUpperCase() | translate }}</ion-option>
   </ion-select>
-  <ion-select showWhen="android,windows" interface="alert" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
+  <ion-select *ngIf="!isIOS" interface="alert" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
     cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentThemeClass" (ngModelChange)="changeTheme()">
     <ion-option *ngFor="let theme of themes" [value]="theme.class">{{ 'THEMES_NAME.' + theme.class.split('theme-')[1].toUpperCase() | translate }}</ion-option>
   </ion-select>

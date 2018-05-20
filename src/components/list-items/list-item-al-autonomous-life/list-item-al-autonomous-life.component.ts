@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Platform } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
@@ -12,6 +13,8 @@ import { SettingsService } from '../../../app/services/settings/settings.service
 })
 export class ListItemALAutonomousLifeComponent {
 
+  isIOS: boolean;
+
   private _stateInterval;
 
   states: string[];
@@ -23,7 +26,7 @@ export class ListItemALAutonomousLifeComponent {
   private _themeSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
-  constructor(translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService, settingsService: SettingsService) {
+  constructor(platform: Platform, translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService, settingsService: SettingsService) {
     this.states = [];
     this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res);
@@ -33,6 +36,7 @@ export class ListItemALAutonomousLifeComponent {
     this.statesToSelect = [];
     this.statesToSelect[0] = this.states[0];
     this.statesToSelect[1] = this.states[3];
+    this.isIOS = platform.is('ios');
   }
 
   ngOnInit(): void {

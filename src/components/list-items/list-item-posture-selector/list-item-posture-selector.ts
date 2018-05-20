@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALRobotPostureService } from '../../../app/services/naoqi/alrobotposture.service';
@@ -11,6 +12,8 @@ import { SettingsService } from '../../../app/services/settings/settings.service
 })
 export class ListItemPostureSelectorComponent {
 
+  isIOS: boolean;
+
   private _postureInterval;
 
   robotPostures: string[];
@@ -21,8 +24,9 @@ export class ListItemPostureSelectorComponent {
   private _themeSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
-  constructor(private _alRobotPosture: ALRobotPostureService, settingsService: SettingsService) {
+  constructor(platform: Platform, private _alRobotPosture: ALRobotPostureService, settingsService: SettingsService) {
     this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    this.isIOS = platform.is('ios');
   }
 
   ngOnInit(): void {

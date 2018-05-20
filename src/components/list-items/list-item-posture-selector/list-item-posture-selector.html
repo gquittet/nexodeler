@@ -1,11 +1,11 @@
 <ion-item>
   <ion-icon name="body" item-start></ion-icon>
   <ion-label>{{ 'POSTURE' | translate }}</ion-label>
-  <ion-select showWhen="ios" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
+  <ion-select *ngIf="isIOS" interface="action-sheet" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
     cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentPosture" (ngModelChange)="changePosture(posture)">
     <ion-option *ngFor="let posture of robotPostures" [value]="posture">{{ 'NAOQI.ROBOT_POSTURES.' + posture.toUpperCase() | translate }}</ion-option>
   </ion-select>
-  <ion-select showWhen="android,windows" interface="alert" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
+  <ion-select *ngIf="!isIOS" interface="alert" [selectOptions]="selectOptions" okText="{{ 'VERBS.VALIDATE' | translate }}"
     cancelText="{{ 'VERBS.CANCEL' | translate }}" [(ngModel)]="currentPosture" (ngModelChange)="changePosture(posture)">
     <ion-option *ngFor="let posture of robotPostures" [value]="posture">{{ 'NAOQI.ROBOT_POSTURES.' + posture.toUpperCase() | translate }}</ion-option>
   </ion-select>

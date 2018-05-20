@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
@@ -11,6 +12,8 @@ import { SettingsService } from '../../../app/services/settings/settings.service
 })
 export class ListItemLanguagesAvailableComponent {
 
+  isIOS: boolean;
+
   private _languagesInterval;
 
   languages: string[];
@@ -21,8 +24,9 @@ export class ListItemLanguagesAvailableComponent {
   selectOptions: Object = { cssClass: '' };
   private _themeSubscription: Subscription;
 
-  constructor(public alTextToSpeech: ALTextToSpeechService, _settingsService: SettingsService) {
+  constructor(platform: Platform, public alTextToSpeech: ALTextToSpeechService, _settingsService: SettingsService) {
     this._themeSubscription = _settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    this.isIOS = platform.is('ios');
   }
 
   ngOnInit(): void {
