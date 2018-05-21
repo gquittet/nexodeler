@@ -13,7 +13,6 @@ import { RobotsService } from '../../app/services/robots/robots.service';
 import { SettingsService } from '../../app/services/settings/settings.service';
 
 
-
 @IonicPage()
 @Component({
   selector: 'page-list-modules',
@@ -42,9 +41,8 @@ export class ListModulesPage {
   private theme: Theme;
   private _themeSubscription: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, settingsService: SettingsService, private _translate: TranslateService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService, private _settingsService: SettingsService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, settingsService: SettingsService, private _translate: TranslateService, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _robotsService: RobotsService, private _settingsService: SettingsService) {
     this.searchControl = new FormControl();
-    this._robotsChooser = new RobotsChooser(this.navCtrl, this.viewCtrl, this._translate, this._alertCtrl, this._robotsService, loadingCtrl, this._file, settingsService);
   }
 
   ionViewDidLoad(): void {
@@ -57,6 +55,7 @@ export class ListModulesPage {
   }
 
   ionViewDidEnter(): void {
+    this._robotsChooser = new RobotsChooser(this.navCtrl, this.viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file, this._settingsService);
     this.updateCategories(this._modulesOriginal);
     this.refreshModules();
   }

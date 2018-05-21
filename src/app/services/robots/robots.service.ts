@@ -14,29 +14,31 @@ import { Robot } from '../../objects/Robot';
 export class RobotsService {
 
   /**
-   * The file name where the data will be saved.
+   * The name of the file where the data are stored.
    * @readonly
    */
-  readonly FILE_NAME: string = "robots.json";
+  private readonly _FILE_NAME: string = "robots.json";
 
   /**
    * The list of the robots.
+   * @readonly
    */
-  private _robotsSubject: BehaviorSubject<Robot[]> = new BehaviorSubject<Robot[]>([]);
+  private readonly _robotsSubject: BehaviorSubject<Robot[]> = new BehaviorSubject<Robot[]>([]);
 
   /**
    * The observer of the robots.
+   * @readonly
    */
-  private _robots: Observable<Robot[]> = this._robotsSubject.asObservable();
+  private readonly _robots: Observable<Robot[]> = this._robotsSubject.asObservable();
 
   constructor(private _file: File) {
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
       if (res) {
-        this._file.readAsText(this._file.dataDirectory, this.FILE_NAME).then((data: string) => {
+        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
           this.next(JSON.parse(data));
         });
       }
-    }, err => console.error(err));
+    }, err => console.error(JSON.stringify(err)));
   }
 
   /**
@@ -45,11 +47,8 @@ export class RobotsService {
    */
   next(robots: Robot[]): void {
     this._robotsSubject.next(robots);
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
-      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));
-    }, err => {
-      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(robots));
-    });
+    this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(robots), { replace: true });
+
   }
 
   /**
@@ -67,5 +66,13 @@ export class RobotsService {
    */
   get robots(): Observable<Robot[]> {
     return this._robots;
+  }
+
+  /**
+   * Return the name of the file where the data are stored.
+   * @returns {string} The name of the file where the data are stored.
+   */
+  get fileName(): string {
+    return this._FILE_NAME;
   }
 }

@@ -56,9 +56,9 @@ export class RobotsChooser {
     constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _translate: TranslateService, private _alertCtrl: AlertController, private _robotsService: RobotsService, loadingCtrl: LoadingController, file: File, private _settingsService: SettingsService) {
         this.loadTranslations();
         this._loading = new AlertLoading(loadingCtrl, _translate, _settingsService);
-        file.checkFile(file.dataDirectory, this._robotsService.FILE_NAME).then(res => {
+        file.checkFile(file.dataDirectory, this._robotsService.fileName).then(res => {
             if (res) {
-                file.readAsText(file.dataDirectory, this._robotsService.FILE_NAME).then(data => {
+                file.readAsText(file.dataDirectory, this._robotsService.fileName).then(data => {
                     this._robots = JSON.parse(data);
                     this._robotsService.next(this._robots);
                 });

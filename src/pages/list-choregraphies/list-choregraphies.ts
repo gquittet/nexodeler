@@ -71,7 +71,6 @@ export class ListChoregraphiesPage {
   }
 
   ionViewDidLoad(): void {
-    this._robotsChooser = new RobotsChooser(this.navCtrl, this._viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file, this._settingsService);
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
       this.filterItems();
@@ -79,6 +78,7 @@ export class ListChoregraphiesPage {
   }
 
   ionViewDidEnter(): void {
+    this._robotsChooser = new RobotsChooser(this.navCtrl, this._viewCtrl, this._translate, this._alertCtrl, this._robotsService, this._loadingCtrl, this._file, this._settingsService);
     this._robotsChooser.exitOnCancel = true;
     this._robotsChooser.show(this, this.loadBehaviors);
   }
