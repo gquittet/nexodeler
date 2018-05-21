@@ -167,6 +167,10 @@
             "IS_REBOOTING_DOTS": "{{value}} is rebooting...",
             "IS_SHUTTINGDOWN_DOTS": "{{value}} is shutting down...",
             "NAME_APPLIED_AFTER_REBOOT": "The name will be applied after a reboot."
+          },
+          "THEME": {
+            "CAN_NOT_APPLY_CHANGES": "Can not apply changes.",
+            "CHANGES_APPLIED": "Changes applied."
           }
         }
       },
