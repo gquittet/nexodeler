@@ -18,12 +18,13 @@ export class ModulesService {
    * The file name where the data will be saved.
    * @readonly
    */
-  readonly FILE_NAME: string = "modules.json";
+  private readonly _FILE_NAME: string = "modules.json";
 
   /**
    * The list of the modules.
+   * @readonly
    */
-  private _modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
+  private readonly _modulesSubject: BehaviorSubject<Module[]> = new BehaviorSubject<Module[]>([
     <Module>{ id: 0, name: 'THEMATICALASSOCIATION', category: 'LEARNING', page: 'ModuleThematicalAssociationPage', fav: false, creator: 'Éspéranderie', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-26T11:45:00'), updated: new Date('2018-04-26T11:45:00'), last_access: null },
     <Module>{ id: 1, name: 'SPEAK', category: 'SPEAK', page: 'ModuleSpeakPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
     <Module>{ id: 2, name: 'MOVE', category: 'MOVE', page: 'ModuleMotionPage', fav: false, creator: 'Guillaume Quittet', maintainer: 'Guillaume Quittet', version: '0.0.1', created: new Date('2018-04-17T11:59:00'), updated: new Date('2018-04-17T11:59:00'), last_access: null },
@@ -31,17 +32,18 @@ export class ModulesService {
 
   /**
    * The observer of the modules.
+   * @readonly
    */
-  private _modules: Observable<Module[]> = this._modulesSubject.asObservable();
+  private readonly _modules: Observable<Module[]> = this._modulesSubject.asObservable();
 
   constructor(private _file: File, private _translate: TranslateService) {
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
       if (res) {
-        this._file.readAsText(this._file.dataDirectory, this.FILE_NAME).then((data: string) => {
+        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
           this.update(JSON.parse(data));
         });
       }
-    }, err => console.error(err));
+    }, err => console.error(JSON.stringify(err)));
   }
 
   /**
@@ -67,11 +69,7 @@ export class ModulesService {
       }
     });
     this._modulesSubject.next(modules);
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
-      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
-    }, err => {
-      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
-    });
+    this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(modules), { replace: true });
   }
 
   /**
@@ -82,10 +80,10 @@ export class ModulesService {
     // Fixing the bad sorting. Sort with the id.
     modules.sort((a, b) => a.id - b.id);
     this._modulesSubject.next(modules);
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
-      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then(res => {
+      this._file.writeExistingFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(modules));
     }, err => {
-      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(modules));
+      this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(modules));
     });
   }
 
