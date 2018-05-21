@@ -167,6 +167,10 @@
             "IS_REBOOTING_DOTS": "{{value}} redémarre...",
             "IS_SHUTTINGDOWN_DOTS": "{{value}} s'éteind...",
             "NAME_APPLIED_AFTER_REBOOT": "Le nom sera changé après un redémarrage."
+          },
+          "THEME": {
+            "CAN_NOT_APPLY_CHANGES": "Impossible d'appliquer les changements.",
+            "CHANGES_APPLIED": "Les changements ont bien été appliqués."
           }
         }
       },
