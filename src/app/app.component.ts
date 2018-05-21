@@ -41,6 +41,7 @@ export class MyApp {
       this._splashScreen.hide();
       setTimeout(() => this.splash = false, 1000);
       setTimeout(() => this.changeStatusBarColor(), 1250);
+      this._settingsService.readFile();
       this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
         this.theme = theme;
         this.changeStatusBarColor();

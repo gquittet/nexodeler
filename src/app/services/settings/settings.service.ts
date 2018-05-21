@@ -37,25 +37,25 @@ export class SettingsService {
    */
   private readonly _themeSubject: BehaviorSubject<Theme> = new BehaviorSubject<Theme>(this._THEMES[0]);
 
-  constructor(private _file: File) {
-    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
-      if (res) {
-        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
-          const settings: Settings = JSON.parse(data);
-          this.changeTheme(settings.theme);
-        });
-      }
-    }, err => this.changeTheme(this.settings.theme));
+  constructor(private _file: File) { }
+
+  /**
+   * Read the file where the settings are saved.
+   */
+  readFile(): void {
+    this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
+      const settings: Settings = JSON.parse(data);
+      this.changeTheme(settings.theme);
+    }).catch(err => console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err))));
   }
 
   /**
    * Change the theme of the application.
    * @param theme The new theme of the applicaiton.
-   * @returns {Promise<void>} Returns a Promise that resolves or rejects with an error.
    */
-  changeTheme(theme: Theme): Promise<void> {
+  changeTheme(theme: Theme): void {
     this._themeSubject.next(theme);
-    return this.updateFile();
+    this.updateFile();
   }
 
   /**
@@ -75,10 +75,9 @@ export class SettingsService {
 
   /**
    * Update the file where the settings are saved.
-   * @returns {Promise<void>} Returns a Promise that resolves or rejects with an error.
    */
-  private updateFile(): Promise<void> {
-    return this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(this.settings), { replace: true });
+  private updateFile(): void {
+    this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(this.settings), { replace: true });
   }
 
   /**
