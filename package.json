@@ -1,6 +1,6 @@
 {
   "name": "nexodeler",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Guillaume Quittet",
   "homepage": "https://gquittet.com/",
   "private": true,
@@ -12,7 +12,8 @@
     "ionic:serve": "ionic-app-scripts serve",
     "doc:build": "compodoc -p tsconfig.json --theme postmark --hideGenerator",
     "doc:serve": "compodoc -s",
-    "doc:buildandserve": "compodoc -p tsconfig.json --theme postmark --hideGenerator -s"
+    "doc:buildandserve": "compodoc -p tsconfig.json --theme postmark --hideGenerator -s",
+    "ngc": "ngc"
   },
   "dependencies": {
     "@angular/animations": "^5.2.10",

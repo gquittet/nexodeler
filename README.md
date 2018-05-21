@@ -1,13 +1,13 @@
 # Nexodeler
 
-![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)
 
 The goal of this project is to make an extensible and modular application to control the NAO robot.
 
-<div style="text-align:center">
+<p align="center">
 <img src="./assets/nexodeler-1.png" alt="Nexodeler screenshot" width="180" height="360" style="margin-right: 70px">
 <img src="./assets/nexodeler-2.png" alt="Nexodeler screenshot" width="180" height="360">
-</div>
+</p>
 
 ## Technologies used
 
