@@ -51,17 +51,34 @@ export class SettingsService {
   /**
    * Change the theme of the application.
    * @param theme The new theme of the applicaiton.
+   * @returns {Promise<void>} Returns a Promise that resolves or rejects with an error.
    */
-  changeTheme(theme: Theme): void {
+  changeTheme(theme: Theme): Promise<void> {
     this._themeSubject.next(theme);
-    this.updateFile();
+    return this.updateFile();
+  }
+
+  /**
+   * Find a theme by its class name and return it.
+   * @param className The class name of the theme.
+   * @returns {Theme} The theme.
+   */
+  findThemeByClassName(className: string): Theme {
+    for (let theme of this._THEMES) {
+      if (theme.class == className) {
+        return theme;
+      }
+    }
+    console.error("[ERROR][Themes] Unable to find the theme with this class: " + className);
+    return null;
   }
 
   /**
    * Update the file where the settings are saved.
+   * @returns {Promise<void>} Returns a Promise that resolves or rejects with an error.
    */
-  private updateFile(): void {
-    this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(this.settings), { replace: true });
+  private updateFile(): Promise<void> {
+    return this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(this.settings), { replace: true });
   }
 
   /**
