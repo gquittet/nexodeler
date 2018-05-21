@@ -37,13 +37,9 @@ export class ModulesService {
   private readonly _modules: Observable<Module[]> = this._modulesSubject.asObservable();
 
   constructor(private _file: File, private _translate: TranslateService) {
-    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
-      if (res) {
-        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
-          this.update(JSON.parse(data));
-        });
-      }
-    }, err => console.error(JSON.stringify(err)));
+    this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
+      this.update(JSON.parse(data));
+    }).catch(err => console.error(JSON.stringify("[ERROR][ModulesService] Unable to read the file " + JSON.stringify(err))));
   }
 
   /**

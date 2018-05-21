@@ -32,13 +32,9 @@ export class RobotsService {
   private readonly _robots: Observable<Robot[]> = this._robotsSubject.asObservable();
 
   constructor(private _file: File) {
-    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
-      if (res) {
-        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
-          this.next(JSON.parse(data));
-        });
-      }
-    }, err => console.error(JSON.stringify(err)));
+    this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
+      this.next(JSON.parse(data));
+    }).catch(err => console.error(JSON.stringify("[ERROR][RobotsService] Unable to read the file " + JSON.stringify(err))));
   }
 
   /**
