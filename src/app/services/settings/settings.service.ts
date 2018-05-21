@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { File } from '@ionic-native/file';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Settings } from '../../objects/Settings';
 import { Theme } from '../../objects/Theme';
@@ -17,7 +17,7 @@ export class SettingsService {
    * The file name where the data will be saved.
    * @readonly
    */
-  readonly FILE_NAME: string = "settings.json";
+  private readonly _FILE_NAME: string = "settings.json";
 
   /**
    * The list of the themes.
@@ -33,14 +33,14 @@ export class SettingsService {
 
   /**
    * The obsever of the themes.
+   * @readonly
    */
-  private _themeSubject: BehaviorSubject<Theme>;
+  private readonly _themeSubject: BehaviorSubject<Theme> = new BehaviorSubject<Theme>(this._THEMES[0]);
 
   constructor(private _file: File) {
-    this._themeSubject = new BehaviorSubject<Theme>(this._THEMES[0]);
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
+    this._file.checkFile(this._file.dataDirectory, this._FILE_NAME).then((res: boolean) => {
       if (res) {
-        this._file.readAsText(this._file.dataDirectory, this.FILE_NAME).then((data: string) => {
+        this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
           const settings: Settings = JSON.parse(data);
           this.changeTheme(settings.theme);
         });
@@ -61,11 +61,7 @@ export class SettingsService {
    * Update the file where the settings are saved.
    */
   private updateFile(): void {
-    this._file.checkFile(this._file.dataDirectory, this.FILE_NAME).then(res => {
-      this._file.writeExistingFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(this.settings));
-    }, err => {
-      this._file.writeFile(this._file.dataDirectory, this.FILE_NAME, JSON.stringify(this.settings));
-    });
+    this._file.writeFile(this._file.dataDirectory, this._FILE_NAME, JSON.stringify(this.settings), { replace: true });
   }
 
   /**
@@ -85,10 +81,10 @@ export class SettingsService {
   }
 
   /**
-   * Return the settings as objects.
+   * Return the settings of the application.
    * @returns {Settings} The settings of the application.
    */
   private get settings(): Settings {
-    return { theme: this._themeSubject.value };
+    return <Settings>{ theme: this._themeSubject.value };
   }
 }

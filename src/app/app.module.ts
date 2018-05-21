@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { Brightness } from '@ionic-native/brightness';
 import { File } from '@ionic-native/file';
 import { Globalization } from '@ionic-native/globalization';
@@ -42,13 +43,14 @@ export function createTranslateLoader(http: HttpClient) {
     MyApp
   ],
   providers: [
+    AndroidPermissions,
+    BackgroundMode,
+    Brightness,
+    File,
+    Globalization,
+    SettingsService,
     SplashScreen,
     StatusBar,
-    Globalization,
-    File,
-    AndroidPermissions,
-    Brightness,
-    SettingsService,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
