@@ -122,6 +122,14 @@
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/android-permissions/-/android-permissions-4.7.0.tgz#3b7d86432725dec4f2fd83acd8181b52b31e3f3a"
 
+"@ionic-native/background-mode@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/background-mode/-/background-mode-4.7.0.tgz#033c7166a2614337103a4396ea579a50dc4ad9f6"
+
+"@ionic-native/brightness@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/brightness/-/brightness-4.7.0.tgz#43052766f313b9c2c9ff422c6fe31d72097fd7ac"
+
 "@ionic-native/core@4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.7.0.tgz#9e7c13db9f18f454d7a31a5d61d369a7db3f338c"
@@ -134,13 +142,25 @@
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/globalization/-/globalization-4.7.0.tgz#134a1983fb9ca42021d021b10603aca101818ca0"
 
+"@ionic-native/network@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/network/-/network-4.7.0.tgz#f6f3e53d7dbff111dd6b689e38d6470fcc35a717"
+
+"@ionic-native/open-native-settings@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/open-native-settings/-/open-native-settings-4.7.0.tgz#f590b26b992dbfb6a9965c429a7fef59deb8c392"
+
 "@ionic-native/splash-screen@4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-4.7.0.tgz#e22c41e986cfc5e8ff12db7fc464c2daf9206037"
 
-"@ionic-native/status-bar@4.7.0":
+"@ionic-native/status-bar@^4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-4.7.0.tgz#f292bf67c2d5fef43b1fc7b442f5bc75139cc8e3"
+
+"@ionic-native/zeroconf@^4.7.0":
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/zeroconf/-/zeroconf-4.7.0.tgz#7e2d18c50319e083da2b9db05fbba0b341e842f9"
 
 "@ionic/app-scripts@3.1.9":
   version "3.1.9"
@@ -1089,9 +1109,25 @@ cordova-common@^2.1.1, cordova-common@^2.2.0:
     underscore "^1.8.3"
     unorm "^1.3.3"
 
+cordova-open-native-settings@^1.5.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/cordova-open-native-settings/-/cordova-open-native-settings-1.5.1.tgz#63b3f08f995317a8304ab5b156e3a7a4d944088f"
+
+cordova-plugin-add-swift-support@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-add-swift-support/-/cordova-plugin-add-swift-support-1.7.2.tgz#02ae655f3e123974f6b43da4340e7e8e1f316d48"
+
 cordova-plugin-android-permissions@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-android-permissions/-/cordova-plugin-android-permissions-1.0.0.tgz#9e7c116be668eb7dfa41491b13d8d47da9548149"
+
+cordova-plugin-background-mode@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-background-mode/-/cordova-plugin-background-mode-0.7.2.tgz#eaf5639c065a87231b3ecf757a6e28b101d0332f"
+
+cordova-plugin-brightness@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-brightness/-/cordova-plugin-brightness-0.2.0.tgz#af2b57d5f8054828a54f86bd6886d015d00293bc"
 
 cordova-plugin-device@^2.0.2:
   version "2.0.2"
@@ -1113,13 +1149,25 @@ cordova-plugin-ionic-webview@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-ionic-webview/-/cordova-plugin-ionic-webview-1.2.0.tgz#83a3a7743422833899d623c074d8a0e39d36a6a1"
 
+cordova-plugin-network-information@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-network-information/-/cordova-plugin-network-information-2.0.1.tgz#e90421f430c6ab76d409223f25fcefbbbce17690"
+
 cordova-plugin-splashscreen@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.2.tgz#747e74f56e201cd585bc62d14bca19f6867ff1ed"
 
+cordova-plugin-statusbar@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.2.tgz#fc1fbdc0d8d7033a7e8e1f1f7ff167ac9bd4faf6"
+
 cordova-plugin-whitelist@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-whitelist/-/cordova-plugin-whitelist-1.3.3.tgz#b5e85ecdbbfe5aeded40a1bf4ee2372e67d96fb4"
+
+cordova-plugin-zeroconf@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-zeroconf/-/cordova-plugin-zeroconf-1.3.3.tgz#a6a9cfd48a432e4da6836f14a190f88fa0fa9fcf"
 
 cordova-registry-mapper@^1.1.8:
   version "1.1.15"
