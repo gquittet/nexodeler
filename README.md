@@ -1,6 +1,6 @@
 # Nexodeler
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)
 
 The goal of this project is to make an extensible and modular application to control the NAO robot.
 
@@ -22,6 +22,7 @@ The goal of this project is to make an extensible and modular application to con
 - NodeJS
 - SASS/CSS/CSS3
 - TypeScript
+- VirtualScroll
 - Yarn
 
 ## Librairies used
