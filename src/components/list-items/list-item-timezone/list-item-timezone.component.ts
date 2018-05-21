@@ -10,7 +10,7 @@ export class ListItemTimezoneComponent {
 
   private _timezoneInterval;
 
-  private timezone: string;
+  timezone: string;
 
   constructor(private _alSystem: ALSystemService) { }
 
