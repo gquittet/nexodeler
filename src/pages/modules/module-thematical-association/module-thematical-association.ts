@@ -2,6 +2,7 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Subscription } from 'rxjs';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
 
 
@@ -56,6 +57,7 @@ export class ModuleThematicalAssociationPage {
   selectedThematicalObjects: ThematicalObject[];
   selectedTargets: any[];
 
+  // String UI
   private _confirmExitText: string;
   private _notCorrectText: string;
   private _noText: string;
@@ -68,18 +70,22 @@ export class ModuleThematicalAssociationPage {
   private _correctText: string;
   private _youWinText: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService) {
-    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this._confirmExitText = res)
-    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this._questionGameExitText = res)
-    translate.get('NO').subscribe((res: string) => this._noText = res);
-    translate.get('OK').subscribe((res: string) => this._okText = res);
-    translate.get('VICTORY').subscribe((res: string) => this._victoryText = res);
-    translate.get('YES').subscribe((res: string) => this._yesText = res);
-    translate.get('YOU_WIN').subscribe((res: string) => this._youWinText = res);
-    translate.get('SUPER').subscribe((res: string) => this._superText = res);
-    translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this._notCorrectText = res);
-    translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this._youpieWinText = res);
-    translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this._correctText = res);
+    this._subscription = new Subscription();
+    this._subscription.add(translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this._confirmExitText = res))
+    this._subscription.add(translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this._questionGameExitText = res))
+    this._subscription.add(translate.get('NO').subscribe((res: string) => this._noText = res));
+    this._subscription.add(translate.get('OK').subscribe((res: string) => this._okText = res));
+    this._subscription.add(translate.get('VICTORY').subscribe((res: string) => this._victoryText = res));
+    this._subscription.add(translate.get('YES').subscribe((res: string) => this._yesText = res));
+    this._subscription.add(translate.get('YOU_WIN').subscribe((res: string) => this._youWinText = res));
+    this._subscription.add(translate.get('SUPER').subscribe((res: string) => this._superText = res));
+    this._subscription.add(translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this._notCorrectText = res));
+    this._subscription.add(translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this._youpieWinText = res));
+    this._subscription.add(translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this._correctText = res));
     this.selectedImages = [];
     this.selectedThematicalObjects = [];
     this.selectedTargets = [];
@@ -93,10 +99,6 @@ export class ModuleThematicalAssociationPage {
         }
       }
     }
-  }
-
-  ionViewDidLoad(): void {
-
   }
 
   selectImage(thematicalObject: ThematicalObject, event: any): void {
@@ -172,6 +174,7 @@ export class ModuleThematicalAssociationPage {
   }
 
   private dismiss(): void {
+    this._subscription.unsubscribe();
     this.viewCtrl.dismiss();
   }
 

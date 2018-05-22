@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { File } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -36,7 +37,11 @@ export class ModulesService {
    */
   private readonly _modules: Observable<Module[]> = this._modulesSubject.asObservable();
 
+  // Subscription
+  private _subscription: Subscription;
+
   constructor(private _file: File, private _translate: TranslateService) {
+    this._subscription = new Subscription();
     this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
       this.update(JSON.parse(data));
     }).catch(err => console.error(JSON.stringify("[ERROR][ModulesService] Unable to read the file " + JSON.stringify(err))));
@@ -102,8 +107,8 @@ export class ModulesService {
     let name: string;
     let category: string;
     return this._modules.map((modules: Module[]) => modules.filter((module: Module) => {
-      this._translate.get('MODULES.NAMES.' + module.name).subscribe((res: string) => name = res);
-      this._translate.get('MODULES.CATEGORIES.' + module.category).subscribe((res: string) => category = res);
+      this._subscription.add(this._translate.get('MODULES.NAMES.' + module.name).subscribe((res: string) => name = res));
+      this._subscription.add(this._translate.get('MODULES.CATEGORIES.' + module.category).subscribe((res: string) => category = res));
       return this.equals(name, value) || this.equals(category, value) || this.equals(module.creator, value) || this.equals(module.maintainer, value) || this.equals(module.version, value);
     }));
   }
@@ -114,5 +119,9 @@ export class ModulesService {
    */
   get modules(): Observable<Module[]> {
     return this._modules;
+  }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, NavController, ViewController } from 'ionic-angular';
+import { Subscription } from 'rxjs';
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../../app/services/naoqi/qi.service';
 
@@ -11,6 +12,8 @@ import { QiService } from '../../../app/services/naoqi/qi.service';
 })
 export class ListItemShutdownButtonComponent {
 
+  private _subscription: Subscription;
+
   private _confirmShutdownText: string;
   private _noText: string;
   private _okText: string;
@@ -19,16 +22,16 @@ export class ListItemShutdownButtonComponent {
   private _yesText: string;
 
   constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService) {
-    _translate.get('NO').subscribe((res: string) => this._noText = res);
-    _translate.get('OK').subscribe((res: string) => this._okText = res);
-    _translate.get('UI.ALERT.TITLE.CONFIRM.SHUTDOWN').subscribe((res: string) => this._confirmShutdownText = res);
-    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.SHUTDOWN').subscribe((res: string) => this._questionShutdownText = res);
-    _translate.get('YES').subscribe((res: string) => this._yesText = res);
+    this._subscription = _translate.get('NO').subscribe((res: string) => this._noText = res);
+    this._subscription.add(_translate.get('OK').subscribe((res: string) => this._okText = res));
+    this._subscription.add(_translate.get('UI.ALERT.TITLE.CONFIRM.SHUTDOWN').subscribe((res: string) => this._confirmShutdownText = res));
+    this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.SHUTDOWN').subscribe((res: string) => this._questionShutdownText = res));
+    this._subscription.add(_translate.get('YES').subscribe((res: string) => this._yesText = res));
   }
 
   ngOnInit(): void {
     this._alSystem.getName().then((name: string) => {
-      this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_SHUTTINGDOWN_DOTS', { value: name }).subscribe((res: string) => this._shutdownText = res);
+      this._subscription.add(this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_SHUTTINGDOWN_DOTS', { value: name }).subscribe((res: string) => this._shutdownText = res));
     }).catch(error => console.error(error));
   }
 
@@ -64,4 +67,7 @@ export class ListItemShutdownButtonComponent {
     }).present();
   }
 
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
+  }
 }

@@ -23,8 +23,6 @@ export class ListModulesPage {
   private _oldSection: string;
   section: string = "favorites";
 
-  private _dataSubscription: Subscription;
-
   private _modulesOriginal: Module[];
   modules: Module[];
   categories: string[];
@@ -37,11 +35,14 @@ export class ListModulesPage {
   searchBar: boolean = false;
   searching: boolean;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // Modal Theme
   private theme: Theme;
-  private _themeSubscription: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, settingsService: SettingsService, private _translate: TranslateService, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _robotsService: RobotsService, private _settingsService: SettingsService) {
+    this._subscription = new Subscription();
     this.searchControl = new FormControl();
   }
 
@@ -50,8 +51,8 @@ export class ListModulesPage {
       this.searching = false;
       this.filterItems();
     });
-    this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => this.theme = theme);
-    this._dataSubscription = this._modulesService.modules.subscribe((modules: Module[]) => this._modulesOriginal = modules);
+    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this.theme = theme));
+    this._subscription.add(this._modulesService.modules.subscribe((modules: Module[]) => this._modulesOriginal = modules));
   }
 
   ionViewDidEnter(): void {
@@ -72,8 +73,8 @@ export class ListModulesPage {
     let categorieA: string = "";
     let categorieB: string = "";
     this.categories = this.categories.sort((a, b) => {
-      this._translate.get('MODULES.CATEGORIES.' + a).subscribe((res: string) => categorieA = res);
-      this._translate.get('MODULES.CATEGORIES.' + b).subscribe((res: string) => categorieB = res);
+      this._subscription.add(this._translate.get('MODULES.CATEGORIES.' + a).subscribe((res: string) => categorieA = res));
+      this._subscription.add(this._translate.get('MODULES.CATEGORIES.' + b).subscribe((res: string) => categorieB = res));
       return categorieA.localeCompare(categorieB);
     });
   }
@@ -97,8 +98,8 @@ export class ListModulesPage {
     let nameA: string = "";
     let nameB: string = "";
     module.sort((a, b) => {
-      this._translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res);
-      this._translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res);
+      this._subscription.add(this._translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res));
+      this._subscription.add(this._translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res));
       return nameA.localeCompare(nameB);
     });
   }
@@ -159,7 +160,6 @@ export class ListModulesPage {
   }
 
   ionViewWillLeave(): void {
-    this._dataSubscription.unsubscribe();
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }
