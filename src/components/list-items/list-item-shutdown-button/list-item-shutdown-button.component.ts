@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, NavController, ViewController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
+import { Theme } from '../../../app/objects/Theme';
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../../app/services/naoqi/qi.service';
+import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
 @Component({
@@ -21,12 +23,17 @@ export class ListItemShutdownButtonComponent {
   private _shutdownText: string;
   private _yesText: string;
 
-  constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService) {
+  // UI
+  // Theme
+  private _theme: Theme;
+
+  constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService, private _settingsService: SettingsService) {
     this._subscription = _translate.get('NO').subscribe((res: string) => this._noText = res);
     this._subscription.add(_translate.get('OK').subscribe((res: string) => this._okText = res));
     this._subscription.add(_translate.get('UI.ALERT.TITLE.CONFIRM.SHUTDOWN').subscribe((res: string) => this._confirmShutdownText = res));
     this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.SHUTDOWN').subscribe((res: string) => this._questionShutdownText = res));
     this._subscription.add(_translate.get('YES').subscribe((res: string) => this._yesText = res));
+    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
   }
 
   ngOnInit(): void {
@@ -39,6 +46,7 @@ export class ListItemShutdownButtonComponent {
     this._alertCtrl.create({
       title: this._confirmShutdownText,
       message: this._questionShutdownText,
+      cssClass: this._theme.class,
       buttons: [
         {
           text: this._noText,
@@ -46,11 +54,13 @@ export class ListItemShutdownButtonComponent {
         },
         {
           text: this._yesText,
+          cssClass: this._theme.class,
           handler: () => {
             this._alSystem.shutdown().catch(error => console.error(error));
             this._alertCtrl.create({
               title: 'Info',
               subTitle: this._shutdownText,
+              cssClass: this._theme.class,
               buttons: [
                 {
                   text: this._okText,

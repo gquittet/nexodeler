@@ -10,6 +10,7 @@ import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 import { Theme } from '../../app/objects/Theme';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
+import { AppStateService } from '../../app/services/appstate/appstate.service';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
@@ -102,7 +103,7 @@ export class ListRobotsPage {
   // Theme
   private _theme: Theme;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService, private _appStateService: AppStateService) {
     this._subscription = new Subscription();
     this.searchControl = new FormControl();
     this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
@@ -165,6 +166,7 @@ export class ListRobotsPage {
     this._alertCtrl.create({
       title: this._confirmDeleteText,
       message: this._questionRobotDelete,
+      cssClass: this._theme.class,
       buttons: [
         {
           text: this._cancelText,
@@ -193,6 +195,7 @@ export class ListRobotsPage {
     const ipPart = robot.ip.split('.');
     this._alertCtrl.create({
       title: this._editText,
+      cssClass: this._theme.class,
       inputs: [
         {
           name: 'name',
@@ -237,14 +240,16 @@ export class ListRobotsPage {
               this._alertCtrl.create({
                 title: this._errorErrorText,
                 subTitle: this._errorEnterCorrectNameText,
-                buttons: [this._okText]
+                buttons: [this._okText],
+                cssClass: this._theme.class
               }).present();
               return false;
             } else if (!ip.isValid()) {
               this._alertCtrl.create({
                 title: this._errorErrorText,
                 subTitle: this._errorEnterCorrectIpAddressText,
-                buttons: [this._okText]
+                buttons: [this._okText],
+                cssClass: this._theme.class
               }).present();
               return false;
             } else {
@@ -261,7 +266,8 @@ export class ListRobotsPage {
                         this.alertCtrl.create({
                           title: this.errorErrorText,
                           subTitle: this.errorVerifyNetworkConnectionText,
-                          buttons: [this.okText]
+                          buttons: [this.okText],
+                          cssClass: this._theme.class
                         }).present();
                       });
                     }
@@ -287,6 +293,7 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._confirmUpdateText,
         message: this._labelNameAppliedAfterRebootText + ' ' + this._questionRobotReboot,
+        cssClass: this._theme.class,
         buttons: [
           {
             text: this._noText,
@@ -306,7 +313,8 @@ export class ListRobotsPage {
                     this._alertCtrl.create({
                       title: 'Info',
                       subTitle: labelRebootText,
-                      buttons: [this._okText]
+                      buttons: [this._okText],
+                      cssClass: this._theme.class
                     }).present();
                   }));
               });
@@ -332,7 +340,9 @@ export class ListRobotsPage {
     } else {
       ping('http://' + robot.ip).then(delta => {
         this.loading.close();
-        this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class }).present();
+        const modal = this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class });
+        modal.onDidDismiss(() => this._appStateService.changeModalOpenedState(false));
+        modal.present().then(() => this._appStateService.changeModalOpenedState(true));
       }).catch(error => {
         this.loading.close();
         let errorUnableToFindText: string;
@@ -343,7 +353,8 @@ export class ListRobotsPage {
             self._alertCtrl.create({
               title: self._errorNetworkErrorText,
               subTitle: errorUnableToFindText,
-              buttons: [self._okText]
+              buttons: [self._okText],
+              cssClass: this._theme.class
             }).present();
           }
         ));
@@ -375,12 +386,11 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._confirmDeleteText,
         message: this._questionRobotsDelete,
+        cssClass: this._theme.class,
         buttons: [
           {
             text: this._noText,
-            role: 'cancel',
-            handler: () => {
-            }
+            role: 'cancel'
           },
           {
             text: this._yesText,

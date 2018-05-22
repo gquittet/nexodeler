@@ -70,8 +70,8 @@ export class AddRobotPage {
         this._alertCtrl.create({
           title: this._errorText,
           subTitle: this._errorUnableToGetRobotName,
-          buttons: [this._okText],
-          cssClass: this._theme.class
+          cssClass: this._theme.class,
+          buttons: [this._okText]
         }).present();
       }, 5000);
       QiService.connect(ip);
@@ -83,8 +83,8 @@ export class AddRobotPage {
             this._alertCtrl.create({
               title: this._errorText,
               subTitle: this._errorRobotAlreadyExit,
-              buttons: [this._okText],
-              cssClass: this._theme.class
+              cssClass: this._theme.class,
+              buttons: [this._okText]
             }).present();
             canAddTheRobot = false;
             break;
@@ -103,8 +103,8 @@ export class AddRobotPage {
         this._alertCtrl.create({
           title: this._errorText,
           subTitle: this._errorUnableToGetRobotName,
-          buttons: [this._okText],
-          cssClass: this._theme.class
+          cssClass: this._theme.class,
+          buttons: [this._okText]
         }).present();
       });
     }).catch(err => {
@@ -112,8 +112,8 @@ export class AddRobotPage {
       this._alertCtrl.create({
         title: this._errorText,
         subTitle: this._errorVerifyNetworkConnection,
-        buttons: [this._okText],
-        cssClass: this._theme.class
+        cssClass: this._theme.class,
+        buttons: [this._okText]
       }).present();
     });
   }

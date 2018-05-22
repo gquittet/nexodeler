@@ -9,6 +9,7 @@ import { App, Platform } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Color } from './objects/Color';
 import { Theme } from './objects/Theme';
+import { AppStateService } from './services/appstate/appstate.service';
 import { SettingsService } from './services/settings/settings.service';
 
 
@@ -23,15 +24,16 @@ import { SettingsService } from './services/settings/settings.service';
         ])
       ]
     )
-  ],
+  ]
 })
 export class MyApp {
 
   splash: boolean = true;
   theme: Theme = <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism', primaryColor: '#5191CE' };
+  _modalOpenedState: boolean = false;
   private _subscription: Subscription;
 
-  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _backgroundMode: BackgroundMode, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _settingsService: SettingsService) {
+  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _backgroundMode: BackgroundMode, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _settingsService: SettingsService, private _appState: AppStateService) {
     this._subscription = new Subscription();
   }
 
@@ -46,11 +48,14 @@ export class MyApp {
         this.theme = theme;
         this.changeStatusBarColor();
       }));
+      this._subscription.add(this._appState.modalOpenedState.subscribe((modalOpenedState: boolean) => this._modalOpenedState = modalOpenedState));
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
       if (this._platform.is('android') || this._platform.is('windows')) {
         this._platform.registerBackButtonAction(() => {
+          /* Close modal page with back button.
+           or Go back on back button.*/
           const nav = this._app.getActiveNavs()[0];
-          if (nav.canGoBack()) {
+          if (nav.canGoBack() || this._modalOpenedState) {
             nav.pop();
           } else {
             if (this._platform.is('android'))

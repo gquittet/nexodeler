@@ -9,7 +9,7 @@ export class AboutService {
 
   private readonly _CREATOR: string = "Guillaume Quittet";
   private readonly _NAME: string = "Nexodeler";
-  private readonly _VERSION: string = "0.1.4";
+  private readonly _VERSION: string = "0.1.5";
 
   /**
    * Return the creator's name of this application.
