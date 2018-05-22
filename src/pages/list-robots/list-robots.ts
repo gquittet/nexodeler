@@ -10,6 +10,7 @@ import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 import { Theme } from '../../app/objects/Theme';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
+import { AppStateService } from '../../app/services/appstate/appstate.service';
 import { ALSystemService } from '../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../app/services/naoqi/qi.service';
 import { RobotsService } from '../../app/services/robots/robots.service';
@@ -102,7 +103,7 @@ export class ListRobotsPage {
   // Theme
   private _theme: Theme;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService) {
+  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService, private _appStateService: AppStateService) {
     this._subscription = new Subscription();
     this.searchControl = new FormControl();
     this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
@@ -339,7 +340,9 @@ export class ListRobotsPage {
     } else {
       ping('http://' + robot.ip).then(delta => {
         this.loading.close();
-        this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class }).present();
+        const modal = this._modalCtrl.create('SettingsRobotPage', { ip: robot.ip }, { cssClass: this._theme.class });
+        modal.onDidDismiss(() => this._appStateService.changeModalOpenedState(false));
+        modal.present().then(() => this._appStateService.changeModalOpenedState(true));
       }).catch(error => {
         this.loading.close();
         let errorUnableToFindText: string;
