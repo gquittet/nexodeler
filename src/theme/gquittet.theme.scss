@@ -264,6 +264,12 @@
   }
   .range-md,
   .range-wp {
+    .range-pin {
+      background: getColor(primary);
+      &::before {
+        background: getColor(primary);
+      }
+    }
     .range-knob {
       background: getColor(primary);
     }
