@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { SettingsService } from '../../../app/services/settings/settings.service';
 
@@ -17,22 +16,21 @@ export class ListItemLanguagesSelectorComponent {
   currentLanguage: string;
   languages: string[];
 
-  // Unsubscribe
-  private _subscription: Subscription;
+  // Subscription
+  private _takeWhile: boolean = true;
 
   // UI
   // Theme
   selectOptions: Object = { cssClass: '' };
 
   constructor(platform: Platform, translate: TranslateService, public settingsService: SettingsService) {
-    this._subscription = new Subscription();
-    this._subscription.add(this.settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class));
+    this.settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     this.isIOS = platform.is('ios');
     this.currentLanguage = translate.currentLang;
-    this.languages = translate.getLangs();
+    this.languages = translate.getLangs().sort((a, b) => a.localeCompare(b));
   }
 
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }
