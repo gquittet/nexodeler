@@ -59,7 +59,10 @@ export class SettingsService {
       const settings: Settings = JSON.parse(data);
       this.initializeTranslate(settings);
       this.changeTheme(settings.theme);
-    }).catch(err => console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err))));
+    }).catch(err => {
+      console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err)))
+      this.initializeTranslate(null);
+    });
   }
 
   /**
@@ -69,7 +72,7 @@ export class SettingsService {
   private initializeTranslate(settings: Settings): void {
     this._translate.setDefaultLang('en');
     this._translate.addLangs(['fr']);
-    if (!settings.language) {
+    if (!settings || !settings.language) {
       this._globalization.getPreferredLanguage().then(lang => {
         this.changeLanguage(lang.value.split('-')[0]);
       }).catch(e => {
