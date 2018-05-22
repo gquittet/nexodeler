@@ -6,11 +6,12 @@ import { Brightness } from '@ionic-native/brightness';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { App, Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
+import "rxjs/add/operator/takeWhile";
 import { Color } from './objects/Color';
 import { Theme } from './objects/Theme';
 import { AppStateService } from './services/appstate/appstate.service';
 import { SettingsService } from './services/settings/settings.service';
+
 
 
 @Component({
@@ -31,43 +32,39 @@ export class MyApp {
   splash: boolean = true;
   theme: Theme = <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism', primaryColor: '#5191CE' };
   _modalOpenedState: boolean = false;
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
-  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _backgroundMode: BackgroundMode, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _settingsService: SettingsService, private _appState: AppStateService) {
-    this._subscription = new Subscription();
-  }
-
-  ngOnInit(): void {
-    this._platform.ready().then(() => {
+  constructor(platform: Platform, private _statusBar: StatusBar, splashScreen: SplashScreen, app: App, backgroundMode: BackgroundMode, private _androidPermissions: AndroidPermissions, brightness: Brightness, private _settingsService: SettingsService, appState: AppStateService) {
+    platform.ready().then(() => {
       this._statusBar.styleLightContent();
-      this._splashScreen.hide();
+      splashScreen.hide();
       setTimeout(() => this.splash = false, 1000);
-      setTimeout(() => this.changeStatusBarColor(), 1250);
+      setTimeout(() => this.changeStatusBarColor(platform.is('android')), 1250);
       this._settingsService.readFile();
-      this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => {
+      this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => {
         this.theme = theme;
-        this.changeStatusBarColor();
-      }));
-      this._subscription.add(this._appState.modalOpenedState.subscribe((modalOpenedState: boolean) => this._modalOpenedState = modalOpenedState));
+        this.changeStatusBarColor(platform.is('android'));
+      });
+      appState.modalOpenedState.takeWhile(() => this._takeWhile).subscribe((modalOpenedState: boolean) => this._modalOpenedState = modalOpenedState);
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
-      if (this._platform.is('android') || this._platform.is('windows')) {
-        this._platform.registerBackButtonAction(() => {
+      if (platform.is('android') || platform.is('windows')) {
+        platform.registerBackButtonAction(() => {
           /* Close modal page with back button.
            or Go back on back button.*/
-          const nav = this._app.getActiveNavs()[0];
+          const nav = app.getActiveNavs()[0];
           if (nav.canGoBack() || this._modalOpenedState) {
             nav.pop();
           } else {
-            if (this._platform.is('android'))
-              this._backgroundMode.moveToBackground();
+            if (platform.is('android'))
+              backgroundMode.moveToBackground();
             else
-              this._platform.exitApp();
+              platform.exitApp();
           }
         });
       }
-      if (this._platform.is('ios') || this._platform.is('android')) {
-        this._brightness.setKeepScreenOn(true);
-        if (this._platform.is('android'))
+      if (platform.is('ios') || platform.is('android')) {
+        brightness.setKeepScreenOn(true);
+        if (platform.is('android'))
           this.initializeAndroidPermissions();
       }
     });
@@ -76,10 +73,10 @@ export class MyApp {
   /**
    * Change the color of the status bar.
    */
-  private changeStatusBarColor(): void {
+  private changeStatusBarColor(isAndroid: boolean): void {
     const shadeValue: number = -20;
     const colorCode: string = (this.splash) ? '#5191CE' : this.theme.primaryColor;
-    if (this._platform.is('android'))
+    if (isAndroid)
       this._statusBar.backgroundColorByHexString(Color.shade(colorCode, shadeValue));
     else
       this._statusBar.backgroundColorByHexString(colorCode);
@@ -101,7 +98,7 @@ export class MyApp {
   }
 
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }
 

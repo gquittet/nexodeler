@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { IP } from '../../app/objects/IP';
 import { Theme } from '../../app/objects/Theme';
 import { QiService } from '../../app/services/naoqi/qi.service';
@@ -23,16 +22,15 @@ export class SettingsRobotPage {
   private _theme: Theme;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, alertCtrl: AlertController, network: Network, settingsService: SettingsService) {
-    this._subscription = new Subscription();
-    this._subscription.add(translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res));
-    this._subscription.add(translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this._errorNetworkDisconnectedText = res));
-    this._subscription.add(translate.get("OK").subscribe((res: string) => this._okText = res));
-    this._subscription.add(settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
-    this._subscription.add(network.onDisconnect().subscribe(() => {
+    translate.get('ERROR.ERROR').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorText = res);
+    translate.get('ERROR.NETWORK_DISCONNECTED').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorNetworkDisconnectedText = res);
+    translate.get("OK").takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
+    network.onDisconnect().takeWhile(() => this._takeWhile).subscribe(() => {
       console.log('[INFO][NETWORK] Network access disconnected.');
       alertCtrl.create({
         title: this._errorText,
@@ -41,7 +39,7 @@ export class SettingsRobotPage {
         buttons: [this._okText]
       }).present();
       this.navCtrl.remove(this.viewCtrl.index, 1);
-    }));
+    });
   }
 
   ionViewCanEnter(): void {
@@ -50,7 +48,7 @@ export class SettingsRobotPage {
   }
 
   ionViewWillLeave(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
     QiService.disconnect();
   }
 }
