@@ -1,6 +1,6 @@
 # Nexodeler
 
-![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.5-blue.svg)
 
 The goal of this project is to make an extensible and modular application to control the NAO robot.
 
