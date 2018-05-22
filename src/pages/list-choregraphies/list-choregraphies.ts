@@ -7,6 +7,7 @@ import { AlertController, Content, IonicPage, LoadingController, NavController, 
 import { Subscription } from 'rxjs/Rx';
 import 'rxjs/add/operator/debounceTime';
 import { Behavior } from '../../app/objects/Behavior';
+import { Theme } from '../../app/objects/Theme';
 import { AlertLoading } from '../../app/objects/ionic/AlertLoading';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
 import { ALBehaviorManagerService } from '../../app/services/naoqi/albehaviormanager.service';
@@ -46,6 +47,8 @@ export class ListChoregraphiesPage {
   @ViewChild(VirtualScroll) virtualScroll: VirtualScroll;
   private _loading: AlertLoading;
 
+  private _theme: Theme;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManagerService) {
     this._subscription = new Subscription();
     this._loading = new AlertLoading(_loadingCtrl, _translate, this._settingsService);
@@ -58,11 +61,13 @@ export class ListChoregraphiesPage {
     this._subscription.add(_translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this._informationText = res));
     this._subscription.add(_translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this._choregraphyStartingText = res));
     this._subscription.add(_translate.get("OK").subscribe((res: string) => this._okText = res));
+    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
     this._subscription.add(network.onDisconnect().subscribe(() => {
       console.log('[INFO][NETWORK] Network access disconnected.');
       this._alertCtrl.create({
         title: this._errorText,
         subTitle: this._errorNetworkDisconnectedText,
+        cssClass: this._theme.class,
         buttons: [{
           text: this._okText,
           handler: () => {
@@ -129,6 +134,7 @@ export class ListChoregraphiesPage {
       const alert = this._alertCtrl.create({
         title: this._informationText,
         subTitle: this._choregraphyStartingText,
+        cssClass: this._theme.class,
         buttons: [this._okText]
       })
       alert.present();
@@ -139,6 +145,7 @@ export class ListChoregraphiesPage {
       this._alertCtrl.create({
         title: this._errorText,
         subTitle: this._errorBehaviorStartText,
+        cssClass: this._theme.class,
         buttons: [{
           text: this._okText,
           handler: () => {

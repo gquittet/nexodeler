@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
+import { SettingsService } from '../../../app/services/settings/settings.service';
 
 
 @IonicPage()
@@ -57,6 +58,7 @@ export class ModuleThematicalAssociationPage {
   selectedThematicalObjects: ThematicalObject[];
   selectedTargets: any[];
 
+  // UI
   // String UI
   private _confirmExitText: string;
   private _notCorrectText: string;
@@ -69,11 +71,13 @@ export class ModuleThematicalAssociationPage {
   private _youpieWinText: string;
   private _correctText: string;
   private _youWinText: string;
+  // Theme
+  private _theme;
 
   // Subscription
   private _subscription: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService, private _settingsService: SettingsService) {
     this._subscription = new Subscription();
     this._subscription.add(translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this._confirmExitText = res))
     this._subscription.add(translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this._questionGameExitText = res))
@@ -86,6 +90,7 @@ export class ModuleThematicalAssociationPage {
     this._subscription.add(translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this._notCorrectText = res));
     this._subscription.add(translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this._youpieWinText = res));
     this._subscription.add(translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this._correctText = res));
+    this._subscription.add(this._settingsService.theme.subscribe(theme => this._theme = theme));
     this.selectedImages = [];
     this.selectedThematicalObjects = [];
     this.selectedTargets = [];
@@ -161,6 +166,7 @@ export class ModuleThematicalAssociationPage {
       this._alertCtrl.create({
         title: this._victoryText,
         subTitle: this._youWinText,
+        cssClass: this._theme.class,
         enableBackdropDismiss: false,
         buttons: [{
           text: this._okText,
@@ -185,9 +191,10 @@ export class ModuleThematicalAssociationPage {
         title: this._confirmExitText,
         subTitle: this._questionGameExitText,
         enableBackdropDismiss: false,
+        cssClass: this._theme.class,
         buttons: [
           {
-            text: this._noText
+            text: this._noText,
           },
           {
             text: this._yesText,

@@ -132,11 +132,10 @@ export class RobotsChooser {
                 this._alertCtrl.create({
                     title: this._errorText,
                     subTitle: this._errorAddAtLeastOneRobotText,
-                    enableBackdropDismiss: false,
                     cssClass: this._theme.class,
+                    enableBackdropDismiss: false,
                     buttons: [{
                         text: this._okText,
-                        cssClass: this._theme.class,
                         handler: () => {
                             if (this._exitOnCancel)
                                 this._navCtrl.remove(this._viewCtrl.index, 1)
@@ -155,7 +154,6 @@ export class RobotsChooser {
 
                 robotsAlertCombobox.addButton({
                     text: this._cancelText,
-                    cssClass: this._theme.class,
                     handler: () => {
                         this._robotsAlertCombobox.close();
                         this._subscription.unsubscribe();
@@ -166,7 +164,6 @@ export class RobotsChooser {
 
                 robotsAlertCombobox.addButton({
                     text: this._connectText,
-                    cssClass: this._theme.class,
                     handler: data => {
                         if (data) {
                             this._robotsAlertCombobox.close();

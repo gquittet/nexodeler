@@ -165,6 +165,7 @@ export class ListRobotsPage {
     this._alertCtrl.create({
       title: this._confirmDeleteText,
       message: this._questionRobotDelete,
+      cssClass: this._theme.class,
       buttons: [
         {
           text: this._cancelText,
@@ -193,6 +194,7 @@ export class ListRobotsPage {
     const ipPart = robot.ip.split('.');
     this._alertCtrl.create({
       title: this._editText,
+      cssClass: this._theme.class,
       inputs: [
         {
           name: 'name',
@@ -237,14 +239,16 @@ export class ListRobotsPage {
               this._alertCtrl.create({
                 title: this._errorErrorText,
                 subTitle: this._errorEnterCorrectNameText,
-                buttons: [this._okText]
+                buttons: [this._okText],
+                cssClass: this._theme.class
               }).present();
               return false;
             } else if (!ip.isValid()) {
               this._alertCtrl.create({
                 title: this._errorErrorText,
                 subTitle: this._errorEnterCorrectIpAddressText,
-                buttons: [this._okText]
+                buttons: [this._okText],
+                cssClass: this._theme.class
               }).present();
               return false;
             } else {
@@ -261,7 +265,8 @@ export class ListRobotsPage {
                         this.alertCtrl.create({
                           title: this.errorErrorText,
                           subTitle: this.errorVerifyNetworkConnectionText,
-                          buttons: [this.okText]
+                          buttons: [this.okText],
+                          cssClass: this._theme.class
                         }).present();
                       });
                     }
@@ -287,6 +292,7 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._confirmUpdateText,
         message: this._labelNameAppliedAfterRebootText + ' ' + this._questionRobotReboot,
+        cssClass: this._theme.class,
         buttons: [
           {
             text: this._noText,
@@ -306,7 +312,8 @@ export class ListRobotsPage {
                     this._alertCtrl.create({
                       title: 'Info',
                       subTitle: labelRebootText,
-                      buttons: [this._okText]
+                      buttons: [this._okText],
+                      cssClass: this._theme.class
                     }).present();
                   }));
               });
@@ -343,7 +350,8 @@ export class ListRobotsPage {
             self._alertCtrl.create({
               title: self._errorNetworkErrorText,
               subTitle: errorUnableToFindText,
-              buttons: [self._okText]
+              buttons: [self._okText],
+              cssClass: this._theme.class
             }).present();
           }
         ));
@@ -375,12 +383,11 @@ export class ListRobotsPage {
       this._alertCtrl.create({
         title: this._confirmDeleteText,
         message: this._questionRobotsDelete,
+        cssClass: this._theme.class,
         buttons: [
           {
             text: this._noText,
-            role: 'cancel',
-            handler: () => {
-            }
+            role: 'cancel'
           },
           {
             text: this._yesText,

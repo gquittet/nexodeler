@@ -23,7 +23,7 @@ import { SettingsService } from './services/settings/settings.service';
         ])
       ]
     )
-  ],
+  ]
 })
 export class MyApp {
 
