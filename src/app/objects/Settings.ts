@@ -7,6 +7,11 @@ import { Theme } from "./Theme";
 export interface Settings {
 
     /**
+     * The current language used by the application.
+     */
+    language: string;
+
+    /**
      * The current theme used by the application.
      */
     theme: Theme;
