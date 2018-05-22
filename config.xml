@@ -14,7 +14,7 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashScreenDelay" value="30000" />
     <preference name="StatusBarBackgroundColor" value="#5191CE" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <platform name="android">

@@ -1,7 +1,6 @@
 import { File } from "@ionic-native/file";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController, LoadingController, NavController, ViewController } from "ionic-angular";
-import { Subscription } from "rxjs";
 import { QiService } from "../../services/naoqi/qi.service";
 import { RobotsService } from "../../services/robots/robots.service";
 import { SettingsService } from "../../services/settings/settings.service";
@@ -10,6 +9,7 @@ import { Robot } from "../Robot";
 import { Theme } from "../Theme";
 import { AlertLoading } from "./AlertLoading";
 import { AlertRadioButton } from "./AlertRadioButton";
+
 
 declare var pingRobot: any;
 
@@ -36,7 +36,7 @@ export class RobotsChooser {
     private _robotsText: string;
 
     // Subscription
-    private _subscription: Subscription;
+    private _takeWhile: boolean = true;
 
     // UI
     private _robotsAlertCombobox: AlertRadioButton;
@@ -55,7 +55,6 @@ export class RobotsChooser {
      * @param file The file service.
      */
     constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _translate: TranslateService, private _alertCtrl: AlertController, private _robotsService: RobotsService, loadingCtrl: LoadingController, file: File, private _settingsService: SettingsService) {
-        this._subscription = new Subscription();
         this.loadTranslations();
         this._loading = new AlertLoading(loadingCtrl, _translate, _settingsService);
         file.checkFile(file.dataDirectory, this._robotsService.fileName).then(res => {
@@ -66,7 +65,7 @@ export class RobotsChooser {
                 });
             }
         }, err => { });
-        this._subscription.add(this._robotsService.robots.subscribe((robots: Robot[]) => this._robots = robots));
+        this._robotsService.robots.takeWhile(() => this._takeWhile).subscribe((robots: Robot[]) => this._robots = robots);
         this._robotsAlertCombobox = new AlertRadioButton(this._alertCtrl, _settingsService);
     }
 
@@ -74,13 +73,13 @@ export class RobotsChooser {
      * Load the translation for the UI
      */
     private loadTranslations(): void {
-        this._subscription.add(this._translate.get("ERROR.ERROR").subscribe((res: string) => (this._errorText = res)));
-        this._subscription.add(this._translate.get("ERROR.ADD_AT_LEAST_A_ROBOT").subscribe((res: string) => (this._errorAddAtLeastOneRobotText = res)));
-        this._subscription.add(this._translate.get("ERROR.NO_ROBOT_FOUND").subscribe((res: string) => (this._errorNoRobotFoundText = res)));
-        this._subscription.add(this._translate.get("VERBS.CANCEL").subscribe((res: string) => (this._cancelText = res)));
-        this._subscription.add(this._translate.get("VERBS.CONNECT").subscribe((res: string) => (this._connectText = res)));
-        this._subscription.add(this._translate.get("OK").subscribe((res: string) => (this._okText = res)));
-        this._subscription.add(this._translate.get("ROBOTS").subscribe((res: string) => (this._robotsText = res)));
+        this._translate.get("ERROR.ERROR").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._errorText = res));
+        this._translate.get("ERROR.ADD_AT_LEAST_A_ROBOT").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._errorAddAtLeastOneRobotText = res));
+        this._translate.get("ERROR.NO_ROBOT_FOUND").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._errorNoRobotFoundText = res));
+        this._translate.get("VERBS.CANCEL").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._cancelText = res));
+        this._translate.get("VERBS.CONNECT").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._connectText = res));
+        this._translate.get("OK").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._okText = res));
+        this._translate.get("ROBOTS").takeWhile(() => this._takeWhile).subscribe((res: string) => (this._robotsText = res));
     }
 
     /**
@@ -124,7 +123,7 @@ export class RobotsChooser {
      * @param args The arguments (optional).
      */
     show(obj: Object, func: Function, ...args): void {
-        this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
+        this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
         const robotsAlertCombobox = this._robotsAlertCombobox.create(this._robotsText);
         this.pingRobots().then((robots: Robot[]) => {
             if (robots.length == 0) {
@@ -156,7 +155,7 @@ export class RobotsChooser {
                     text: this._cancelText,
                     handler: () => {
                         this._robotsAlertCombobox.close();
-                        this._subscription.unsubscribe();
+                        this._takeWhile = false;
                         if (this._exitOnCancel)
                             this._navCtrl.remove(this._viewCtrl.index, 1)
                     }
@@ -167,7 +166,7 @@ export class RobotsChooser {
                     handler: data => {
                         if (data) {
                             this._robotsAlertCombobox.close();
-                            this._subscription.unsubscribe();
+                            this._takeWhile = false;
                             this._loading.show();
                             QiService.connect(new IP(data.split('.')));
                             if (args)

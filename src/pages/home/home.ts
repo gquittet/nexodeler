@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, MenuController, NavController, Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -18,13 +17,9 @@ export class HomePage {
   private _okText: string;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
-  constructor(platform: Platform, private _navCtrl: NavController, private _menuCtrl: MenuController, alertCtrl: AlertController, translate: TranslateService) {
-    this._subscription = new Subscription();
-    this._subscription.add(translate.get('UI.ALERT.CONTENT.LABEL.TO_USE_APP_ENABLE_NETWORK').subscribe((res: string) => this._noNetworkConnection = res));
-    this._subscription.add(translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res));
-    this._subscription.add(translate.get('OK').subscribe((res: string) => this._okText = res));
+  constructor(platform: Platform, private _navCtrl: NavController, private _menuCtrl: MenuController, alertCtrl: AlertController, private _translate: TranslateService) {
     this.isAndroid = platform.is('android');
   }
 
@@ -33,11 +28,14 @@ export class HomePage {
   }
 
   ionViewWillEnter(): void {
+    this._translate.get('UI.ALERT.CONTENT.LABEL.TO_USE_APP_ENABLE_NETWORK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._noNetworkConnection = res);
+    this._translate.get('ERROR.ERROR').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorText = res);
+    this._translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
     this._menuCtrl.enable(true);
   }
 
   ionViewDidLeave(): void {
     this._menuCtrl.enable(false);
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

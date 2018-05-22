@@ -1,6 +1,5 @@
 import { TranslateService } from "@ngx-translate/core";
 import { Loading, LoadingController } from "ionic-angular";
-import { Subscription } from "rxjs";
 import { SettingsService } from "../../services/settings/settings.service";
 import { Theme } from "../Theme";
 
@@ -17,7 +16,7 @@ export class AlertLoading {
     private pleaseWaitText: string;
 
     // Subscription
-    private _subscription: Subscription;
+    private _takeWhile: boolean = true;
 
     // UI
     // Theme
@@ -30,14 +29,14 @@ export class AlertLoading {
      * @param _settingsService The service to access to settings data.
      */
     constructor(private _loadingCtrl: LoadingController, translate: TranslateService, private _settingsService: SettingsService) {
-        this._subscription = translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
+        translate.get('PLEASE_WAIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this.pleaseWaitText = res);
     }
 
     /**
      * Create and show an alert of type loading.
      */
     show(): void {
-        this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
+        this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
         this.loading = this._loadingCtrl.create({
             content: this.pleaseWaitText,
             cssClass: this._theme.class
@@ -52,6 +51,6 @@ export class AlertLoading {
         if (!this.loading)
             throw "[ERROR][LOADING][Close] Loading is not showing!";
         this.loading.dismiss();
-        this._subscription.unsubscribe();
+        this._takeWhile = false;
     }
 }

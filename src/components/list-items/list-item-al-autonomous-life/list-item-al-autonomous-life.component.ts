@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALAutonomousLifeService } from '../../../app/services/naoqi/alautonomouslife.service';
 import { SettingsService } from '../../../app/services/settings/settings.service';
@@ -22,7 +21,7 @@ export class ListItemALAutonomousLifeComponent {
   currentState: string;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // UI
   // Theme
@@ -30,11 +29,11 @@ export class ListItemALAutonomousLifeComponent {
 
   constructor(platform: Platform, translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService, settingsService: SettingsService) {
     this.states = [];
-    this._subscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
-    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res));
-    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').subscribe((res: string) => this.states[1] = res));
-    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.SAFEGARD').subscribe((res: string) => this.states[2] = res));
-    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.DISABLED').subscribe((res: string) => this.states[3] = res));
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').takeWhile(() => this._takeWhile).subscribe((res: string) => this.states[0] = res);
+    translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').takeWhile(() => this._takeWhile).subscribe((res: string) => this.states[1] = res);
+    translate.get('NAOQI.AUTONOMOUS_LIFE.SAFEGARD').takeWhile(() => this._takeWhile).subscribe((res: string) => this.states[2] = res);
+    translate.get('NAOQI.AUTONOMOUS_LIFE.DISABLED').takeWhile(() => this._takeWhile).subscribe((res: string) => this.states[3] = res);
     this.statesToSelect = [];
     this.statesToSelect[0] = this.states[0];
     this.statesToSelect[1] = this.states[3];
@@ -87,6 +86,6 @@ export class ListItemALAutonomousLifeComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._stateInterval);
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

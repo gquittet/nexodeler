@@ -1,5 +1,4 @@
 import { Alert, AlertController } from "ionic-angular";
-import { Subscription } from "rxjs";
 import { SettingsService } from "../../services/settings/settings.service";
 import { Theme } from "../Theme";
 import { IAlertRadioButton } from "./interfaces/IAlertRadioButton";
@@ -16,7 +15,7 @@ export class AlertRadioButton implements IAlertRadioButton {
   private _result: string;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // UI
   // Theme
@@ -36,7 +35,7 @@ export class AlertRadioButton implements IAlertRadioButton {
    * @override
    */
   create(title: string): Alert {
-    this._subscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+    this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
     this._alert = this._alertCtrl.create({
       enableBackdropDismiss: false,
       cssClass: this._theme.class
@@ -67,7 +66,7 @@ export class AlertRadioButton implements IAlertRadioButton {
    */
   close(): void {
     this.isRadioOpen = false;
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 
   /**

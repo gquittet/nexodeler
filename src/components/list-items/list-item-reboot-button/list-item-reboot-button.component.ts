@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, NavController, ViewController } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALSystemService } from '../../../app/services/naoqi/alsystem.service';
 import { QiService } from '../../../app/services/naoqi/qi.service';
@@ -14,7 +13,7 @@ import { SettingsService } from '../../../app/services/settings/settings.service
 })
 export class ListItemRebootButtonComponent {
 
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   private _confirmRebootText: string;
   private _noText: string;
@@ -28,17 +27,17 @@ export class ListItemRebootButtonComponent {
   private _theme: Theme;
 
   constructor(private _navCtrl: NavController, private _viewCtrl: ViewController, private _alertCtrl: AlertController, private _translate: TranslateService, private _alSystem: ALSystemService, private _settingsService: SettingsService) {
-    this._subscription = _translate.get('NO').subscribe((res: string) => this._noText = res);
-    this._subscription.add(_translate.get('OK').subscribe((res: string) => this._okText = res));
-    this._subscription.add(_translate.get('UI.ALERT.TITLE.CONFIRM.REBOOT').subscribe((res: string) => this._confirmRebootText = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this._questionRebootText = res));
-    this._subscription.add(_translate.get('YES').subscribe((res: string) => this._yesText = res));
-    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
+    _translate.get('NO').takeWhile(() => this._takeWhile).subscribe((res: string) => this._noText = res);
+    _translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.REBOOT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmRebootText = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionRebootText = res);
+    _translate.get('YES').takeWhile(() => this._takeWhile).subscribe((res: string) => this._yesText = res);
+    this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
   }
 
   ngOnInit(): void {
     this._alSystem.getName().then((name: string) => {
-      this._subscription.add(this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_REBOOTING_DOTS', { value: name }).subscribe((res: string) => this._rebootText = res));
+      this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.IS_REBOOTING_DOTS', { value: name }).takeWhile(() => this._takeWhile).subscribe((res: string) => this._rebootText = res);
     }).catch(error => console.error(error));
   }
 
@@ -77,6 +76,6 @@ export class ListItemRebootButtonComponent {
   }
 
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { SettingsService } from '../../../app/services/settings/settings.service';
 
@@ -13,9 +12,10 @@ export class ListItemThemeSelectorComponent {
 
   isIOS: boolean;
 
+  private _takeWhile: boolean = true;
+
   currentThemeClass: string;
   themes: Theme[];
-  private _themesSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
   constructor(platform: Platform, private _settingsService: SettingsService) {
@@ -24,7 +24,7 @@ export class ListItemThemeSelectorComponent {
 
   ngOnInit(): void {
     this._settingsService.themes.then((themes: Theme[]) => this.themes = themes);
-    this._themesSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
+    this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => {
       this.currentThemeClass = theme.class;
       this.selectOptions['cssClass'] = theme.class;
     });
@@ -35,6 +35,6 @@ export class ListItemThemeSelectorComponent {
   }
 
   ngOnDestroy(): void {
-    this._themesSubscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

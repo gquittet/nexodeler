@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, LoadingController, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 import { Theme } from '../../app/objects/Theme';
@@ -38,10 +37,9 @@ export class AddRobotPage {
   private _theme: Theme;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   constructor(private _fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService, private _alSystemService: ALSystemService, translate: TranslateService, settingsService: SettingsService) {
-    this._subscription = new Subscription();
     this.addForm = this._fb.group({
       'number1': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number2': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
@@ -49,12 +47,12 @@ export class AddRobotPage {
       'number4': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])]
     });
     this._loading = new AlertLoading(loadingCtrl, translate, settingsService);
-    this._subscription.add(settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
-    this._subscription.add(translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res));
-    this._subscription.add(translate.get('ERROR.ROBOT_ALREADY_EXIST_IN_YOUR_LIST').subscribe((res: string) => this._errorRobotAlreadyExit = res));
-    this._subscription.add(translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').subscribe((res: string) => this._errorUnableToGetRobotName = res));
-    this._subscription.add(translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnection = res));
-    this._subscription.add(translate.get('OK').subscribe((res: string) => this._okText = res));
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
+    translate.get('ERROR.ERROR').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorText = res);
+    translate.get('ERROR.ROBOT_ALREADY_EXIST_IN_YOUR_LIST').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorRobotAlreadyExit = res);
+    translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorUnableToGetRobotName = res);
+    translate.get('ERROR.VERIFY_NETWORK_CONNECTION').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorVerifyNetworkConnection = res);
+    translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
   }
 
   ionViewWillEnter(): void {
@@ -123,7 +121,7 @@ export class AddRobotPage {
   }
 
   ionViewWillLeave(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
     QiService.disconnect();
   }
 }
