@@ -7,10 +7,10 @@ import { SettingsService } from '../../../app/services/settings/settings.service
 
 
 @Component({
-  selector: 'list-item-language-chooser',
-  templateUrl: 'list-item-language-chooser.html'
+  selector: 'list-item-languages-selector',
+  templateUrl: 'list-item-languages-selector.html'
 })
-export class ListItemLanguageChooserComponent {
+export class ListItemLanguagesSelectorComponent {
 
   isIOS: boolean;
 
