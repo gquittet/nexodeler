@@ -2,7 +2,6 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
 import { SettingsService } from '../../../app/services/settings/settings.service';
 
@@ -75,22 +74,21 @@ export class ModuleThematicalAssociationPage {
   private _theme;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService, private _settingsService: SettingsService) {
-    this._subscription = new Subscription();
-    this._subscription.add(translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').subscribe((res: string) => this._confirmExitText = res))
-    this._subscription.add(translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').subscribe((res: string) => this._questionGameExitText = res))
-    this._subscription.add(translate.get('NO').subscribe((res: string) => this._noText = res));
-    this._subscription.add(translate.get('OK').subscribe((res: string) => this._okText = res));
-    this._subscription.add(translate.get('VICTORY').subscribe((res: string) => this._victoryText = res));
-    this._subscription.add(translate.get('YES').subscribe((res: string) => this._yesText = res));
-    this._subscription.add(translate.get('YOU_WIN').subscribe((res: string) => this._youWinText = res));
-    this._subscription.add(translate.get('SUPER').subscribe((res: string) => this._superText = res));
-    this._subscription.add(translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').subscribe((res: string) => this._notCorrectText = res));
-    this._subscription.add(translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').subscribe((res: string) => this._youpieWinText = res));
-    this._subscription.add(translate.get('REACTIONS.POSITIVES.GOOD_GAME').subscribe((res: string) => this._correctText = res));
-    this._subscription.add(this._settingsService.theme.subscribe(theme => this._theme = theme));
+    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmExitText = res)
+    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionGameExitText = res)
+    translate.get('NO').takeWhile(() => this._takeWhile).subscribe((res: string) => this._noText = res);
+    translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
+    translate.get('VICTORY').takeWhile(() => this._takeWhile).subscribe((res: string) => this._victoryText = res);
+    translate.get('YES').takeWhile(() => this._takeWhile).subscribe((res: string) => this._yesText = res);
+    translate.get('YOU_WIN').takeWhile(() => this._takeWhile).subscribe((res: string) => this._youWinText = res);
+    translate.get('SUPER').takeWhile(() => this._takeWhile).subscribe((res: string) => this._superText = res);
+    translate.get('REACTIONS.NEGATIVES.NO_IT_IS_NOT_CORRECT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._notCorrectText = res);
+    translate.get('REACTIONS.POSITIVES.YOUPI_YOU_WIN').takeWhile(() => this._takeWhile).subscribe((res: string) => this._youpieWinText = res);
+    translate.get('REACTIONS.POSITIVES.GOOD_GAME').takeWhile(() => this._takeWhile).subscribe((res: string) => this._correctText = res);
+    this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe(theme => this._theme = theme);
     this.selectedImages = [];
     this.selectedThematicalObjects = [];
     this.selectedTargets = [];
@@ -180,7 +178,7 @@ export class ModuleThematicalAssociationPage {
   }
 
   private dismiss(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
     this.viewCtrl.dismiss();
   }
 

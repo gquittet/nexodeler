@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALTextToSpeechService } from '../../../app/services/naoqi/altexttospeech.service';
 import { SettingsService } from '../../../app/services/settings/settings.service';
@@ -20,14 +19,14 @@ export class ListItemLanguagesAvailableComponent {
   currentLanguage: string;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // UI
   // Theme
   selectOptions: Object = { cssClass: '' };
 
-  constructor(platform: Platform, public alTextToSpeech: ALTextToSpeechService, _settingsService: SettingsService) {
-    this._subscription = _settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+  constructor(platform: Platform, public alTextToSpeech: ALTextToSpeechService, settingsService: SettingsService) {
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     this.isIOS = platform.is('ios');
   }
 
@@ -45,6 +44,6 @@ export class ListItemLanguagesAvailableComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._languagesInterval);
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

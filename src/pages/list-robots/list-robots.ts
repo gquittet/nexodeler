@@ -4,8 +4,6 @@ import { FormControl } from '@angular/forms';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, ToastController } from 'ionic-angular';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/debounceTime';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 import { Theme } from '../../app/objects/Theme';
@@ -96,7 +94,7 @@ export class ListRobotsPage {
   private _yesText: string;
 
   // Theme
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // UI
   private loading: AlertLoading;
@@ -104,36 +102,35 @@ export class ListRobotsPage {
   private _theme: Theme;
 
   constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService, private _appStateService: AppStateService) {
-    this._subscription = new Subscription();
     this.searchControl = new FormControl();
     this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
-    this._subscription.add(settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
-    this._subscription.add(_translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').subscribe((res: string) => this._errorEnterCorrectIpAddressText = res));
-    this._subscription.add(_translate.get('ERROR.ENTER_CORRECT_NAME').subscribe((res: string) => this._errorEnterCorrectNameText = res));
-    this._subscription.add(_translate.get('ERROR.ENTER_CORRECT_NUMBER').subscribe((res: string) => this._errorEnterCorrectNumberText = res));
-    this._subscription.add(_translate.get('ERROR.ERROR').subscribe((res: string) => this._errorErrorText = res));
-    this._subscription.add(_translate.get('ERROR.NETWORK_ERROR').subscribe((res: string) => this._errorNetworkErrorText = res));
-    this._subscription.add(_translate.get('ERROR.UNABLE_TO_COMMUNICATE_WITH_VALUE').subscribe((res: string) => this._errorUnableToFindValueText = res));
-    this._subscription.add(_translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnectionText = res));
-    this._subscription.add(_translate.get('NAME').subscribe((res: string) => this._nameText = res));
-    this._subscription.add(_translate.get('NO').subscribe((res: string) => this._noText = res));
-    this._subscription.add(_translate.get('NUMBER').subscribe((res: string) => this._numberText = res));
-    this._subscription.add(_translate.get('OK').subscribe((res: string) => this._okText = res));
-    this._subscription.add(_translate.get('UI.ALERT.TITLE.CONFIRM.DELETE').subscribe((res: string) => this._confirmDeleteText = res));
-    this._subscription.add(_translate.get('UI.ALERT.TITLE.CONFIRM.UPDATE').subscribe((res: string) => this._confirmUpdateText = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.DELETE').subscribe((res: string) => this._questionRobotDelete = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').subscribe((res: string) => this._questionRobotReboot = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.QUESTION.ROBOTS.DELETE').subscribe((res: string) => this._questionRobotsDelete = res));
-    this._subscription.add(_translate.get('UI.TOAST.ROBOTS.SELECTED_DELETE').subscribe((res: string) => this._toastRobotSelectedDeleteText = res));
-    this._subscription.add(_translate.get('UI.TOAST.ROBOTS.NO_DELETE').subscribe((res: string) => this._toastRobotNoDeleteText = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.NAME_APPLIED_AFTER_REBOOT').subscribe((res: string) => this._labelNameAppliedAfterRebootText = res));
-    this._subscription.add(_translate.get('UI.ALERT.CONTENT.LABEL.NETWORK.CONNECT_TO_NETWORK').subscribe((res: string) => this._errorNoNetwork = res));
-    this._subscription.add(_translate.get('VERBS.CANCEL').subscribe((res: string) => this._cancelText = res));
-    this._subscription.add(_translate.get('VERBS.DELETE').subscribe((res: string) => this._deleteText = res));
-    this._subscription.add(_translate.get('VERBS.EDIT').subscribe((res: string) => this._editText = res));
-    this._subscription.add(_translate.get('VERBS.REBOOT').subscribe((res: string) => this._rebootText = res));
-    this._subscription.add(_translate.get('VERBS.SAVE').subscribe((res: string) => this._saveText = res));
-    this._subscription.add(_translate.get('YES').subscribe((res: string) => this._yesText = res));
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
+    _translate.get('ERROR.ENTER_CORRECT_IP_ADDRESS').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorEnterCorrectIpAddressText = res);
+    _translate.get('ERROR.ENTER_CORRECT_NAME').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorEnterCorrectNameText = res);
+    _translate.get('ERROR.ENTER_CORRECT_NUMBER').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorEnterCorrectNumberText = res);
+    _translate.get('ERROR.ERROR').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorErrorText = res);
+    _translate.get('ERROR.NETWORK_ERROR').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorNetworkErrorText = res);
+    _translate.get('ERROR.UNABLE_TO_COMMUNICATE_WITH_VALUE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorUnableToFindValueText = res);
+    _translate.get('ERROR.VERIFY_NETWORK_CONNECTION').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorVerifyNetworkConnectionText = res);
+    _translate.get('NAME').takeWhile(() => this._takeWhile).subscribe((res: string) => this._nameText = res);
+    _translate.get('NO').takeWhile(() => this._takeWhile).subscribe((res: string) => this._noText = res);
+    _translate.get('NUMBER').takeWhile(() => this._takeWhile).subscribe((res: string) => this._numberText = res);
+    _translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmDeleteText = res);
+    _translate.get('UI.ALERT.TITLE.CONFIRM.UPDATE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmUpdateText = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionRobotDelete = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOT.REBOOT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionRobotReboot = res);
+    _translate.get('UI.ALERT.CONTENT.QUESTION.ROBOTS.DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionRobotsDelete = res);
+    _translate.get('UI.TOAST.ROBOTS.SELECTED_DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._toastRobotSelectedDeleteText = res);
+    _translate.get('UI.TOAST.ROBOTS.NO_DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._toastRobotNoDeleteText = res);
+    _translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.NAME_APPLIED_AFTER_REBOOT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._labelNameAppliedAfterRebootText = res);
+    _translate.get('UI.ALERT.CONTENT.LABEL.NETWORK.CONNECT_TO_NETWORK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._errorNoNetwork = res);
+    _translate.get('VERBS.CANCEL').takeWhile(() => this._takeWhile).subscribe((res: string) => this._cancelText = res);
+    _translate.get('VERBS.DELETE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._deleteText = res);
+    _translate.get('VERBS.EDIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._editText = res);
+    _translate.get('VERBS.REBOOT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._rebootText = res);
+    _translate.get('VERBS.SAVE').takeWhile(() => this._takeWhile).subscribe((res: string) => this._saveText = res);
+    _translate.get('YES').takeWhile(() => this._takeWhile).subscribe((res: string) => this._yesText = res);
   }
 
   ionViewDidLoad(): void {
@@ -141,7 +138,7 @@ export class ListRobotsPage {
       this.searching = false;
       this.filterItems();
     });
-    this._subscription.add(this._robotsService.robots.subscribe(robots => this.robots = robots));
+    this._robotsService.robots.takeWhile(() => this._takeWhile).subscribe(robots => this.robots = robots);
   }
 
   ionViewDidEnter(): void {
@@ -176,13 +173,15 @@ export class ListRobotsPage {
           text: this._deleteText,
           handler: () => {
             let index = 0;
-            this._robotsService.robots.subscribe(robots => this.robots = robots);
+            let canLive: boolean = true;
+            this._robotsService.robots.takeWhile(() => canLive).subscribe(robots => this.robots = robots);
             this.robots.forEach(element => {
               if (element === robot) {
                 this.robots.splice(index, 1);
               }
               index++;
             });
+            canLive = false;
             this._robotsService.next(this.robots);
           }
         }
@@ -283,8 +282,7 @@ export class ListRobotsPage {
   }
 
   filterItems(): void {
-    const searchSubscription = this._robotsService.filter(this.searchTerm).subscribe(robots => this.robots = robots);
-    searchSubscription.unsubscribe();
+    this._robotsService.filter(this.searchTerm).takeWhile(() => this._takeWhile).subscribe(robots => this.robots = robots);
   }
 
   updateName(name: string, ip: IP): void {
@@ -306,7 +304,7 @@ export class ListRobotsPage {
             handler: () => {
               this._alSystemService.reboot().then(() => {
                 let labelRebootText: string;
-                this._subscription.add(this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.REBOOT', { value: name }).subscribe(
+                this._translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.REBOOT', { value: name }).takeWhile(() => this._takeWhile).subscribe(
                   (res: string) => labelRebootText = res,
                   () => { },
                   () => {
@@ -316,7 +314,7 @@ export class ListRobotsPage {
                       buttons: [this._okText],
                       cssClass: this._theme.class
                     }).present();
-                  }));
+                  });
               });
             }
           }
@@ -346,7 +344,7 @@ export class ListRobotsPage {
       }).catch(error => {
         this.loading.close();
         let errorUnableToFindText: string;
-        self._subscription.add(self._translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).subscribe(
+        self._translate.get('ERROR.UNABLE_TO_FIND_VALUE', { value: robot.name }).takeWhile(() => this._takeWhile).subscribe(
           (res: string) => errorUnableToFindText = res,
           () => { },
           () => {
@@ -357,7 +355,7 @@ export class ListRobotsPage {
               cssClass: this._theme.class
             }).present();
           }
-        ));
+        );
       });
     }
 
@@ -418,7 +416,7 @@ export class ListRobotsPage {
   }
 
   ionViewWillLeave(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 
   cancelSearch(): void {

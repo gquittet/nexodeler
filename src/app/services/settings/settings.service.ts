@@ -3,7 +3,7 @@ import { File } from '@ionic-native/file';
 import { Globalization } from '@ionic-native/globalization';
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from 'ionic-angular';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Settings } from '../../objects/Settings';
 import { Theme } from '../../objects/Theme';
@@ -44,12 +44,9 @@ export class SettingsService {
    */
   private readonly _languageSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._translate.currentLang);
 
-  // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
-  constructor(private _file: File, private _translate: TranslateService, private _globalization: Globalization, private _config: Config) {
-    this._subscription = new Subscription();
-  }
+  constructor(private _file: File, private _translate: TranslateService, private _globalization: Globalization, private _config: Config) { }
 
   /**
    * Read the file where the settings are saved.
@@ -57,8 +54,8 @@ export class SettingsService {
   readFile(): void {
     this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
       const settings: Settings = JSON.parse(data);
-      this.initializeTranslate(settings);
       this.changeTheme(settings.theme);
+      this.initializeTranslate(settings);
     }).catch(err => {
       console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err)))
       this.initializeTranslate(null);
@@ -81,9 +78,9 @@ export class SettingsService {
     } else {
       this.changeLanguage(settings.language);
     }
-    this._subscription.add(this._translate.get('UI.NAVBAR.BUTTONS.BACK').subscribe(res => {
+    this._translate.get('UI.NAVBAR.BUTTONS.BACK').takeWhile(() => this._takeWhile).subscribe(res => {
       this._config.set('ios', 'backButtonText', res);
-    }));
+    });
   }
 
   /**
@@ -156,6 +153,6 @@ export class SettingsService {
   }
 
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

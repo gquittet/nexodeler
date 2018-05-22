@@ -3,8 +3,6 @@ import { FormControl } from '@angular/forms';
 import { File } from '@ionic-native/file';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, Content, IonicPage, LoadingController, ModalController, NavController, NavParams, ViewController } from 'ionic-angular';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/debounceTime';
 import { Module } from '../../app/objects/Module';
 import { Theme } from '../../app/objects/Theme';
 import { RobotsChooser } from '../../app/objects/ionic/RobotsChooser';
@@ -36,23 +34,22 @@ export class ListModulesPage {
   searching: boolean;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // Modal Theme
   private theme: Theme;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _modalCtrl: ModalController, private _file: File, private _modulesService: ModulesService, settingsService: SettingsService, private _translate: TranslateService, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _robotsService: RobotsService, private _settingsService: SettingsService) {
-    this._subscription = new Subscription();
     this.searchControl = new FormControl();
   }
 
   ionViewDidLoad(): void {
-    this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+    this.searchControl.valueChanges.debounceTime(700).takeWhile(() => this._takeWhile).subscribe(search => {
       this.searching = false;
       this.filterItems();
     });
-    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this.theme = theme));
-    this._subscription.add(this._modulesService.modules.subscribe((modules: Module[]) => this._modulesOriginal = modules));
+    this._settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this.theme = theme);
+    this._modulesService.modules.takeWhile(() => this._takeWhile).subscribe((modules: Module[]) => this._modulesOriginal = modules);
   }
 
   ionViewDidEnter(): void {
@@ -73,8 +70,8 @@ export class ListModulesPage {
     let categorieA: string = "";
     let categorieB: string = "";
     this.categories = this.categories.sort((a, b) => {
-      this._subscription.add(this._translate.get('MODULES.CATEGORIES.' + a).subscribe((res: string) => categorieA = res));
-      this._subscription.add(this._translate.get('MODULES.CATEGORIES.' + b).subscribe((res: string) => categorieB = res));
+      this._translate.get('MODULES.CATEGORIES.' + a).takeWhile(() => this._takeWhile).subscribe((res: string) => categorieA = res);
+      this._translate.get('MODULES.CATEGORIES.' + b).takeWhile(() => this._takeWhile).subscribe((res: string) => categorieB = res);
       return categorieA.localeCompare(categorieB);
     });
   }
@@ -98,8 +95,8 @@ export class ListModulesPage {
     let nameA: string = "";
     let nameB: string = "";
     module.sort((a, b) => {
-      this._subscription.add(this._translate.get('MODULES.NAMES.' + a.name).subscribe((res: string) => nameA = res));
-      this._subscription.add(this._translate.get('MODULES.NAMES.' + b.name).subscribe((res: string) => nameB = res));
+      this._translate.get('MODULES.NAMES.' + a.name).takeWhile(() => this._takeWhile).subscribe((res: string) => nameA = res);
+      this._translate.get('MODULES.NAMES.' + b.name).takeWhile(() => this._takeWhile).subscribe((res: string) => nameB = res);
       return nameA.localeCompare(nameB);
     });
   }
@@ -153,13 +150,12 @@ export class ListModulesPage {
 
   private filterItems(): void {
     if (this.searchBar) {
-      const subscription = this._modulesService.filter(this.searchTerm).subscribe((modules: Module[]) => this.modules = modules);
+      this._modulesService.filter(this.searchTerm).takeWhile(() => this._takeWhile).subscribe((modules: Module[]) => this.modules = modules);
       this.updateCategories(this.modules);
-      subscription.unsubscribe();
     }
   }
 
   ionViewWillLeave(): void {
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }

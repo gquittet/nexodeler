@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Subscription } from 'rxjs';
 import { Theme } from '../../../app/objects/Theme';
 import { ALRobotPostureService } from '../../../app/services/naoqi/alrobotposture.service';
 import { SettingsService } from '../../../app/services/settings/settings.service';
@@ -20,14 +19,14 @@ export class ListItemPostureSelectorComponent {
   currentPosture: string;
 
   // Subscription
-  private _subscription: Subscription;
+  private _takeWhile: boolean = true;
 
   // UI
   // Theme
   selectOptions: Object = { cssClass: '' };
 
   constructor(platform: Platform, private _alRobotPosture: ALRobotPostureService, settingsService: SettingsService) {
-    this._subscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     this.isIOS = platform.is('ios');
   }
 
@@ -47,6 +46,6 @@ export class ListItemPostureSelectorComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._postureInterval);
-    this._subscription.unsubscribe();
+    this._takeWhile = false;
   }
 }
