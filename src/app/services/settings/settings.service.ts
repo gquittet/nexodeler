@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { File } from '@ionic-native/file';
-import { BehaviorSubject } from 'rxjs';
+import { Globalization } from '@ionic-native/globalization';
+import { TranslateService } from '@ngx-translate/core';
+import { Config } from 'ionic-angular';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Settings } from '../../objects/Settings';
 import { Theme } from '../../objects/Theme';
@@ -36,8 +39,17 @@ export class SettingsService {
    * @readonly
    */
   private readonly _themeSubject: BehaviorSubject<Theme> = new BehaviorSubject<Theme>(this._THEMES[0]);
+  /**
+   * The observer of the language.
+   */
+  private readonly _languageSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this._translate.currentLang);
 
-  constructor(private _file: File) { }
+  // Subscription
+  private _subscription: Subscription;
+
+  constructor(private _file: File, private _translate: TranslateService, private _globalization: Globalization, private _config: Config) {
+    this._subscription = new Subscription();
+  }
 
   /**
    * Read the file where the settings are saved.
@@ -45,13 +57,38 @@ export class SettingsService {
   readFile(): void {
     this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
       const settings: Settings = JSON.parse(data);
+      this.initializeTranslate(settings);
       this.changeTheme(settings.theme);
-    }).catch(err => console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err))));
+    }).catch(err => {
+      console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err)))
+      this.initializeTranslate(null);
+    });
+  }
+
+  /**
+   * Initialize the translations.
+   * @param settings The settings object.
+   */
+  private initializeTranslate(settings: Settings): void {
+    this._translate.setDefaultLang('en');
+    this._translate.addLangs(['fr']);
+    if (!settings || !settings.language) {
+      this._globalization.getPreferredLanguage().then(lang => {
+        this.changeLanguage(lang.value.split('-')[0]);
+      }).catch(e => {
+        console.error('[ERROR][GLOBALIZATION][getLocale] ' + e);
+      });
+    } else {
+      this.changeLanguage(settings.language);
+    }
+    this._subscription.add(this._translate.get('UI.NAVBAR.BUTTONS.BACK').subscribe(res => {
+      this._config.set('ios', 'backButtonText', res);
+    }));
   }
 
   /**
    * Change the theme of the application.
-   * @param theme The new theme of the applicaiton.
+   * @param theme The new theme of the application.
    */
   changeTheme(theme: Theme): void {
     this._themeSubject.next(theme);
@@ -71,6 +108,16 @@ export class SettingsService {
     }
     console.error("[ERROR][Themes] Unable to find the theme with this class: " + className);
     return null;
+  }
+
+  /**
+   * Change the language of the application.
+   * @param language The new language of the applicaiton.
+   */
+  changeLanguage(language: string): void {
+    this._languageSubject.next(language);
+    this._translate.use(language);
+    this.updateFile();
   }
 
   /**
@@ -96,11 +143,19 @@ export class SettingsService {
     return new Promise((resolve, reject) => resolve(this._THEMES));
   }
 
+  get language(): Observable<string> {
+    return this._languageSubject.asObservable();
+  }
+
   /**
    * Return the settings of the application.
    * @returns {Settings} The settings of the application.
    */
   private get settings(): Settings {
-    return <Settings>{ theme: this._themeSubject.value };
+    return <Settings>{ language: this._languageSubject.value, theme: this._themeSubject.value };
+  }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
   }
 }

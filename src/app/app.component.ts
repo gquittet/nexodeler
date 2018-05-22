@@ -3,11 +3,9 @@ import { Component } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Brightness } from '@ionic-native/brightness';
-import { Globalization } from '@ionic-native/globalization';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { TranslateService } from '@ngx-translate/core';
-import { App, Config, Platform } from 'ionic-angular';
+import { App, Platform } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Color } from './objects/Color';
 import { Theme } from './objects/Theme';
@@ -31,9 +29,11 @@ export class MyApp {
 
   splash: boolean = true;
   theme: Theme = <Theme>{ name: 'Blue Autism', class: 'theme-blue-autism', primaryColor: '#5191CE' };
-  private _themeSubscription: Subscription;
+  private _subscription: Subscription;
 
-  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _backgroundMode: BackgroundMode, private _translate: TranslateService, private _globalization: Globalization, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _config: Config, private _settingsService: SettingsService) { }
+  constructor(private _platform: Platform, private _statusBar: StatusBar, private _splashScreen: SplashScreen, private _app: App, private _backgroundMode: BackgroundMode, private _androidPermissions: AndroidPermissions, private _brightness: Brightness, private _settingsService: SettingsService) {
+    this._subscription = new Subscription();
+  }
 
   ngOnInit(): void {
     this._platform.ready().then(() => {
@@ -42,10 +42,10 @@ export class MyApp {
       setTimeout(() => this.splash = false, 1000);
       setTimeout(() => this.changeStatusBarColor(), 1250);
       this._settingsService.readFile();
-      this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
+      this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => {
         this.theme = theme;
         this.changeStatusBarColor();
-      });
+      }));
       // Fix sidemenu icon disappear in navbar when Android hardware back button pressed.
       if (this._platform.is('android') || this._platform.is('windows')) {
         this._platform.registerBackButtonAction(() => {
@@ -60,7 +60,6 @@ export class MyApp {
           }
         });
       }
-      this.initializeTranslation();
       if (this._platform.is('ios') || this._platform.is('android')) {
         this._brightness.setKeepScreenOn(true);
         if (this._platform.is('android'))
@@ -82,24 +81,6 @@ export class MyApp {
   }
 
   /**
-   * Initialize the translations.
-   */
-  private initializeTranslation(): void {
-    this._translate.setDefaultLang('en');
-    this._globalization.getPreferredLanguage().then(lang => {
-      this._translate.use(lang.value.split('-')[0]);
-      this._translate.get('UI.NAVBAR.BUTTONS.BACK').subscribe(res => {
-        this._config.set('ios', 'backButtonText', res);
-      });
-    }).catch(e => {
-      console.log('[ERROR][GLOBALIZATION][getLocale] ' + e);
-      this._translate.get('UI.NAVBAR.BUTTONS.BACK').subscribe(res => {
-        this._config.set('ios', 'backButtonText', res);
-      });
-    });
-  }
-
-  /**
    * Ask for permissions on a Android system.
    */
   private initializeAndroidPermissions(): void {
@@ -115,7 +96,7 @@ export class MyApp {
   }
 
   ngOnDestroy(): void {
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }
 

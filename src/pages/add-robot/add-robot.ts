@@ -34,10 +34,14 @@ export class AddRobotPage {
 
   private _loading: AlertLoading;
 
+  // Theme
   private _theme: Theme;
-  private _themeSubscription: Subscription;
+
+  // Subscription
+  private _subscription: Subscription;
 
   constructor(private _fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _robotsService: RobotsService, private _alSystemService: ALSystemService, translate: TranslateService, settingsService: SettingsService) {
+    this._subscription = new Subscription();
     this.addForm = this._fb.group({
       'number1': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
       'number2': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])],
@@ -45,12 +49,12 @@ export class AddRobotPage {
       'number4': ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(255), Validators.minLength(1), Validators.maxLength(3)])]
     });
     this._loading = new AlertLoading(loadingCtrl, translate, settingsService);
-    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
-    translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res);
-    translate.get('ERROR.ROBOT_ALREADY_EXIST_IN_YOUR_LIST').subscribe((res: string) => this._errorRobotAlreadyExit = res);
-    translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').subscribe((res: string) => this._errorUnableToGetRobotName = res);
-    translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnection = res);
-    translate.get('OK').subscribe((res: string) => this._okText = res);
+    this._subscription.add(settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
+    this._subscription.add(translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res));
+    this._subscription.add(translate.get('ERROR.ROBOT_ALREADY_EXIST_IN_YOUR_LIST').subscribe((res: string) => this._errorRobotAlreadyExit = res));
+    this._subscription.add(translate.get('ERROR.UNABLE_TO_GET_ROBOT_NAME').subscribe((res: string) => this._errorUnableToGetRobotName = res));
+    this._subscription.add(translate.get('ERROR.VERIFY_NETWORK_CONNECTION').subscribe((res: string) => this._errorVerifyNetworkConnection = res));
+    this._subscription.add(translate.get('OK').subscribe((res: string) => this._okText = res));
   }
 
   ionViewWillEnter(): void {
@@ -119,7 +123,7 @@ export class AddRobotPage {
   }
 
   ionViewWillLeave(): void {
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
     QiService.disconnect();
   }
 }

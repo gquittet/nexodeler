@@ -23,7 +23,6 @@ import { SettingsService } from '../../app/services/settings/settings.service';
 export class ListChoregraphiesPage {
 
   // Object
-  private _isConnectedToWireless: Subscription;
   choregraphies: Behavior[];
   searchResults: Behavior[];
 
@@ -35,6 +34,9 @@ export class ListChoregraphiesPage {
   private _informationText: string;
   private _okText: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // UI
   searchControl: FormControl;
   searchTerm: string = '';
@@ -45,17 +47,18 @@ export class ListChoregraphiesPage {
   private _loading: AlertLoading;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private _viewCtrl: ViewController, private _translate: TranslateService, network: Network, private _file: File, private _alertCtrl: AlertController, private _loadingCtrl: LoadingController, private _settingsService: SettingsService, private _robotsService: RobotsService, private _alBehaviorManager: ALBehaviorManagerService) {
+    this._subscription = new Subscription();
     this._loading = new AlertLoading(_loadingCtrl, _translate, this._settingsService);
     this.searchControl = new FormControl();
     this.choregraphies = [];
     this.searchResults = [];
-    _translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res);
-    _translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this._errorNetworkDisconnectedText = res);
-    _translate.get('ERROR.ERROR_BEHAVIOR_START').subscribe((res: string) => this._errorBehaviorStartText = res);
-    _translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this._informationText = res);
-    _translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this._choregraphyStartingText = res);
-    _translate.get("OK").subscribe((res: string) => this._okText = res);
-    this._isConnectedToWireless = network.onDisconnect().subscribe(() => {
+    this._subscription.add(_translate.get('ERROR.ERROR').subscribe((res: string) => this._errorText = res));
+    this._subscription.add(_translate.get('ERROR.NETWORK_DISCONNECTED').subscribe((res: string) => this._errorNetworkDisconnectedText = res));
+    this._subscription.add(_translate.get('ERROR.ERROR_BEHAVIOR_START').subscribe((res: string) => this._errorBehaviorStartText = res));
+    this._subscription.add(_translate.get('UI.ALERT.TITLE.INFORMATION.INFORMATION').subscribe((res: string) => this._informationText = res));
+    this._subscription.add(_translate.get('UI.ALERT.CONTENT.LABEL.ROBOT.CHOREGRAPHY_STARTING').subscribe((res: string) => this._choregraphyStartingText = res));
+    this._subscription.add(_translate.get("OK").subscribe((res: string) => this._okText = res));
+    this._subscription.add(network.onDisconnect().subscribe(() => {
       console.log('[INFO][NETWORK] Network access disconnected.');
       this._alertCtrl.create({
         title: this._errorText,
@@ -67,7 +70,7 @@ export class ListChoregraphiesPage {
           }
         }]
       }).present();
-    });
+    }));
   }
 
   ionViewDidLoad(): void {
@@ -180,7 +183,7 @@ export class ListChoregraphiesPage {
     let posture: string;
     this.searchResults = this.choregraphies.filter((choregraphy: Behavior) => {
       if (choregraphy.creator === 'Aldebaran')
-        this._translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res);
+        this._subscription.add(this._translate.get('NAOQI.ROBOT_POSTURES.' + choregraphy.posture.toUpperCase()).subscribe((res: string) => posture = res));
       else
         posture = choregraphy.posture;
       return this.isStringEquals(choregraphy.name, this.searchTerm) || this.isStringEquals(posture, this.searchTerm) || this.isStringEquals(choregraphy.category, this.searchTerm) || this.isStringEquals(choregraphy.path, this.searchTerm) || this.isStringEquals(choregraphy.creator, this.searchTerm);
@@ -194,7 +197,7 @@ export class ListChoregraphiesPage {
   }
 
   ionViewWillLeave(): void {
-    this._isConnectedToWireless.unsubscribe();
+    this._subscription.unsubscribe();
     QiService.disconnect();
   }
 }

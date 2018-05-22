@@ -21,18 +21,20 @@ export class ListItemALAutonomousLifeComponent {
   statesToSelect: string[];
   currentState: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // UI
   // Theme
-  private _themeSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
   constructor(platform: Platform, translate: TranslateService, public alAutonomousLife: ALAutonomousLifeService, settingsService: SettingsService) {
     this.states = [];
-    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
-    translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res);
-    translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').subscribe((res: string) => this.states[1] = res);
-    translate.get('NAOQI.AUTONOMOUS_LIFE.SAFEGARD').subscribe((res: string) => this.states[2] = res);
-    translate.get('NAOQI.AUTONOMOUS_LIFE.DISABLED').subscribe((res: string) => this.states[3] = res);
+    this._subscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.SOLITARY').subscribe((res: string) => this.states[0] = res));
+    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.INTERACTIVE').subscribe((res: string) => this.states[1] = res));
+    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.SAFEGARD').subscribe((res: string) => this.states[2] = res));
+    this._subscription.add(translate.get('NAOQI.AUTONOMOUS_LIFE.DISABLED').subscribe((res: string) => this.states[3] = res));
     this.statesToSelect = [];
     this.statesToSelect[0] = this.states[0];
     this.statesToSelect[1] = this.states[3];
@@ -85,6 +87,6 @@ export class ListItemALAutonomousLifeComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._stateInterval);
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }

@@ -15,10 +15,12 @@ export class AlertRadioButton implements IAlertRadioButton {
   private _alert: Alert;
   private _result: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // UI
   // Theme
   private _theme: Theme;
-  private _settingsSubscription: Subscription;
 
   /**
    * Create a new AlertRadioButton object.
@@ -34,7 +36,7 @@ export class AlertRadioButton implements IAlertRadioButton {
    * @override
    */
   create(title: string): Alert {
-    this._settingsSubscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+    this._subscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
     this._alert = this._alertCtrl.create({
       enableBackdropDismiss: false,
       cssClass: this._theme.class
@@ -65,7 +67,7 @@ export class AlertRadioButton implements IAlertRadioButton {
    */
   close(): void {
     this.isRadioOpen = false;
-    this._settingsSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 
   /**

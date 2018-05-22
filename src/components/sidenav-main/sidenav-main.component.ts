@@ -12,18 +12,19 @@ import { SettingsService } from '../../app/services/settings/settings.service';
 export class SidenavMainComponent {
 
   rootPage: string = 'HomePage';
-  private _themeSubscription: Subscription;
+  private _subscription: Subscription;
 
   @ViewChild(Nav) nav: Nav;
 
   constructor(private _menuCtrl: MenuController, private _settingsService: SettingsService) {
+    this._subscription = new Subscription();
   }
 
   ngOnInit(): void {
     const naoPhoto: HTMLElement = document.getElementById('menuTopPanel');
-    this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => {
+    this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => {
       naoPhoto.style.backgroundColor = Color.shade(theme.primaryColor, 13);
-    });
+    }));
   }
 
   openPage(page: string): void {
@@ -32,7 +33,7 @@ export class SidenavMainComponent {
   }
 
   ngOnDestroy(): void {
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 
 }

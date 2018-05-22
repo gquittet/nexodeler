@@ -16,10 +16,12 @@ export class AlertLoading {
     // String UI
     private pleaseWaitText: string;
 
+    // Subscription
+    private _subscription: Subscription;
+
     // UI
     // Theme
     private _theme: Theme;
-    private _themeSubscription: Subscription;
 
     /**
      * Create the AlertLoading object.
@@ -28,14 +30,14 @@ export class AlertLoading {
      * @param _settingsService The service to access to settings data.
      */
     constructor(private _loadingCtrl: LoadingController, translate: TranslateService, private _settingsService: SettingsService) {
-        translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
+        this._subscription = translate.get('PLEASE_WAIT').subscribe((res: string) => this.pleaseWaitText = res);
     }
 
     /**
      * Create and show an alert of type loading.
      */
     show(): void {
-        this._themeSubscription = this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme);
+        this._subscription.add(this._settingsService.theme.subscribe((theme: Theme) => this._theme = theme));
         this.loading = this._loadingCtrl.create({
             content: this.pleaseWaitText,
             cssClass: this._theme.class
@@ -50,6 +52,6 @@ export class AlertLoading {
         if (!this.loading)
             throw "[ERROR][LOADING][Close] Loading is not showing!";
         this.loading.dismiss();
-        this._themeSubscription.unsubscribe();
+        this._subscription.unsubscribe();
     }
 }

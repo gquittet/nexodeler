@@ -19,13 +19,15 @@ export class ListItemLanguagesAvailableComponent {
   languages: string[];
   currentLanguage: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // UI
   // Theme
   selectOptions: Object = { cssClass: '' };
-  private _themeSubscription: Subscription;
 
   constructor(platform: Platform, public alTextToSpeech: ALTextToSpeechService, _settingsService: SettingsService) {
-    this._themeSubscription = _settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    this._subscription = _settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     this.isIOS = platform.is('ios');
   }
 
@@ -43,6 +45,6 @@ export class ListItemLanguagesAvailableComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._languagesInterval);
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }

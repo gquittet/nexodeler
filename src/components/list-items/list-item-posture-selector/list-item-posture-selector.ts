@@ -19,13 +19,15 @@ export class ListItemPostureSelectorComponent {
   robotPostures: string[];
   currentPosture: string;
 
+  // Subscription
+  private _subscription: Subscription;
+
   // UI
   // Theme
-  private _themeSubscription: Subscription;
   selectOptions: Object = { cssClass: '' };
 
   constructor(platform: Platform, private _alRobotPosture: ALRobotPostureService, settingsService: SettingsService) {
-    this._themeSubscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
+    this._subscription = settingsService.theme.subscribe((theme: Theme) => this.selectOptions['cssClass'] = theme.class);
     this.isIOS = platform.is('ios');
   }
 
@@ -45,6 +47,6 @@ export class ListItemPostureSelectorComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._postureInterval);
-    this._themeSubscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }

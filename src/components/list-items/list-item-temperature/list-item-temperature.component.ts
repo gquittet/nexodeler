@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 import { ALBodyTemperatureService } from '../../../app/services/naoqi/albodytemperature.service';
 
 @Component({
@@ -10,16 +11,19 @@ export class ListItemTemperatureComponent {
 
   private _temperatureInterval;
 
+  private _subscription: Subscription;
+
   temperature: string;
 
   private _temperatures: string[];
 
   constructor(translate: TranslateService, private _alBodyTemperature: ALBodyTemperatureService) {
+    this._subscription = new Subscription();
     this._temperatures = [];
-    translate.get('NAOQI.TEMPERATURE.PERFECT').subscribe(res => this._temperatures[0] = res);
-    translate.get('NAOQI.TEMPERATURE.NEGLIGIBLE').subscribe(res => this._temperatures[1] = res);
-    translate.get('NAOQI.TEMPERATURE.SERIOUS').subscribe(res => this._temperatures[2] = res);
-    translate.get('NAOQI.TEMPERATURE.CRITICAL').subscribe(res => this._temperatures[3] = res);
+    this._subscription.add(translate.get('NAOQI.TEMPERATURE.PERFECT').subscribe(res => this._temperatures[0] = res));
+    this._subscription.add(translate.get('NAOQI.TEMPERATURE.NEGLIGIBLE').subscribe(res => this._temperatures[1] = res));
+    this._subscription.add(translate.get('NAOQI.TEMPERATURE.SERIOUS').subscribe(res => this._temperatures[2] = res));
+    this._subscription.add(translate.get('NAOQI.TEMPERATURE.CRITICAL').subscribe(res => this._temperatures[3] = res));
   }
 
   ngOnInit(): void {
@@ -49,5 +53,6 @@ export class ListItemTemperatureComponent {
 
   ngOnDestroy(): void {
     clearInterval(this._temperatureInterval);
+    this._subscription.unsubscribe();
   }
 }
