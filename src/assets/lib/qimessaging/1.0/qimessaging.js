@@ -25,7 +25,7 @@ function QiSession(host, resource) {
   _socket.on('reply', function (data) {
     var idm = data["idm"];
 
-    if (!(data["result"] && data["result"]["metaobject"])) {
+    if (data["result"] != null && data["result"]["metaobject"] != undefined) {
       var o = new Object();
       o.__MetaObject = data["result"]["metaobject"];
       var pyobj = data["result"]["pyobject"];
