@@ -212,11 +212,46 @@
     border: none;
     line-height: 0;
   } //
+  // Input focus
+  .item-ios.item-input.item-input-has-focus .item-inner,
+  .item-ios.item-input.input-has-focus .item-inner,
+  .item-md.item-input.item-input-has-focus .item-inner,
+  .item-md.item-input.input-has-focus .item-inner,
+  .item-wp.item-input.item-input-has-focus .item-inner,
+  .item-wp.item-input.input-has-focus .item-inner {
+    border-bottom-color: getColor(dark);
+    box-shadow: 0 -1px 0 0 getColor(dark);
+  } //
+  // Input invalid
+  .item-ios.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-md.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-wp.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    border-bottom-color: getColor(danger);
+    box-shadow: 0 -1px 0 0 getColor(danger);
+  } //
+  // Input valid
+  .item-ios.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-wp.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-ios.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner,
+  .item-wp.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    border-bottom-color: getColor(light);
+    box-shadow: 0 -1px 0 0 getColor(light);
+  } //
   // ==========================================================================
   // Ion-Modal
   // ==========================================================================
   ion-modal {
     background: getColor(primary);
+  } //
+  // ==========================================================================
+  // Ion-Item
+  // ==========================================================================
+  .item-ios.item-block .item-inner,
+  .item-md.item-block .item-inner,
+  .item-wp.item-block .item-inner {
+    padding-right: 0;
   } //
   // ==========================================================================
   // Label
