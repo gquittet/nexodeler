@@ -54,7 +54,9 @@ export class SettingsService {
   readFile(): void {
     this._file.readAsText(this._file.dataDirectory, this._FILE_NAME).then((data: string) => {
       const settings: Settings = JSON.parse(data);
+      // Theme settings must be the first. If not the theme will not apply everytime.
       this.changeTheme(settings.theme);
+      // Translate settings must be the second.
       this.initializeTranslate(settings);
     }).catch(err => {
       console.error(JSON.stringify("[ERROR][SettingsService] Unable to read the file " + JSON.stringify(err)))
