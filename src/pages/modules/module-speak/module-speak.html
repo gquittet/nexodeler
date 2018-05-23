@@ -8,8 +8,10 @@
   <ion-grid>
     <ion-row align-items-center justify-content-center>
       <ion-col col-10>
-        <ion-input placeholder="{{ 'UI.PLACEHOLDER.ENTER_TEXT_DOTS' | translate }}" type="text" [(ngModel)]="text" autocomplete="on"
-          autocorrect="on" padding-vertical clearInput style="margin-bottom: 10px"></ion-input>
+        <ion-item no-padding>
+          <ion-input placeholder="{{ 'UI.PLACEHOLDER.ENTER_TEXT_DOTS' | translate }}" type="text" [(ngModel)]="text" autocomplete="on"
+            autocorrect="on" padding-vertical clearInput style="margin-bottom: 10px"></ion-input>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row align-items-center justify-content-center>
