@@ -119,6 +119,3 @@ Check the APK:
 ### Install APK
 Use adb where is in `%android-sdk%/Sdk/platform-tools/adb`
 > adb install MyApplication.apk
-
-
-
