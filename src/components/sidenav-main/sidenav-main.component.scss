@@ -9,29 +9,36 @@ sidenav-main {
     justify-content: center;
     background-color: #28778d;
     @media screen and (orientation: portrait) {
-      height: 21%;
+      height: 25%;
     }
     @media screen and (orientation: landscape) {
       height: 42%;
     }
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 600px) {
       @media screen and (orientation: portrait) {
-        height: 10%;
+        height: 15%;
       }
       @media screen and (orientation: landscape) {
-        height: 15%;
+        height: 30%;
       }
     }
     .photoDiv {
+      display: -webkit-flex;
+      -webkit-align-items: center;
+      -webkit-justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 999px;
       border: 3px solid white;
       overflow: hidden;
-      width: 25%;
+      width: 32%;
       height: auto;
       background-color: #6b9697;
       img {
         display: block;
         width: 100%;
+        padding: 12%;
       }
     }
   }
