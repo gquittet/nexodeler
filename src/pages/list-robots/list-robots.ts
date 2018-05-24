@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Network } from '@ionic-native/network';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, ToastController } from 'ionic-angular';
+import { AlertController, App, Content, IonicPage, ItemSliding, LoadingController, ModalController, NavController, Platform, ToastController } from 'ionic-angular';
 import { IP } from '../../app/objects/IP';
 import { Robot } from '../../app/objects/Robot';
 import { Theme } from '../../app/objects/Theme';
@@ -101,7 +101,7 @@ export class ListRobotsPage {
   // Theme
   private _theme: Theme;
 
-  constructor(public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService, private _appStateService: AppStateService) {
+  constructor(private _platform: Platform, public appCtrl: App, public navCtrl: NavController, private _modalCtrl: ModalController, private _toastCtrl: ToastController, private _robotsService: RobotsService, private _network: Network, private _alSystemService: ALSystemService, private _alertCtrl: AlertController, loadingCtrl: LoadingController, private _translate: TranslateService, settingsService: SettingsService, private _appStateService: AppStateService) {
     this.searchControl = new FormControl();
     this.loading = new AlertLoading(loadingCtrl, _translate, settingsService);
     settingsService.theme.takeWhile(() => this._takeWhile).subscribe((theme: Theme) => this._theme = theme);
@@ -192,6 +192,14 @@ export class ListRobotsPage {
   edit(item: ItemSliding, robot: Robot): void {
     item.close();
     const ipPart = robot.ip.split('.');
+    let idPlatformPrefix: string = '';
+    if (this._platform.is('android')) {
+      idPlatformPrefix = 'md';
+    } else if (this._platform.is('ios')) {
+      idPlatformPrefix = 'ios';
+    } else if (this._platform.is('windows')) {
+      idPlatformPrefix = 'wp';
+    }
     this._alertCtrl.create({
       title: this._editText,
       cssClass: this._theme.class,
@@ -199,31 +207,36 @@ export class ListRobotsPage {
         {
           name: 'name',
           placeholder: this._nameText,
-          value: robot.name
+          value: robot.name,
+          id: 'alert-input-' + idPlatformPrefix + '-1-0'
         },
         {
           name: 'ipPart0',
           placeholder: this._numberText + ' 1',
           value: ipPart[0],
-          type: 'number'
+          type: 'number',
+          id: 'alert-input-' + idPlatformPrefix + '-1-1'
         },
         {
           name: 'ipPart1',
           placeholder: this._numberText + ' 2',
           value: ipPart[1],
-          type: 'number'
+          type: 'number',
+          id: 'alert-input-' + idPlatformPrefix + '-1-2'
         },
         {
           name: 'ipPart2',
           placeholder: this._numberText + ' 3',
           value: ipPart[2],
-          type: 'number'
+          type: 'number',
+          id: 'alert-input-' + idPlatformPrefix + '-1-3'
         },
         {
           name: 'ipPart3',
           placeholder: this._numberText + ' 4',
           value: ipPart[3],
-          type: 'number'
+          type: 'number',
+          id: 'alert-input-' + idPlatformPrefix + '-1-4'
         }
       ],
       buttons: [
