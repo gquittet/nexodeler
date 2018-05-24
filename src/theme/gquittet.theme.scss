@@ -34,10 +34,10 @@
   @for $i from 0 to 20 {
     @for $j from 0 to 20 {
       #alert-input-md-#{$i}-#{$j}:focus {
-        border-bottom: 2px solid getColor(primary) !important;
+        border-bottom: 1px solid getColor(dark) !important;
       }
       #alert-input-wp-#{$i}-#{$j}:focus {
-        border-color: getColor(primary) !important;
+        border-color: getColor(dark) !important;
       }
     }
   } //
