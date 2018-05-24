@@ -77,8 +77,8 @@ export class ModuleThematicalAssociationPage {
   private _takeWhile: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, translate: TranslateService, private _alertCtrl: AlertController, private _alTextToSpeech: ALTextToSpeechService, private _settingsService: SettingsService) {
-    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmExitText = res)
-    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionGameExitText = res)
+    translate.get('UI.ALERT.TITLE.CONFIRM.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._confirmExitText = res);
+    translate.get('UI.ALERT.CONTENT.QUESTION.GAME.EXIT').takeWhile(() => this._takeWhile).subscribe((res: string) => this._questionGameExitText = res);
     translate.get('NO').takeWhile(() => this._takeWhile).subscribe((res: string) => this._noText = res);
     translate.get('OK').takeWhile(() => this._takeWhile).subscribe((res: string) => this._okText = res);
     translate.get('VICTORY').takeWhile(() => this._takeWhile).subscribe((res: string) => this._victoryText = res);
